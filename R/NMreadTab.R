@@ -26,7 +26,8 @@ NMreadTab <- function(file, silent=F,skip ,sep=" ",debug=F) {
         }
     }
 
-    idx.tabh <- grep ("^TABLE.*",lines) idx.cnames <- idx.tabh+1
+    idx.tabh <- grep ("^TABLE.*",lines)
+    idx.cnames <- idx.tabh+1
 
     idx.data <- setdiff(1:length(lines),c(idx.tabh,idx.cnames))
     idx.data
