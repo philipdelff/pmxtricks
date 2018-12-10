@@ -16,11 +16,11 @@
 ##' @param test Want to see the resulting input.txt and not write it to disk? Default is FALSE.
 ##' @param debug start by running browser()?
 ##'
+##' @details The new file will be written with unix-style line endings. 
+##' 
 ##' @examples
 ##' newlines <- "$EST POSTHOC INTERACTION METHOD=1 NOABORT PRINT=5 MAXEVAL=9999 SIG=3"
-##' nmReplacePart(path=file.nonmem("FtfpiConc/10_01"),
-##' dollar="EST",
-##' newlines=newlines)
+##' nmReplacePart(path="run01.mod",dollar="EST", newlines=newlines)
 
 
 NMreplacePart <- function(path,dollar,newlines,newpath,backup=T,blank.append=T,test=F,debug=F){
@@ -82,7 +82,9 @@ NMreplacePart <- function(path,dollar,newlines,newpath,backup=T,blank.append=T,t
     if(test){
         return(newlines)
     }
-    writeLines(newlines,con=newfile)
-    
+
+    con.newfile <- file(newfile,"wb")
+    writeLines(newlines,con=con.newfile)
+    close(con.newfile)
     
 }

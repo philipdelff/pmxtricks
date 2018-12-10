@@ -1,7 +1,7 @@
 Package: pmxtricks
 Type: Package
 Title: Author's tiny but golden every-day pmx helper functions
-Version: 0.0.0.903
+Version: 0.0.1.901
 Date: 
 Depends: 
 Author: Philip Delff <philip@delff.dk>
