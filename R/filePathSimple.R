@@ -10,7 +10,7 @@
 
 #' 
 
-file.path.simple <- function(...,debug=F){
+filePathSimple <- function(...,debug=F){
     if(debug) browser()
     
     fpath <- file.path(...)

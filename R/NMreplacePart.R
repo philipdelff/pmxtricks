@@ -23,23 +23,18 @@
 ##' newlines=newlines)
 
 
-####### not tested
-### Done. multiple lines in newlines. Empty lines seem to disappear but OK.
-### remember to test when multiple dollar sections matched - like $TABLE
-
-
 NMreplacePart <- function(path,dollar,newlines,newpath,backup=T,blank.append=T,test=F,debug=F){
     if(debug) browser()
 
 #### handle arguments
-    path <- file.path.simple(path)
+    path <- filePathSimple(path)
     file <- path
     if(dir.exists(path)) file <- file.path(path,"input.txt")
     stopifnot(file.exists(file))
 
     if(missing(newpath)) newpath <- path
     if(!is.null(newpath)){
-        newfile <- file.path.simple(newpath)
+        newfile <- filePathSimple(newpath)
         if(dir.exists(newpath)) newfile <- file.path(newpath,"input.txt")
         stopifnot(file.exists(newfile))
     }
