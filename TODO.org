@@ -4,6 +4,7 @@
 *** TODO AUC function
 *** TODO selectVars
 *** TODO ggplot watermark function
+hem
 *** TODO powerpoint theme function
 ** Documentation
 *** TODO Tests
