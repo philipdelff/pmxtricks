@@ -1,8 +1,11 @@
 #' Read a table file from NONMEM 
 #'
-#' @param file path to NONMEM table file 
-#' @param silent logical stating whether or not information is printed.
-#' @param skip Amount of lines skipes in the start of the file. Some files have additional headers so if table looks wierd try adding 1 to skip.
+#' @param file path to NONMEM table file
+#' @param silent logical stating whether or not information is
+#'     printed.
+#' @param skip Amount of lines skipes in the start of the file. Some
+#'     files have additional headers so if table looks wierd try
+#'     adding 1 to skip.
 #'
 #' @return Nonmem table as df.
 #' @author Philip Delff

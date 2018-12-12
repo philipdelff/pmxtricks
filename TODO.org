@@ -2,5 +2,13 @@
 ** Functions requests
 *** TODO Functions to read and write NM csv files
 *** TODO AUC function
+*** TODO selectVars
+*** TODO ggplot watermark function
+*** TODO powerpoint theme function
 ** Documentation
 *** TODO Tests
+** Improvements
+*** NMreadTab
+**** TODO option to use colnames for all subtables?
+**** TODO Check if correct seperator chosen
+
