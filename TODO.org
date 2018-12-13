@@ -7,11 +7,13 @@
     CLOSED: [2018-12-12 Wed 19:42]
 *** DONE ggplot watermark function
     CLOSED: [2018-12-12 Wed 19:42]
-*** TODO powerpoint theme function
+*** DONE powerpoint theme function
+    CLOSED: [2018-12-12 Wed 23:05]
 ** Documentation
 *** TODO Tests
 ** Improvements
 *** NMreadTab
 **** TODO option to use colnames for all subtables?
 **** TODO Check if correct seperator chosen
-
+*** gg_theme
+*** TODO Add choice of base theme

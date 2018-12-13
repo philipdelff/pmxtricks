@@ -1,3 +1,7 @@
+##' A custom theme - aim is powerpoint
+##'
+##' @param ... arguments passed to theme() as last thing.
+
 theme_pp <- function(...){
 this.theme <- theme_classic()+
     theme(
