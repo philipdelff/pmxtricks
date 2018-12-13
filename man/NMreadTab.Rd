@@ -9,9 +9,12 @@ NMreadTab(file, silent = F, skip, sep = " ", debug = F)
 \arguments{
 \item{file}{path to NONMEM table file}
 
-\item{silent}{logical stating whether or not information is printed.}
+\item{silent}{logical stating whether or not information is
+printed.}
 
-\item{skip}{Amount of lines skipes in the start of the file. Some files have additional headers so if table looks wierd try adding 1 to skip.}
+\item{skip}{Amount of lines skipes in the start of the file. Some
+files have additional headers so if table looks wierd try
+adding 1 to skip.}
 }
 \value{
 Nonmem table as df.

@@ -4,7 +4,7 @@
 \alias{geomean}
 \title{calculate geometric  mean}
 \usage{
-geomean(x, log = F, z.rm = F)
+geomean(x, z.rm = F)
 }
 \arguments{
 \item{x}{vector to calculate the geometric mean of}
