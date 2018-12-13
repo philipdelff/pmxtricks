@@ -1,9 +1,12 @@
 * pmxtricks todo
 ** Functions requests
-*** TODO Functions to read and write NM csv files
+*** DONE Functions to read and write NM csv files
+    CLOSED: [2018-12-12 Wed 19:27]
 *** TODO AUC function
-*** TODO selectVars
-*** TODO ggplot watermark function
+*** DONE selectVars
+    CLOSED: [2018-12-12 Wed 19:42]
+*** DONE ggplot watermark function
+    CLOSED: [2018-12-12 Wed 19:42]
 *** TODO powerpoint theme function
 ** Documentation
 *** TODO Tests
