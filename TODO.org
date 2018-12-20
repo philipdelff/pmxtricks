@@ -1,16 +1,22 @@
 * pmxtricks todo
+** Bugs
+*** TODO theme_pp doesn't run
 ** Functions requests
 *** DONE Functions to read and write NM csv files
     CLOSED: [2018-12-12 Wed 19:27]
-*** TODO AUC function
+*** DONE AUC function
+    CLOSED: [2018-12-16 Sun 23:06]
 *** DONE selectVars
     CLOSED: [2018-12-12 Wed 19:42]
 *** DONE ggplot watermark function
     CLOSED: [2018-12-12 Wed 19:42]
 *** DONE powerpoint theme function
     CLOSED: [2018-12-12 Wed 23:05]
-*** TODO Compare contents of df's when rbind fails
-*** TODO Improved plot saver
+*** DONE Compare contents of df's when rbind fails
+    CLOSED: [2018-12-16 Sun 23:06]
+*** DONE Improved plot saver
+    CLOSED: [2018-12-16 Sun 23:06]
+*** TODO function for rounding data.frames
 ** Documentation
 *** TODO Tests
 ** Improvements
