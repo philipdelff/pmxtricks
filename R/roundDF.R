@@ -13,7 +13,7 @@
 ##' df1 <- data.frame(obs=letters[1:3],x1=rnorm(3),x2=c(1.24/1e4,1.1334e6,1.1),x3=1:3)
 ##' roundDF(df1,digits=3)
 
-roundDF <- function(x,FUN=signif.c,...){
+roundDF <- function(x,FUN=signif2,...){
 
     ## do this for a numerical vector
     if (is.function(FUN)){

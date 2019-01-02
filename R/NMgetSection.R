@@ -1,7 +1,7 @@
 #' Extract a specific section from Nonmem code
 #' 
 #' @param lines A Nonmem output or input file as a vector of lines
-#' @param name The desired dollar name. eg PROBLEM (PROB) without the
+#' @param name The desired section name. eg PROBLEM (PROB) without the
 #'     $
 #' @param keepEmpty Boolean. Should empty lines be included? Defaults
 #'     to FALSE.
@@ -15,14 +15,14 @@
 #'
 #' @examples
 #' testLines = list("$asdf  ","$asdf asd ", "asdfa","$bla", "$derp","")
-#' findDollar(testLines,"bla")
-#' findDollar(testLines,"asdf")
-#' findDollar(testLines,"asdf", FALSE, FALSE)
-#' findDollar(testLines,"derp",TRUE)
+#' NMgetSection(testLines,"bla")
+#' NMgetSection(testLines,"asdf")
+#' NMgetSection(testLines,"asdf", FALSE, FALSE)
+#' NMgetSection(testLines,"derp",TRUE)
 
 
 ####### TODO
-### the function only works reliably on input.txt, not output.txt. I shuggest discarding the possibly Nonmem generated part of the lines (which is the part after the repeated input.txt). So far, I have used something like this to remove it:
+### the function only works reliably on input.txt, not output.txt. I suggest discarding the possibly Nonmem generated part of the lines (which is the part after the repeated input.txt). So far, I have used something like this to remove it:
 ## lines <- lines[1:(min(c(length(lines.tab),grep("NM-TRAN MESSAGES|WARNINGS AND ERRORS \\(IF ANY\\) FOR PROBLEM",lines)-1)))]
 ### it may have to be adjusted not to make trouble if grep returns nothing.
 

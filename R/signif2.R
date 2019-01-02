@@ -1,4 +1,3 @@
-cat("signif.c\n")
 ##' round to fixed number of significant digits
 ##'
 ##' @param x a numeric vector.
@@ -16,7 +15,7 @@ cat("signif.c\n")
 ##' signif.c(c(.2,11.84),2)
 
 
-signif.c <- function(x,digits,add=T,debug=F) {
+signif2 <- function(x,digits=1,add=T,debug=F) {
     if(debug) browser()
     
     ## check that x is a numeric vector
