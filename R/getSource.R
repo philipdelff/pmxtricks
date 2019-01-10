@@ -18,12 +18,13 @@
 #' @return None. Sources the specified file into the global environment.
 #' @export
 
-getSource <- function(file,dir.central=NULL,dir.local=dir.scripts,overwrite=FALSE,source.directly=FALSE,silent=F){
+getSource <- function(file,dir.central=NULL,dir.local,overwrite=FALSE,source.directly=FALSE,silent=F){
 ### Getting the paths right
     if(is.null(dir.central)){
         dir.central <- dirname(file)
         file <- basename(file)
     }
+    if(missing(dir.local)) dir.local <- getwd()
     org = file.path(dir.central,file)
 
 
@@ -38,7 +39,7 @@ getSource <- function(file,dir.central=NULL,dir.local=dir.scripts,overwrite=FALS
     if(!dir.exists(dir.local)) {stop("Destination directory (dir.local) must exist.")}
 
     ## Check that source directory is different from destination directory
-    if(file.path.simple(dir.central)==file.path.simple(dir.local)){
+    if(filePathSimple(dir.central)==filePathSimple(dir.local)){
         stop("source and destination directories are identical. Makes no sense.")
     }
     

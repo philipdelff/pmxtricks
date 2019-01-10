@@ -49,8 +49,9 @@ NMgetSection <- function(file,lines,name,keepEmpty = FALSE, keepDollarEmpty = TR
         ## First of all add this $name if it's not empty
         ## if(nchar(sub(paste("^\\$",name," *",sep = ""),"",lines[line]))> 0)
         ## If there is only empty characters after "$name", then check if it should be added to result
-        if (keepDollarEmpty || !grepl(paste(regex,"[[:space:]]*$",sep = ""),lines[line]))
+        if (keepDollarEmpty || !grepl(paste(regex,"[[:space:]]*$",sep = ""),lines[line])){
             result = c(result,line)
+        }
         i = line + 1
         ## Check a line at a time after the previous if they start with $something. If they do not, then add it to the result
         while( i <= length(lines) && !grepl("^\\$[A-Za-z]+",lines[i])){
