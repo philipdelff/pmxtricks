@@ -16,12 +16,19 @@
     CLOSED: [2018-12-16 Sun 23:06]
 *** DONE Improved plot saver
     CLOSED: [2018-12-16 Sun 23:06]
-*** TODO function for rounding data.frames
+*** DONE function for rounding data.frames
+    CLOSED: [2019-01-10 Thu 15:06]
 ** Documentation
 *** TODO Tests
 ** Improvements
 *** NMreadTab
 **** TODO option to use colnames for all subtables?
 **** TODO Check if correct seperator chosen
+*** NMrunLog
+**** TODO Add convergence info
+**** TODO Add Covariance step info
+**** TODO Add dataset name
+**** TODO Add Nsubj
+**** TODO Add Nobs
 *** gg_theme
 *** TODO Add choice of base theme

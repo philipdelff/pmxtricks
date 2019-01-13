@@ -1,36 +1,8 @@
-#' Extract a specific section from Nonmem code
-#' 
-#' @param lines A Nonmem output or input file as a vector of lines
-#' @param name The desired section name. eg PROBLEM (PROB) without the
-#'     $
-#' @param keepEmpty Boolean. Should empty lines be included? Defaults
-#'     to FALSE.
-#' @param keepDollarEmpty Boolean. Should a line including the dollar,
-#'     but with nothing else be kept? Defaults to TRUE.
-#' @param dropComments drop comment lines from output.
-#' @param return "text" or "lineNumbers". What do you want to get back
-#'     from the function? The actual text or the line numbers to find
-#'     the text?
-#' @return The value of desired $name with comments and everything.
-#'
-#' @examples
-#' testLines = list("$asdf  ","$asdf asd ", "asdfa","$bla", "$derp","")
-#' NMgetSection(testLines,"bla")
-#' NMgetSection(testLines,"asdf")
-#' NMgetSection(testLines,"asdf", FALSE, FALSE)
-#' NMgetSection(testLines,"derp",TRUE)
 
 
-####### TODO
-### the function only works reliably on input.txt, not output.txt. I suggest discarding the possibly Nonmem generated part of the lines (which is the part after the repeated input.txt). So far, I have used something like this to remove it:
-## lines <- lines[1:(min(c(length(lines.tab),grep("NM-TRAN MESSAGES|WARNINGS AND ERRORS \\(IF ANY\\) FOR PROBLEM",lines)-1)))]
-### it may have to be adjusted not to make trouble if grep returns nothing.
-
-####### end todo
-
-
-NMgetSection <- function(file,lines,name,keepEmpty = FALSE, keepDollarEmpty = TRUE,dropComments=T,return="text"){
-
+NMgetSection <- function(file,lines,name,keepEmpty = FALSE, keepName = TRUE,keepComments=T,return="text",asOne=TRUE,simplify=TRUE){
+    
+    
 ### check arguments
     if(!missing(file) & !missing(lines) ) stop("Supply either file or lines, not both")
     if(missing(file) & missing(lines) ) stop("Supply either file or lines.")
@@ -38,38 +10,68 @@ NMgetSection <- function(file,lines,name,keepEmpty = FALSE, keepDollarEmpty = TR
         if(!file.exists(file)) stop("When using the file argument, file has to point to an existing file.")
         lines <- readLines(file)
     }
+    if(!return%in%c("idx","text")) stop("text must be one of text or idx.")
     
-    ## Result array
-    result = c()
-    regex = paste("^ *\\$",name,sep = "")
+    ## works with both .mod and .lst
+    lines <-
+        lines[1:(min(c(length(lines),grep("NM-TRAN MESSAGES|WARNINGS AND ERRORS \\(IF ANY\\) FOR PROBLEM",lines)-1)))]
+    
+    idx.name <- grep(paste0("^ *\\$",name),lines)
     ## Find all the lines that start with the $name
-    findLines = grep(regex,lines)
-    ## For each found line, check consecutive lines
-    for (line in findLines){
-        ## First of all add this $name if it's not empty
-        ## if(nchar(sub(paste("^\\$",name," *",sep = ""),"",lines[line]))> 0)
-        ## If there is only empty characters after "$name", then check if it should be added to result
-        if (keepDollarEmpty || !grepl(paste(regex,"[[:space:]]*$",sep = ""),lines[line])){
-            result = c(result,line)
+    idx.dollars <- grep("^ *\\$",lines)
+
+    ## get the sections
+    idx.sections <- lapply(idx.name,function(idx.start){
+        idx.dollars.after <- idx.dollars[idx.dollars>idx.start]
+        if(length(idx.dollars.after)==0) {
+            idx.end <- length(lines)
+        } else {
+            idx.end <- min(idx.dollars.after)-1
         }
-        i = line + 1
-        ## Check a line at a time after the previous if they start with $something. If they do not, then add it to the result
-        while( i <= length(lines) && !grepl("^\\$[A-Za-z]+",lines[i])){
-            ## Check if it's not empty, before adding it. This removes useless lines
-            if(keepEmpty) result = c(result,i)
-            else {
-                                        # if (nchar(lines[i]) > 0) result = c(result,i)
-                ## check that line is not just spaces
-                if (!grepl("^[[:space:]]*$",lines[i])) result = c(result,i)
-            }
-            i = i + 1
+        idx.section <- idx.start:idx.end
+    })
+    result <- idx.sections
+
+    if(!keepEmpty){
+        result <- lapply(result,function(x)
+            x[!grepl("^ *$",lines[x])]
+        )
+    }
+    
+    if(!keepComments){
+        result <- lapply(result,function(x)
+            x[!grepl("^ *;",lines[x])]
+            )
+    }
+    
+    if(return=="text"){
+        result <- lapply(result,function(x)lines[x])
+    }
+    
+    if(!keepName){
+        if(!return=="text") {
+            stop("keepName can only be FALSE if return=='text'")
         }
+        result <- lapply(result, function(x)sub(paste0("^ *\\$",name),"",x))
     }
-    ## dropping comments
-    if(dropComments){
-        result <- result[!grepl("^ *;",lines[result])]
-    }
-    result <- unlist(result)
-    if(return=="text") result <- lines[result]
+
+    if(asOne) {result <- do.call(c,result)}
+
+    if(simplify && length(result)==1) result <- result[[1]]
+    
+
+########## formating return
+##:ess-bp-start::browser@nil:##
+browser(expr=is.null(.ESSBP.[["@7@"]]));##:ess-bp-end:##
+    
+    ## result <- unlist(result)
     return (result)
+    
 }
+
+
+
+    ## idx or text
+    ## keepName option to omit $NAME. Only if return="text"
+    ## if as.one, stack the resulting list elements
+    ## list. if simplify=T and length=1, then return list[[1]]

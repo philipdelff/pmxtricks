@@ -1,14 +1,24 @@
-##' rename data with standard evaluation
+##' rename list elements with standard evaluation
+##'
+##' @param data A list (which can be a data.frame)
+##' @param names A list that contains elements "old" and "new" of
+##'     equal length.
+##' @param If names$new contains a name of an existing element in
+##'     data, should it be overwritten?
 
-
-
-newnames <- function(data,names,overwrite=F){
+newnames <- function(data,names,overwrite=F,debug=F){
+    if(debug) browser()
     ## check that old and new are characters and equally long
 
+### if input is factors
+    names$old <- as.character(names$old)
+    names$new <- as.character(names$new)
+
+    
     ## check that all old exist
     n.data <- names(data)
     if(!all(names$old  %in% n.data)){
-        stop("These old names are missing in data:",paste(names$old[!names$old  %in% n.data],collapse=", "))
+        stop("These old names are missing in data: ",paste(names$old[!names$old  %in% n.data],collapse=", "))
     }
 
     ## new names must be unique

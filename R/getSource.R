@@ -5,7 +5,7 @@
 #' @param file File name of wanted file
 #' @param dir.central Folder path of wanted file
 #' @param dir.local Where to put the file if imported, and where to look for
-#'     already imported files
+#'     already imported files. Default is getwd().
 #' @param overwrite Owerwrite previously imported file?
 #' @param source.directly Enables direct sourcing of the central file copy. This
 #'     bypasses the whole concept of the function but it is useful when
@@ -13,7 +13,6 @@
 #'     editor is linking to a file that you will edit while debugging. It gives
 #'     a warning because it is not allowed in final code.
 #' @param silent Disables printning. Mainly used in testing.
-#' @family Misc
 #' @author philip@delff.dk
 #' @return None. Sources the specified file into the global environment.
 #' @export
@@ -50,10 +49,10 @@ getSource <- function(file,dir.central=NULL,dir.local,overwrite=FALSE,source.dir
     if(file.exists(file.path(dir.local,file))){
       #File exists locally, but not external. Load local
       source(file.path(dest),echo=F)
-      warning("getandsource warning: File not found at dir.central. Local version has been imported.")
+      warning("File not found at dir.central. Local version has been imported.")
       return(invisible())
     } else {
-      if (silent == F){cat("getandsource: No local version have been found.\n")}
+      if (silent == F){message("No local version have been found.\n")}
       stopifnot(file.exists(dir.central))
       stopifnot(file.exists(org))
     }
@@ -61,7 +60,7 @@ getSource <- function(file,dir.central=NULL,dir.local,overwrite=FALSE,source.dir
   ## Checking whether there is a local version and if it missing, it is copied
   if(!file.exists(dest) || overwrite){
     ## Copying the latest version of the file
-    if (silent == F){cat("getandsource: Copying",file,"\n")}
+    if (silent == F){message("Copying",file,"\n")}
     file.copy(from=org,
               to=dest,overwrite=TRUE)
   }
