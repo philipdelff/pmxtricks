@@ -61,8 +61,6 @@ NMgetSection <- function(file,lines,name,keepEmpty = FALSE, keepName = TRUE,keep
     
 
 ########## formating return
-##:ess-bp-start::browser@nil:##
-browser(expr=is.null(.ESSBP.[["@7@"]]));##:ess-bp-end:##
     
     ## result <- unlist(result)
     return (result)
