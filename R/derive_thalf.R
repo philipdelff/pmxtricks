@@ -1,4 +1,4 @@
-s### most of these functions are t1/2 functions. But functions to calculate more derived parameters follow.
+### most of these functions are t1/2 functions. But functions to calculate more derived parameters follow.
 
 ### This is only 1st order models, single-depot abs. One row of parameters only. Use thalf.1a.1c instead.
 thalf.1a.1c.one <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
