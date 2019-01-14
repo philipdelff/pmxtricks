@@ -20,10 +20,11 @@
 findCovs <- function(data,cols.id,cols.drop=NULL){
 
     cnames <- colnames(data)
-    cnames.no.id <- cnames[!cnames%in%cols.id]
-    cnames.to.use <- cnames.no.id[!cnames.no.id%in%cols.drop]
+    cnames.no.id <- setdiff(cnames,cols.id)
+    cnames.to.use <- setdiff(cnames.no.id,cols.drop)
 
-    Nid <- nrow(unique(data[,cols.id,drop=FALSE]))
+    udata <- unique(data[,cols.id,drop=FALSE])
+    Nid <- nrow(udata)
     names.covs <- cnames.to.use[unlist(lapply(cnames.to.use,function(x) nrow(unique(data[,c(cols.id,x)]))==Nid))]
 
     reduced.in <- unique(data[,c(cols.id,names.covs),drop=F])

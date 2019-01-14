@@ -14,11 +14,16 @@ NMreadRun <- function(run){
 
     out <- n2r.sumo
     out$run=runname
-    problem <- NMgetSection(file.path(dir,paste0(runname,".lst")),name="PROBLEM",keepDollarEmpty=F)
-    problem <- sub("^ *\\$PROBLEM +","",problem)
+    problem <- NMgetSection(file.path(dir,paste0(runname,".lst"))
+                           ,name="PROBLEM"
+                           ,keepName=F
+                           ,keepEmpty=F
+                           ,keepComments=F
+                           ,cleanSpaces=T
+                            )
 
     out$problem <- problem
-  
+    
 
     ## find reference as in ";; Reference modname"
     lines.lst <- readLines(file.lst)

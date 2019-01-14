@@ -30,7 +30,8 @@ NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,
     cat("Nonmem data file:",file,"\n")
     cat("For NonMem:\n")
     cat("$INPUT",paste(colnames(data.out),collapse=" "),"\n")
-    cat("$DATA", sub(pattern="^E:/",replacement="/project/",file,ignore.case=TRUE))
+    ##    cat("$DATA", sub(pattern="^E:/",replacement="/project/",file,ignore.case=TRUE))
+    cat("$DATA", file)
     ## if(!quote) cat(" IGN=@")
     cat(" IGN=@")
     if("FLAG"%in%colnames(data.out)) cat(" IGNORE=(FLAG.NE.0)")
@@ -53,7 +54,7 @@ NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,
         written <- TRUE
     }
     if(write.rds){
-        if(!grepl("\\..+$",file)) stop("filename could not be translated to .RData. Choose a .csv file name.")
+        if(!grepl("\\..+$",file)) stop("filename could not be translated to .rds. Choose a .csv file name.")
         file.rds <- sub("\\..+$",".rds",file)
         ## browser()
         saveRDS(data.out,file=file.rds)

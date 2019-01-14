@@ -28,79 +28,32 @@
 ##' @param col.grp If present, ID and OCC level info is grouped by col.grp. So should only be needed for cross-over.
 
 
-NMscan <- function(path.run,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC",structure="full",use.input=T,reconstructRows=F,debug=F){
+NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC",structure="full",use.input=T,reconstructRows=F,debug=F){
     if(debug) browser()
 
-    ### at least plyr::arrange is used
-    library(plyr)
+### at least plyr::arrange is used
+    ## library(plyr)
 
 
 ###{ process arguments 
-    path.run <- file.path.simple(path.run)
-    if(!file.exists(path.run)) stop("path.run does not exist.")
-    if(file.info(path.run)$isdir){
-        file.model <- file.path(path.run,"output.txt")
-        if(!file.exists(file.model)) stop("path.run is a directory but does not contain output.txt")
-    } else {
-        file.model <- path.run
-        if(sub(".*\\.(.*)$","\\1",basename(path.run))=="mod"){
-            ## file.model <- sub("(.*\\.)(.*)$","\\1lst",path.run)
-            file.model <- path.run
-            ## if(!file.exists(file.model)) stop("path.run is a file ending in .mod so assuming that output file from nonmem is to be found in corresponding .lst. This file is however missing. Model not run?")
-        }
-        path.run <- dirname(path.run)
-    }
-
+    file <- filePathSimple(file)
+    if(!file.exists(file)) stop("file does not exist.")
+    dir <- dirname(file)
 
 ###}
 
-###{ read output text from Nonmem
-    ## we call this output. But in psn case, this is actually the input (mod) file.
-    output <- readLines(file.model)
-    ## discard comments
-    output <- output[!grepl("^ *;.*",output)]
-
-    ## discard output part - only keep the control stream
-    
-    ##### find all tables in output
-    ## lines.tab <- output[findDollar(output,name="TABLE")]
-    lines.tab <- output[findDollar(output,name="TABLE")]
-    
-    lines.tab <- lines.tab[1:(min(c(length(lines.tab),grep("NM-TRAN MESSAGES|WARNINGS AND ERRORS \\(IF ANY\\) FOR PROBLEM",lines.tab)-1)))]
-    ##lines.tab <- lines.tab[1:(min(grep("NM-TRAN MESSAGES",lines.tab))-1)]
-    nlines.tabdollars <- grep("\\$TABLE",lines.tab)
-    nlines.tabfiles <- grep("FILE *=",lines.tab)
-    stopifnot(length(nlines.tabdollars)==length(nlines.tabfiles))
-    stopifnot(all(nlines.tabdollars<=nlines.tabfiles))
-
-##### find the all rows tables - they will be merged into one.
-    ## lines.tab
-    tablines.l <- strsplit(paste(lines.tab,collapse=" "),split="\\$TABLE")[[1]]
-    tablines.l <- tablines.l[-1]
-    overview.tables <- rbindUnion(lapply(tablines.l,function(x){
-        data.frame(
-            file=sub(".*FILE=([^ ]*).*","\\1", x),
-#### these are valid as well.
-### FIRSTRECORDONLY or FIRSTRECONLY
-            firstonly=grepl("FIRSTONLY|FIRSTRECORDONLY|FIRSTRECONLY",x)
-        )
-    }))
-###}
 
 ###{ read all output tables and merge to max one firstonly and max one row
-    data <- lapply(overview.tables$file,function(x){
-        out <- NMimport(absPath(file.path(path.run,x)),silent=T)
-        out$TABLE <- NULL
-        out
-    })
+    tables <- NMscanTables(file,details=T)
+    data <- tables$data
+    overview.tables <- tables$meta
+    
+#### add has.grp, has.occ, has.id?
+    overview.tables <- cbind(overview.tables,setNames(as.data.frame(do.call(rbind,lapply(data,function(x)c(col.row%in%names(x))))),c("has.col.ROW")))
+    overview.tables <- within(overview.tables,{maxLength=nrow==max(nrow)})
 
-
-    overview.tables <- cbind(overview.tables,setNames(as.data.frame(do.call(rbind,lapply(data,function(x)c(dim(x),col.row%in%names(x))))),c("nrow","ncol","has.col.ROW")))
-    overview.tables <- mutateQCP(overview.tables,maxLength=nrow==max(nrow))
-
-    overview.tables <- mutateQCP(overview.tables,full.length=!firstonly&maxLength&has.col.ROW)
-    overview.tables
-
+    overview.tables <- within(overview.tables,{full.length=!firstonly&maxLength&has.col.ROW})
+    
     ## browser()
     
 ### combine full tables into one
@@ -123,7 +76,7 @@ NMscan <- function(path.run,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
             data.frame(col.id=data[[tabs.firstonly[1]]][,col.id])
            ,col.id)
         for(I in tabs.firstonly){
-## mergeCheck?
+            ## mergeCheck?
             all.firstonly <- merge(all.firstonly,data[[I]][,c(col.id,setdiff(names(data[[I]]),names(all.firstonly)))])
         }
     }
@@ -184,28 +137,28 @@ NMscan <- function(path.run,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
 ###### now compare between tables and combine into one classsification of variables
     ## row-level and occ-level vars are only accepted from tables with most rows
     dims <- setNames(as.data.frame(do.call(rbind,lapply(data,dim))),c("nrow","ncol"))
-    dims <- mutateQCP(dims,table=1:nrow(dims))
+    dims <- within(dims,{table=1:nrow(dims)})
     coltypes <- merge(coltypes,dims,all.x=T)
-    coltypes <- mutateQCP(coltypes,maxLength=nrow==max(nrow))
+    coltypes <- within(coltypes,{maxLength=nrow==max(nrow)})
     coltypes <- subset(coltypes,!(type%in%c("row","occ")&!maxLength))
 
     ## first look at tables with max rows. Keep variables in only one of them. This is discarding redundant info.
     ## dismiss anything in tables with non-max nrows if it is present in a maxrow table    
     ## dismiss redundant info in non-max row tables.
-    coltypes <- plyr::arrange(coltypes,type,-maxLength,var)
-
+    coltypes <- coltypes[with(coltypes,order(type,-xtfrm(maxLength),var)),]
     coltypes <- coltypes[!duplicated(coltypes[,c("type","var")]),]
 
 ### dismiss overlapping with priority: row, occ, id.
-    coltypes <- mutateQCP(coltypes,type.tmp=factor(type,levels=c("row","occ","id")))
-    coltypes <- plyr::arrange(coltypes,type.tmp)
+    coltypes <- within(coltypes,{type.tmp=factor(type,levels=c("row","occ","id"))})
+    ## coltypes <- plyr::arrange(coltypes,type.tmp)
+    coltypes <- coltypes[order(coltypes$type.tmp),]
     coltypes <- coltypes[!duplicated(coltypes[,c("var")]),]
     coltypes$type.tmp <- NULL
 
     
     
 ### create output data.frames
-    coltypes
+    ## coltypes
     
     ## row-level
     tab.row <- NULL
@@ -290,42 +243,10 @@ NMscan <- function(path.run,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
     if(use.input){
         ## browser()
 
-        ## lines.data <- output[findDollar(output,name="DATA")]
-        lines.data <- output[findDollar(output,name="DATA")]
-        ## pick $DATA and the next string
-        lines.data2 <- paste(lines.data,collapse=" ")
-        lines.data3 <- sub(" *\\$DATA +","",lines.data2)
-        lines.data4 <- sub("^file[ =]+","",lines.data3)
-        lines.data5 <- sub(" .*","",lines.data4)
-        path.data.input <- lines.data5
-
-        pathIsAbs <- function(path) grepl("^/",path)
-        if(pathIsAbs(path.data.input)){
-### assuming we are on windows
-            path.data.input <- absPath(path.data.input)
-        } else {
-            path.data.input <- file.path(path.run,path.data.input)
-        }
-        path.data.input.rds <- sub("^(.+)\\..+$","\\1.rds",path.data.input)
-        if(file.exists(path.data.input.rds)){
-            message("found rds input file. This will be used.")
-            path.data.input <- path.data.input.rds
-            data.input <- readRDS(path.data.input)
-        } else {
-            if(file.exists(path.data.input)){
-                message("Found input data file. Reading with read.csv")
-                data.input <- read.csv(path.data.input,header=T,na.strings=".",stringsAsFactors=F)
-            } else {
-                warning(paste("Input data file not found. Only output data will be available. Was expecting to find",path.data.input))
-                use.input <- FALSE
-            }
-        }
+        data.input <- NMtransInput(file)
         
-    }
-
-    if(use.input){
         cnames.in <- colnames(data.input)
-                
+        
         if(!is.null(tab.row)){
             ## browser()
             data.output <- tab.row
@@ -409,11 +330,11 @@ NMscan <- function(path.run,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
         if(col.occ%in%n.inp.touse) {
             inp.touse <- merge(inp.touse,tab.occ[,c(col.id,col.occ,col.grp,setdiff(names(tab.occ),n.inp.touse))],all.x=T)
         }
-    ##    browser()
+        ##    browser()
         tab.row <- rbindUnion(tab.row,inp.touse)
         tab.row <- tab.row[order(tab.row[,col.row]),]
     }
-    ###}
+###}
 
     stopifnot(max(table(col.row))==1)
     
@@ -453,7 +374,7 @@ if(FALSE){
 
     dat4 <- NMscan6("e:/Project/NN8640/NN8640-ph1PK/current/Nonmem/PK_popAll/runFinal",col.occ="OCC")
 
-    ###### OCC is not in output tables and input data doesnt exist. So occ-level cannot be reconstructed.
+###### OCC is not in output tables and input data doesnt exist. So occ-level cannot be reconstructed.
     dat4 <- NMscan6("e:/Project/NN9924/Meta-analyses/ClinPharmModel/current/Nonmem/PK_final/005",col.occ="OCC",debug=F)
 
     lapply(dat4,dim)

@@ -1,6 +1,6 @@
 
 
-NMgetSection <- function(file,lines,name,keepEmpty = FALSE, keepName = TRUE,keepComments=T,return="text",asOne=TRUE,simplify=TRUE){
+NMgetSection <- function(file,lines,name,keepEmpty = FALSE, keepName = TRUE,keepComments=T,return="text",asOne=TRUE,simplify=TRUE,cleanSpaces=F){
     
     
 ### check arguments
@@ -55,6 +55,14 @@ NMgetSection <- function(file,lines,name,keepEmpty = FALSE, keepName = TRUE,keep
         result <- lapply(result, function(x)sub(paste0("^ *\\$",name),"",x))
     }
 
+    if(cleanSpaces){
+        if(!return=="text") {
+            stop("cleanSpaces can only be TRUE if return=='text'")
+        }
+        result <- lapply(result, function(x)sub(paste0("^ +"),"",x))
+        result <- lapply(result, function(x)sub(paste0(" +$"),"",x))
+    }
+    
     if(asOne) {result <- do.call(c,result)}
 
     if(simplify && length(result)==1) result <- result[[1]]
