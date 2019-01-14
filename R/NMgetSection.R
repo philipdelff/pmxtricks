@@ -1,7 +1,22 @@
+##' extract sections of Nonmem control streams
+##'
+##' @param file A file to read from. Normally a .mod or .lst. See lines also.
+##' @param lines Text lines to process. This is an alternative to use the file
+##'     argument.
+##' @param name The name of section to extract. Examples: "INPUT", "PK",
+##'     "TABLE", etc.
+##' @param return If "text", plain text lines are returned. If "idx", matching
+##'     line numbers are returned. "text" is default.
+##' @param keepEmpty Keep empty lines in output? Default is FALSE.
+##' @param keepName Keep the section name in output (say, "$PROBLEM") Default is
+##'     TRUE. It can only be FALSE, if return"idx".
+##' @param keepComments=TRUE
+##' @param asOne=TRUE
+##' @param simplify=TRUE
+##' @param cleanSpaces=FALSE
 
 
-NMgetSection <- function(file,lines,name,keepEmpty = FALSE, keepName = TRUE,keepComments=T,return="text",asOne=TRUE,simplify=TRUE,cleanSpaces=F){
-    
+NMgetSection <- function(file, lines, name, return="text", keepEmpty=FALSE, keepName=TRUE, keepComments=TRUE, asOne=TRUE, simplify=TRUE, cleanSpaces=FALSE){
     
 ### check arguments
     if(!missing(file) & !missing(lines) ) stop("Supply either file or lines, not both")
@@ -61,6 +76,7 @@ NMgetSection <- function(file,lines,name,keepEmpty = FALSE, keepName = TRUE,keep
         }
         result <- lapply(result, function(x)sub(paste0("^ +"),"",x))
         result <- lapply(result, function(x)sub(paste0(" +$"),"",x))
+        result <- lapply(result, function(x)sub(paste0(" +")," ",x))
     }
     
     if(asOne) {result <- do.call(c,result)}
