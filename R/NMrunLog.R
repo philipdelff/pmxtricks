@@ -1,14 +1,5 @@
-## run <- "\\\\samba-hpc.rd.astrazeneca.net\\QCP_MODELING\\ONC\\azd5363\\poppk_20180813_Ph1Ph2Pooled_final\\Models\\baseModel\\philipdelff\\run416t14_cn_01.lst"
 
-## for inspiration, from Pirana design:
-## "003" = list (
-## " modelfile " = "003. mod " ,
-## " description " = " PK model digoxin " ,
-## " reference_model " = "002" ,
-## " data_file " = " nm_pk_001 . csv " ,
-## " output_file " = "003. lst " ,
-## " tables " = c ("003. TAB " , " sdtab003 ")
-## )
+## TODO add ParNearBoundary
 
 NMrunLog <- function(runs,dir,debug=F){
     if(debug) browser()
