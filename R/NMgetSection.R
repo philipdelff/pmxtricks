@@ -10,10 +10,10 @@
 ##' @param keepEmpty Keep empty lines in output? Default is FALSE.
 ##' @param keepName Keep the section name in output (say, "$PROBLEM") Default is
 ##'     TRUE. It can only be FALSE, if return"idx".
-##' @param keepComments=TRUE
-##' @param asOne=TRUE
-##' @param simplify=TRUE
-##' @param cleanSpaces=FALSE
+##' @param keepComments Keep comment lines?
+##' @param asOne If multiple hits, concatenate into one. This will most often be relevant with name="TABLE". If FALSE, a list will be returned, each element representing a table. Default is TRUE. So if you want to process the tables separately, you probably want FALSE here.
+##' @param simplify If asOne=FALSE, do you want the result to be simplified if only one table is found? Default is TRUE which is desirable for interactive analysis. For programming, you probably want FALSE.
+##' @param cleanSpaces If TRUE, leading and trailing are removed, and multiplied succeeding white spaces are reduced to single white spaces.
 
 
 NMgetSection <- function(file, lines, name, return="text", keepEmpty=FALSE, keepName=TRUE, keepComments=TRUE, asOne=TRUE, simplify=TRUE, cleanSpaces=FALSE){

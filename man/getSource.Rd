@@ -4,8 +4,8 @@
 \alias{getSource}
 \title{Get and source an R script.}
 \usage{
-getSource(file, dir.central = NULL, dir.local = dir.scripts,
-  overwrite = FALSE, source.directly = FALSE, silent = F)
+getSource(file, dir.central = NULL, dir.local, overwrite = FALSE,
+  source.directly = FALSE, silent = F)
 }
 \arguments{
 \item{file}{File name of wanted file}
@@ -13,7 +13,7 @@ getSource(file, dir.central = NULL, dir.local = dir.scripts,
 \item{dir.central}{Folder path of wanted file}
 
 \item{dir.local}{Where to put the file if imported, and where to look for
-already imported files}
+already imported files. Default is getwd().}
 
 \item{overwrite}{Owerwrite previously imported file?}
 
@@ -34,4 +34,3 @@ Get file from remote library and inport it into project if it does not exist. Th
 \author{
 philip@delff.dk
 }
-\concept{Misc}

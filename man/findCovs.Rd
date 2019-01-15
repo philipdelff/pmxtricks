@@ -4,7 +4,7 @@
 \alias{findCovs}
 \title{Extract columns that do not vary within variables in a data.frame}
 \usage{
-findCovs(data, cols.id, cols.drop = NULL)
+findCovs(data, cols.id = NULL, cols.drop = NULL, debug = F)
 }
 \arguments{
 \item{data}{data.frame in which to look for covariates}
@@ -17,10 +17,10 @@ findCovs(data, cols.id, cols.drop = NULL)
 Often the variables will be either empty or ID. But it can also be both say ID and DRUG or ID and GRP.
 }
 \examples{
-dat <- NMimport("e:/Project/NN1406/4218/current/Nonmem/data_review/PK_NNC0143-0406/PK-01-01-1abs_1dist_comberr_RE_KA1V2CL/TABLE_OUTPUT.txt")
+dat <- NMreadTab("TABLE_OUTPUT.txt")
 ### very common use
 findCovs(dat,cols.id="ID",cols.drop=c("IRES","TABLE"))
-###  an ID column is needed.
+###  an ID column is not needed.
 findCovs(dat,cols.id=c(),cols.drop=c("IRES","TABLE"))
 ### need a new data.frame to test for length(cols.id)>1
 }

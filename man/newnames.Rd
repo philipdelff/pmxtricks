@@ -2,10 +2,19 @@
 % Please edit documentation in R/newnames.R
 \name{newnames}
 \alias{newnames}
-\title{rename data with standard evaluation}
+\title{rename list elements with standard evaluation}
 \usage{
-newnames(data, names, overwrite = F)
+newnames(data, names, overwrite = F, debug = F)
+}
+\arguments{
+\item{data}{A list (which can be a data.frame)}
+
+\item{names}{A list that contains elements "old" and "new" of
+equal length.}
+
+\item{If}{names$new contains a name of an existing element in
+data, should it be overwritten?}
 }
 \description{
-rename data with standard evaluation
+rename list elements with standard evaluation
 }

@@ -1,6 +1,6 @@
 ##' create R function that generates param values based on covariates
-
-##' @detail The function returns a function in plain text. If you want
+##' 
+##' @details The function returns a function in plain text. If you want
 ##'     to store the code, paste this text to a file. If you want to
 ##'     use it right away, do
 ##' fun1text <- genCovFun()
