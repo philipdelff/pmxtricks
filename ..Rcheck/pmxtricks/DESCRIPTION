@@ -1,11 +1,12 @@
 Package: pmxtricks
 Type: Package
 Title: Author's tiny but golden every-day pmx helper functions
-Version: 0.0.2.903
-Date: 
+Version: 0.0.0.901
+Date:
+Depends:
 Author: Philip Delff <philip@delff.dk>
 Maintainer: Philip Delff <philip@delff.dk>
 Description: Tools mainly for pharmacometrics related tasks. 
 License: GPL-3
-RoxygenNote: 6.1.1
-Suggests: testthat
+RoxygenNote: 6.0.1
+Built: R 3.5.1; ; 2018-12-08 04:40:25 UTC; unix

@@ -1,16 +1,8 @@
 ##' automatically find Nonmem tables and organize data
 
 #### change log
-### NMscan7 -> NMscan8
-## automatic detection of psn/QCP structure.
 
 ## adding possibility to stack with discarded lines from input data.
-
-### NMscan5 -> NMscan6
-
-## replaced a few plyr calls and changed function calls 
-
-## checks if inpu file exists. If not, it just outputs the output data.
 
 #### end change log
 
