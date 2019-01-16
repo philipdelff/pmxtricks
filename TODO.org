@@ -1,5 +1,8 @@
 * pmxtricks todo
 ** Bugs
+*** NMscanData
+**** TODO If col.row is not supplied, the function fails
+It must report an error since col.row is always necessary.
 *** TODO theme_pp doesn't run
 ** Functions requests
 *** DONE Functions to read and write NM csv files
@@ -19,6 +22,8 @@
 *** DONE function for rounding data.frames
     CLOSED: [2019-01-10 Thu 15:06]
 *** TODO function for creating new runs based on old ones
+*** TODO Function to run NMscanData and save and rds. 
+Must be suitable for batch mode.
 ** Documentation
 *** TODO Tests
 ** Improvements
