@@ -26,7 +26,7 @@ newNames <- function(data,names,overwrite=F,skipMissing=TRUE,debug=F){
             tokeep <- names$old  %in% n.data
             if(sum(!toKeep)==0) return(data)
             names <- names[toKeep,]
-        } else{
+        } else {
             stop("These old names are missing in data: ",paste(names$old[!names$old  %in% n.data],collapse=", "))
         }
     }

@@ -27,7 +27,7 @@ NMrunLog <- function(dir,runs,runs.omit,debug=F){
                                         reslist[c("run","problem","Npars","OFV","run.ref","covRun","finalZeroGradient","covSuccessful","conditionNumber","Nsubjs","Nobs","minSuccessful","roundingErrors")])
                                 }
                                 ))
-    
+
     tab$Model <- 1:nrow(tab)
     tab[,c("Model",setdiff(colnames(tab),"Model"))]
     

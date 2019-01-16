@@ -39,7 +39,7 @@ pars <- exp(ETAS)*tvpars[rep(1,nSubjs),]
 pairs(pars)
 
 pars$ID <- df.cov$ID
-
+pars$F1 <- 1
 
 ###} Section end
 
@@ -70,6 +70,24 @@ df.doses
 
 
 ###{ Section start: Simulate with PKPDsim
+library(PKPDsim)
+
+
+## dA1dt = -ka1*A1
+## dA2dt = ka1*A1-kt1*A2 
+## dA3dt = kt1 * A2 - CL*A3/VC - A2/VC*VM/(KM+A2/V2)
+## dA4dt = Q*(A3/VC-A4/VP)
+pk1 <- PKPDsim::new_ode_model(code ="
+dAdt[1] = -KA1*A[1]
+dAdt[2] = KA1*A[1]-KT1*A[2] 
+dAdt[3] = KT1 * A[2] - CL*A[3]/VC - A[2]/VC*VM/(KM+A[2]/VC)
+dAdt[4] = Q*(A[3]/VC-A[4]/VP)
+"
+,dose = list(cmt = 1, bioav = "F1") ### param goes here
+,obs = list(cmt = 2, scale = "VC")
+,parameters = c("F1","VC","CL","KA1","KT1","VP","Q","VM","KM")
+)
+
 
 
 ## observation noise
