@@ -1,2 +1,4 @@
 ^simdata$
 ^TODO\.org$
+^.*\.Rproj$
+^\.Rproj\.user$
