@@ -18,6 +18,7 @@
     CLOSED: [2018-12-16 Sun 23:06]
 *** DONE function for rounding data.frames
     CLOSED: [2019-01-10 Thu 15:06]
+*** TODO function for creating new runs based on old ones
 ** Documentation
 *** TODO Tests
 ** Improvements
@@ -28,7 +29,24 @@
 **** TODO Add convergence info
 **** TODO Add Covariance step info
 **** TODO Add dataset name
-**** TODO Add Nsubj
-**** TODO Add Nobs
+**** DONE Add Nsubj
+     CLOSED: [2019-01-15 Tue 13:43]
+**** DONE Add Nobs
+     CLOSED: [2019-01-15 Tue 13:43]
+**** TODO shortcut for a model devel tab
+
+***** TODO Colour code checks
+**** TODO Shortcut for a runlog presentation tab
+**** TODO Scan for available lst's and mod's. 
+The user doesn't have to supply which ones to include.
 *** gg_theme
-*** TODO Add choice of base theme
+**** TODO Add choice of base theme
+*** NMreadRun
+**** DONE If lst does not exist, take what you can from .mod
+     CLOSED: [2019-01-15 Tue 17:34]
+**** TODO Add dataset name
+**** TODO Add output tables
+**** TODO add timestamp
+**** DONE If lst does not exist, take what you can from .mod
+     CLOSED: [2019-01-15 Tue 17:35]
+**** TODO Add smalles p-value of test mu=0

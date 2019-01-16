@@ -1,10 +1,24 @@
 
 ## TODO add ParNearBoundary
+## TODO wrap in try.
 
-NMrunLog <- function(runs,dir,debug=F){
+NMrunLog <- function(dir,runs,runs.omit,debug=F){
     if(debug) browser()
+    if(missing(runs)) {
+        runs.lst <- sub("\\.lst$","",list.files(dir,"\\.lst$",ignore.case=T))
+        runs.mod <- sub("\\.mod$","",list.files(dir,"\\.mod$",ignore.case=T))
+        runs <- sort(unique(c(runs.lst,runs.mod)))
+    } else {
+        runs <- sub("\\.lst$|\\.mod$","",runs)
+    }
+    
+    if(!missing(runs.omit)) {
+        runs.omit <- sub("^ | $","",runs.omit)
+        runs.omit <- sub("\\.lst$|\\.mod$","",runs.omit)
+        runs <- setdiff(runs,runs.omit)
+    }
+    
     if(!missing(dir)) runs <- lapply(runs,function(run) filePathSimple(dir,run))
-
     
     tab <- do.call(rbind,lapply(runs,
                                 function(run){

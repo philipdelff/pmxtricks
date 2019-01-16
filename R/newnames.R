@@ -5,20 +5,30 @@
 ##'     equal length.
 ##' @param If names$new contains a name of an existing element in
 ##'     data, should it be overwritten?
+##' @param skipMissing Just skip if names refers to non-existing elements?
+##' @param debug Start by calling browser()?
 
-newnames <- function(data,names,overwrite=F,debug=F){
+newNames <- function(data,names,overwrite=F,skipMissing=TRUE,debug=F){
     if(debug) browser()
     ## check that old and new are characters and equally long
 
 ### if input is factors
     names$old <- as.character(names$old)
     names$new <- as.character(names$new)
-
+    names <- data.frame(old=names$old,
+                        new=names$new,
+                        stringsAsFactors=F)
     
     ## check that all old exist
     n.data <- names(data)
     if(!all(names$old  %in% n.data)){
-        stop("These old names are missing in data: ",paste(names$old[!names$old  %in% n.data],collapse=", "))
+        if(skipMissing){
+            tokeep <- names$old  %in% n.data
+            if(sum(!toKeep)==0) return(data)
+            names <- names[toKeep,]
+        } else{
+            stop("These old names are missing in data: ",paste(names$old[!names$old  %in% n.data],collapse=", "))
+        }
     }
 
     ## new names must be unique
