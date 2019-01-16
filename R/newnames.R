@@ -23,7 +23,7 @@ newNames <- function(data,names,overwrite=F,skipMissing=TRUE,debug=F){
     n.data <- names(data)
     if(!all(names$old  %in% n.data)){
         if(skipMissing){
-            tokeep <- names$old  %in% n.data
+            toKeep <- names$old  %in% n.data
             if(sum(!toKeep)==0) return(data)
             names <- names[toKeep,]
         } else {
