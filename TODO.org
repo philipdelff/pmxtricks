@@ -1,4 +1,9 @@
 * pmxtricks todo
+** Structure etc
+*** TODO Dependencies
+**** nonmem2R
+**** PKPDsim
+*** TODO Use @export flag for better control of stable/unstable
 ** Bugs
 *** NMscanData
 **** TODO If col.row is not supplied, the function fails
@@ -55,3 +60,10 @@ The user doesn't have to supply which ones to include.
 **** DONE If lst does not exist, take what you can from .mod
      CLOSED: [2019-01-15 Tue 17:35]
 **** TODO Add smalles p-value of test mu=0
+*** pkpdSimMany
+**** TODO Doses should not be multiplied by a factor
+**** TODO Clean up id/ID
+**** TODO Individualise doses or introduce a NMdoses
+*** NMscanData
+**** TODO Clean up messages
+Messages seem a bit random. Maybe introduce a quiet option?
