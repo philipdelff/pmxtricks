@@ -1,7 +1,7 @@
 ##' Platform independent sumo
 ##'
 ##' @details This is a fork of nonmem2R::sumo with very little
-##'     modification. Many thanks to Magnus.
+##'     modification. Many thanks to Magnus for a great job!
 
 sumofork <- function (model, use.model.path = TRUE, tableType = 2, format.estimate = "% -#6.4g", 
                       format.rse = "%#6.3g") 
