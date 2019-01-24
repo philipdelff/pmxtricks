@@ -8,4 +8,5 @@ Maintainer: Philip Delff <philip@delff.dk>
 Description: Tools mainly for pharmacometrics related tasks. 
 License: GPL-3
 RoxygenNote: 6.1.1
+Imports: nonmem2R
 Suggests: testthat
