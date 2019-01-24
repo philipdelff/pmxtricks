@@ -50,6 +50,7 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
     
 ### combine full tables into one
     tabs.row <- which(overview.tables$full.length)
+    if(!length(tabs.row)) stop("col.row not found in any full.length tables.")
     all.row <- NULL
     if(length(tabs.row)){
         all.row <- setNames(

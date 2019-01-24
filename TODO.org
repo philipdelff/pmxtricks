@@ -7,7 +7,9 @@
 ** Bugs
 *** NMscanData
 **** TODO If col.row is not supplied, the function fails
-It must report an error since col.row is always necessary.
+***** DONE As of now, It must report an error since col.row is always necessary.
+      CLOSED: [2019-01-24 Thu 18:39]
+***** TODO Ideally, it just treats output tables if tab.row not found
 *** TODO theme_pp doesn't run
 ** Functions requests
 *** DONE Functions to read and write NM csv files
