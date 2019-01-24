@@ -43,7 +43,7 @@ NMreadRun <- function(run){
     }
 
     if(lstOrMod=="lst"){
-        n2r.sumo <- sumoR(file.lst)
+        n2r.sumo <- sumofork(file.lst)
         out <- n2r.sumo
     } else {
         out <- list()
@@ -70,21 +70,22 @@ NMreadRun <- function(run){
     }
     out$run.ref <- run.ref
 
-### no of parameters
-    if(file.exists(file.ext)){
-        n2r.ext <- extload(file.ext)
-        nfix.theta <- sum(grepl("^THETA",n2r.ext$fix))
-        s1 <- strsplit( n2r.ext$fix,"\\.")
-        n.diags <- sum(sapply(s1,function(x) x[1]%in%c("OMEGA","SIGMA") && x[2]==x[3] ))
-        n.off.diags <- sum(sapply(s1,function(x) x[1]%in%c("OMEGA","SIGMA") && x[2]!=x[3] ))
-        n.pars.total <- length(c(n2r.ext$omega,n2r.ext$theta,n2r.ext$sigma))
-        n.fix <- nfix.theta+n.diags+2*n.off.diags
-        n.pars.est <- n.pars.total-n.fix
-        out$Npars <- n.pars.est
-    } else {
-        out$Npars <- NA
-    }
-
+### no of parameters - this is broken in extload. Has to be implemented differently
+    ## if(file.exists(file.ext)){
+    ##     n2r.ext <- extload(file.ext)
+    ##     nfix.theta <- sum(grepl("^THETA",n2r.ext$fix))
+    ##     s1 <- strsplit( n2r.ext$fix,"\\.")
+    ##     browser()
+    ##     n.diags <- sum(sapply(s1,function(x) x[1]%in%c("OMEGA","SIGMA") && x[2]==x[3] ))
+    ##     n.off.diags <- sum(sapply(s1,function(x) x[1]%in%c("OMEGA","SIGMA") && x[2]!=x[3] ))
+    ##     n.pars.total <- length(c(n2r.ext$omega,n2r.ext$theta,n2r.ext$sigma))
+    ##     n.fix <- nfix.theta+n.diags+2*n.off.diags
+    ##     n.pars.est <- n.pars.total-n.fix
+    ##     out$Npars <- n.pars.est
+    ## } else {
+    ##     out$Npars <- NA
+    ## }
+    out$Npars <- NA
 
     out2 <- pmxtricks::newNames(out,names=data.frame(old=c("totNoOfIndividuals" ,"totNoOfObservations"),new=c("Nsubjs","Nobs")),debug=F)
 

@@ -11,6 +11,10 @@
       CLOSED: [2019-01-24 Thu 18:39]
 ***** TODO Ideally, it just treats output tables if tab.row not found
 *** TODO theme_pp doesn't run
+*** NMreadRun
+**** TODO No. of parameters 
+extload sometimes fails to get FIX info creating problems for
+determining no of estimated parameters.
 ** Functions requests
 *** DONE Functions to read and write NM csv files
     CLOSED: [2018-12-12 Wed 19:27]
@@ -29,8 +33,12 @@
 *** DONE function for rounding data.frames
     CLOSED: [2019-01-10 Thu 15:06]
 *** TODO function for creating new runs based on old ones
-*** TODO Function to run NMscanData and save and rds. 
+*** DONE Function to run NMscanData and save and rds. 
+    CLOSED: [2019-01-24 Thu 19:40]
 Must be suitable for batch mode.
+NMcompAllRes
+*** TODO Read Nonmem data rds files if available and up2date, if not create
+    Could be an option to NMscan
 ** Documentation
 *** TODO Tests
 ** Improvements

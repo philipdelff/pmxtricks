@@ -1,4 +1,9 @@
-##' 
+##' make sure all Nonmem results are saved in rds files
+##'
+##' @param dir The directory in which to look for nonmem results
+##' @param ... passed to NMscanData
+##' @param debug start by calling browser()?
+##' @export
 
 
 ## look for lst files
