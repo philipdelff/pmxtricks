@@ -4,6 +4,7 @@
 **** nonmem2R
 **** PKPDsim
 *** TODO Use @export flag for better control of stable/unstable
+    Used to be: exportPattern("^[[:alpha:]]+")
 ** Bugs
 *** NMscanData
 **** TODO If col.row is not supplied, the function fails
