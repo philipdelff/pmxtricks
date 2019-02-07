@@ -14,9 +14,11 @@
 ##' @family plotting
 ##' @export
 
-extractLegend <- function(a.gplot){
-  tmp <- ggplot_gtable(ggplot_build(plot))
+extractLegend <- function(p){
+  tmp <- ggplot_gtable(ggplot_build(p))
   leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  ## if no legend in plot
+  if(length(leg)==0) return(NULL)
   legend <- tmp$grobs[[leg]]
   return(legend)
 }

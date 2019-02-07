@@ -1,9 +1,11 @@
 * pmxtricks todo
 ** Structure etc
 *** TODO Dependencies
-**** nonmem2R
+**** DONE nonmem2R
+     CLOSED: [2019-02-07 Thu 15:36]
 **** PKPDsim
-*** TODO Use @export flag for better control of stable/unstable
+*** DONE Use @export flag for better control of stable/unstable
+    CLOSED: [2019-02-07 Thu 15:36]
     Used to be: exportPattern("^[[:alpha:]]+")
 ** Bugs
 *** NMscanData
@@ -29,8 +31,8 @@ determining no of estimated parameters.
     CLOSED: [2018-12-12 Wed 23:05]
 *** DONE Compare contents of df's when rbind fails
     CLOSED: [2018-12-16 Sun 23:06]
-*** DONE Improved plot saver
-    CLOSED: [2018-12-16 Sun 23:06]
+*** TODO Improved plot saver
+name: ggprint
 *** DONE function for rounding data.frames
     CLOSED: [2019-01-10 Thu 15:06]
 *** TODO function for creating new runs based on old ones

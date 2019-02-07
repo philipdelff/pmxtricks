@@ -1,0 +1,7 @@
+** structure
+*** family keywords
+So far, the following keywords should cover. If not, the function probably doesn't belong here.
+**** Plotting
+**** Calc
+**** DataWrangling
+**** Nonmem
