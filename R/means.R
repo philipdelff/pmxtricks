@@ -28,10 +28,11 @@ means <- function(x,type="arithmetic",z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,c
     nobs <- length(x)
     w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sd(x)/nobs
     out <- c(est,est-w.ci,est+w.ci)
+
     out <- setNames(out,colnames)
     if(type=="geometric"){
       out <- exp(out)
     }
-    df
+    out
 }
 

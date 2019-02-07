@@ -6,6 +6,8 @@ test_that("point estimate - geometric",{
 
     x <- 1:10
     
+  ## > gm1
+  ##  [1] 4.528729
     gm1 <- means(x,type="geometric")
     expect_equal_to_reference(gm1,fileRef)
 })
