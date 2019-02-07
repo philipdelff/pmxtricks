@@ -40,6 +40,7 @@ Must be suitable for batch mode.
 NMcompAllRes
 *** TODO Read Nonmem data rds files if available and up2date, if not create
     Could be an option to NMscan
+*** TODO Function to add columns to all elements in a scanned data obj
 ** Documentation
 *** TODO Tests
 ** Improvements

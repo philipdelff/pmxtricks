@@ -1,5 +1,46 @@
 ### most of these functions are t1/2 functions. But functions to calculate more derived parameters follow.
 
+
+##' 1 absorption depot, 2 compartments
+##'
+##' Can take multiple parameter sets and return a data.frame of halftimes.
+##' @export
+## For thalf, I think this is the one to use. Would be good to generalise this to use for simpler systems.
+
+thalf_1a2c <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",mutate=F,debug=F){
+    if(debug)browser()
+
+    varnames <- c(cl,ka,v2,q,v3)
+    varsInPars <- varnames%in%names(pars)
+    if(any(!varsInPars)){stop(paste("These variables are not in pars:",paste(varnames[!varsInPars],collaps=", ")))}
+    
+    ## pars.u <- unique(pars[,c(cl,ka,v2,q,v3)])
+
+    thalves <- apply(pars,1,function(pars.u){
+        ## Asys <- matrix(unlist(c(-pars.u[,ka],0,0,
+        ##                         pars.u[,ka],-(pars.u[,cl]+pars.u[,q])/pars.u[,v2],pars.u[,q]/pars.u[,v3],
+        ##                         0,pars.u[,q]/pars.u[,v2],-pars.u[,q]/pars.u[,v3])),nrow=3,byrow=TRUE)
+        Asys <- matrix(unlist(c(-pars.u[ka],0,0,
+                                pars.u[ka],-(pars.u[cl]+pars.u[q])/pars.u[v2],pars.u[q]/pars.u[v3],
+                                0,pars.u[q]/pars.u[v2],-pars.u[q]/pars.u[v3])),nrow=3,byrow=TRUE)
+
+        thalves.u <- log(2)/-sort(eigen(Asys)$values)
+        thalves.u
+    })
+
+    ths2 <- t(thalves)
+    
+    if(mutate){
+        colnames(ths2) <- paste("th",1:ncol(ths2),sep="")
+        ths2 <- cbind(pars,ths2)
+    }
+
+    return(ths2)
+}
+
+
+
+
 ### This is only 1st order models, single-depot abs. One row of parameters only. Use thalf.1a.1c instead.
 thalf.1a.1c.one <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
     if(debug)browser()
@@ -70,85 +111,6 @@ thalf.trans.1c <- function(pars,cl="CL",ka="KA1",vc="VC",debug=F){
 }
 
 
-    
-##### 1 absorption depot, 2 compartments
-### This one only works for one set of parameters. Has to be extended to handled several parameter sets and return a data frame with all the thalves for each line in pars.
-thalf.1a.2c.single <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",debug=F){
-    warning("use thalf.1a.2c instead")
-    if(debug)browser()
-    pars.u <- unique(pars[,c(cl,ka,v2,q,v3)])
-
-    Asys <- matrix(unlist(c(-pars.u[,ka],0,0,
-                            pars.u[,ka],-(pars.u[,cl]+pars.u[,q])/pars.u[,v2],pars.u[,q]/pars.u[,v3],
-                            0,pars.u[,q]/pars.u[,v2],-pars.u[,q]/pars.u[,v3])),nrow=3,byrow=TRUE)
-        
-    thalves <- log(2)/-sort(eigen(Asys)$values)
-    
-    return(thalves)
-}
-
-##' 1 absorption depot, 2 compartments
-##'
-##' Can take multiple parameter sets and return a data.frame of halftimes.
-thalf.1a.2c <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",mutate=F,debug=F){
-    if(debug)browser()
-
-    varnames <- c(cl,ka,v2,q,v3)
-    varsInPars <- varnames%in%names(pars)
-    if(any(!varsInPars)){stop(paste("These variables are not in pars:",paste(varnames[!varsInPars],collaps=", ")))}
-    
-    ## pars.u <- unique(pars[,c(cl,ka,v2,q,v3)])
-
-    thalves <- apply(pars,1,function(pars.u){
-        ## Asys <- matrix(unlist(c(-pars.u[,ka],0,0,
-        ##                         pars.u[,ka],-(pars.u[,cl]+pars.u[,q])/pars.u[,v2],pars.u[,q]/pars.u[,v3],
-        ##                         0,pars.u[,q]/pars.u[,v2],-pars.u[,q]/pars.u[,v3])),nrow=3,byrow=TRUE)
-        Asys <- matrix(unlist(c(-pars.u[ka],0,0,
-                                pars.u[ka],-(pars.u[cl]+pars.u[q])/pars.u[v2],pars.u[q]/pars.u[v3],
-                                0,pars.u[q]/pars.u[v2],-pars.u[q]/pars.u[v3])),nrow=3,byrow=TRUE)
-
-        thalves.u <- log(2)/-sort(eigen(Asys)$values)
-        thalves.u
-    })
-
-    ths2 <- t(thalves)
-    
-    if(mutate){
-        colnames(ths2) <- paste("th",1:ncol(ths2),sep="")
-        ths2 <- cbind(pars,ths2)
-    }
-
-    return(ths2)
-}
-
-
-thalf.1a.2c.plyr <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",debug=F){
-    warning("use thalf.1a.2c instead")
-    require(plyr)
-    
-    if(debug)browser()
-    ## pars.u <- unique(pars[,c(cl,ka,v2,q,v3)])
-
-    varnames <- c(cl,ka,v2,q,v3)
-    varsInPars <- varnames%in%names(pars)
-    if(any(!varsInPars)){stop(paste("These variables are not in pars:",paste(varnames[!varsInPars],collaps=", ")))}
-    
-    
-    thalves <- apply(pars,1,function(pars.u){
-            Asys <- matrix(unlist(c(-pars.u[ka],0,0,
-                                pars.u[ka],-(pars.u[cl]+pars.u[q])/pars.u[v2],pars.u[q]/pars.u[v3],
-                                0,pars.u[q]/pars.u[v2],-pars.u[q]/pars.u[v3])),nrow=3,byrow=TRUE)
-
-        
-        
-            thalves.u <- log(2)/-sort(eigen(Asys)$values)
-            thalves.u
-    })
-    
-    return(t(thalves))
-}
-
-
 
 
 ##### 2 absorption depots (split depot), 2 compartments
@@ -178,7 +140,7 @@ thalf.2a.2c <- function(pars,cl="CL",ka1="KA1",ka2="KA2",v2="V2",q="Q",v3="V3",d
   return(thalves)
 }
 
-############ more derived parameters at once
+############ more derived parameters at once. 
 ###{
 derivePars.1a.1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
     if(debug)browser()

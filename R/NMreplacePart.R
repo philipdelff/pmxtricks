@@ -1,12 +1,12 @@
-##' replace ("dollar") parts of a nonmem control stream
+##' replace ($)sections of a nonmem control stream
 ##'
-##' Just give the dollar name, the new lines and the file path, and the
-##' "dollar section", and the input to Nonmem will be updated.
+##' Just give the section name, the new lines and the file path, and the
+##' "$section", and the input to Nonmem will be updated.
 ##'
 ##' @param path The run to edit. If a directory is given, the file is assumed to
 ##'     be called input.txt in that folder.
-##' @param dollar The name of the dollar section to update. Example:
-##'     dollar="EST". See findDollar.
+##' @param section The name of the section to update. Example:
+##'     section="EST" to edit the sections starting by $EST. See NMgetSection
 ##' @param newlines The new text. Better be broken into lines in a character
 ##'     vector since this is simply written with writeLines.
 ##' @param newpath path to new run. If missing, path is used. If NULL, output is
@@ -23,7 +23,7 @@
 ##' nmReplacePart(path="run01.mod",dollar="EST", newlines=newlines)
 
 
-NMreplacePart <- function(path,dollar,newlines,newpath,backup=T,blank.append=T,test=F,debug=F){
+NMreplacePart <- function(path,section,newlines,newpath,backup=T,blank.append=T,test=F,debug=F){
     if(debug) browser()
 
 #### handle arguments
@@ -46,10 +46,13 @@ NMreplacePart <- function(path,dollar,newlines,newpath,backup=T,blank.append=T,t
 ######
     
 
-
+## browser()
     
+    ## see below why we need to read the lines for now
     lines <- readLines(file)
-    idx.dlines <- findDollar(lines,name=dollar,keepEmpty=T,keepDollarEmpty=T,drop.comments=F)
+    idx.dlines <- NMgetSection(lines=lines,name=section,return="idx",keepEmpty=T,
+                               keepName=T,keepComments=T,asOne=T,
+                               cleanSpaces=F)
 
     stopifnot(length(idx.dlines)>0)
     
@@ -60,7 +63,7 @@ NMreplacePart <- function(path,dollar,newlines,newpath,backup=T,blank.append=T,t
     min.dl <- min(idx.dlines)
     max.dl <- max(idx.dlines)
 
-    ### these two cases need to be handled slightly differently so not now
+    ### these two cases need to be handled slightly differently so not supported for now
     stopifnot(min.dl>1)
     stopifnot(max.dl<=length(lines))
 
