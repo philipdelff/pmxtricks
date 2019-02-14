@@ -6,6 +6,10 @@
 ##' fun1text <- genCovFun()
 ##' newfun <- eval(parse(text=fun1text))
 
+## TODO 
+## In case the resulting function doesn't take any covariates (covs <- NULL) the resulting code could be simplified. It seems overly complicated to have a loop over covs when covs is NULL. Should the df.covs argument even be included if none are used anyway?
+## TODO end
+
 genCovFun <- function(NMcode0,pars0,covs0,theta0,omega0,name.fun,debug=F){
     if(debug) browser()
 
