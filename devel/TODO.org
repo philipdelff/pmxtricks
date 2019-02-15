@@ -20,28 +20,22 @@ extload sometimes fails to get FIX info creating problems for
 determining no of estimated parameters.
 ** Functions requests
 *** DONE Functions to read and write NM csv files
-    CLOSED: [2018-12-12 Wed 19:27]
 *** DONE AUC function
-    CLOSED: [2018-12-16 Sun 23:06]
 *** DONE selectVars
-    CLOSED: [2018-12-12 Wed 19:42]
 *** DONE ggplot watermark function
-    CLOSED: [2018-12-12 Wed 19:42]
 *** DONE powerpoint theme function
-    CLOSED: [2018-12-12 Wed 23:05]
 *** DONE Compare contents of df's when rbind fails
-    CLOSED: [2018-12-16 Sun 23:06]
-*** TODO Improved plot saver
-name: ggprint
+*** DONE Improved plot saver
+name: ggwrite
 *** DONE function for rounding data.frames
-    CLOSED: [2019-01-10 Thu 15:06]
 *** TODO function for creating new runs based on old ones
 *** DONE Function to run NMscanData and save and rds. 
     CLOSED: [2019-01-24 Thu 19:40]
 Must be suitable for batch mode.
 NMcompAllRes
 *** TODO Read Nonmem data rds files if available and up2date, if not create
-    Could be an option to NMscan
+    Could be an option to NMscan. For now, it's a new function called
+    NMcompRes.     
 *** TODO Function to add columns to all elements in a scanned data obj
 ** Documentation
 *** TODO Tests
@@ -81,3 +75,7 @@ The user doesn't have to supply which ones to include.
 *** NMscanData
 **** TODO Clean up messages
 Messages seem a bit random. Maybe introduce a quiet option?
+*** NMcompRes
+If an rds exists but was called with other options, it is still
+used. That is risky. Maybe save all options to function call in
+object? Or compare with the meta data object?
