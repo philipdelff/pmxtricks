@@ -12,6 +12,7 @@
 
 ## "run01.mod" -> "run01_output.rds"
 
+
 NMcompAllRes <- function(dir,...,debug=F){
     if(debug) browser()
 
@@ -19,15 +20,41 @@ NMcompAllRes <- function(dir,...,debug=F){
     files.lst <- list.files(dir,pattern="\\.lst$",full.names=T)
 
     ## for each lst file, check if there is an rds that is newer than lst. If there is, exit.
-    lapply(files.lst,function(file.lst){
-        run <- sub("\\.lst$","",file.lst)
-        file.rds <- filePathSimple(paste0(run,"_output.rds"))
-        if(!file.exists(file.rds) || (file.info(file.rds)$mtime<file.info(file.lst)$mtime) ){
-            message(paste0("generating",file.rds))
-            data <- NMscanData(file.lst,...)
-            saveRDS(data,file=file.rds)
-        }
-    }
-    )
+    # lapply(files.lst,function(file.lst){
+    #     run <- sub("\\.lst$","",file.lst)
+    #     file.rds <- filePathSimple(paste0(run,"_output.rds"))
+    #     if(!file.exists(file.rds) || (file.info(file.rds)$mtime<file.info(file.lst)$mtime) ){
+    #         message(paste0("generating",file.rds))
+    #         data <- NMscanData(file.lst,...)
+    #         saveRDS(data,file=file.rds)
+    #     }
+    # }
+    # )
+    lapply(files.lst,NMcompRes,return=FALSE)
+    
     invisible(return())
+}
+
+##' @export
+NMcompRes <- function(file,return=FALSE,...){
+   
+  run <- sub("\\.lst$","",file)
+  run <- sub("\\.mod$","",run)
+  file.lst <- paste0(run,".lst")
+  file.rds <- filePathSimple(paste0(run,"_output.rds"))
+  wrote <- FALSE
+  if(!file.exists(file.rds) || (file.info(file.rds)$mtime<file.info(file.lst)$mtime) ){
+    message(paste0("generating",file.rds))
+    data <- NMscanData(file.lst,...)
+    saveRDS(data,file=file.rds)
+    wrote <- TRUE
+  }
+  
+  if(return) {
+    if(!wrote){
+      data <- readRDS(file.rds)
+    }
+    return(invisible(data))
+  }
+  
 }

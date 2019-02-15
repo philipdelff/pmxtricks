@@ -1,9 +1,11 @@
 ##' automatically find Nonmem tables and organize data
+##'
+##' @param file A nonmem control stream or output file from nonmem (.mod or .lst)
+##' @param col.grp If present, ID and OCC level info is grouped by col.grp. So should only be needed for cross-over.
+
 
 #### change log
-
 ## adding possibility to stack with discarded lines from input data.
-
 #### end change log
 
 
@@ -15,10 +17,6 @@
 ## use default values for col.grp and col.occ. Use if present.
 
 ### end todo 
-
-
-##' @param col.grp If present, ID and OCC level info is grouped by col.grp. So should only be needed for cross-over.
-
 
 NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC",structure="full",use.input=T,reconstructRows=F,debug=F){
     if(debug) browser()

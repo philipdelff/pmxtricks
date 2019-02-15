@@ -1,3 +1,5 @@
+## the use of . in regular expressions seems wrong. Not sure what trouble it gives.
+
 ## there seems to be a bug in nonmem2R::extFormat. This function tries to solve that.
 
 ##        y[i, 1] <- sprintf("%3d", res.table[i, 1])

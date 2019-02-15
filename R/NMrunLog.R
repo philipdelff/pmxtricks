@@ -22,10 +22,15 @@ NMrunLog <- function(dir,runs,runs.omit,debug=F){
     
     tab <- do.call(rbind,lapply(runs,
                                 function(run){
-                                    reslist <- NMreadRun(run)
+                                    reslist <- try(NMreadRun(run))
+                                    if("try-error"%in%class(reslist)) {
+                                      warning("Could not read",run)
+                                      return(NULL)
+                                    }
+                                      else {
                                     as.data.frame(
                                         reslist[c("run","problem","Npars","OFV","run.ref","covRun","finalZeroGradient","covSuccessful","conditionNumber","Nsubjs","Nobs","minSuccessful","roundingErrors")])
-                                }
+                                }}
                                 ))
 
     tab$Model <- 1:nrow(tab)
