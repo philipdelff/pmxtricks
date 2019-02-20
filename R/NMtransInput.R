@@ -1,4 +1,9 @@
-## reads input and translate names according to the $INPUT section
+##' read input data and translate names according to the $INPUT section
+##' 
+##' @description Based on a nonmem run, this function finds the input data and reads it. But it reads it like the nonmem run by applying DROP arguments and alternative naming of columns in the nonmem run.
+##' @param file a .lst or a .mod. No matter which you provide, the .mod is required and is the only one to be read.
+##' @export
+
 NMtransInput <- function(file){
 
 ### the lst file only contains the name of the data file, not the path to it. So we need to find the .mod instead.

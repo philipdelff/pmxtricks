@@ -27,7 +27,7 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
 
 ###{ process arguments 
     file <- filePathSimple(file)
-    if(!file.exists(file)) stop("file does not exist.")
+    if(!file.exists(file)) stop(paste0("Model file ",file," does not exist.",call. = F)
     dir <- dirname(file)
 
 ###}

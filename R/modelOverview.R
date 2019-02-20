@@ -1,3 +1,5 @@
+### this file includes both modelOverview and modelOverviewAll
+
 ##' goodness of fit and more
 ##'
 ##' This function is far from done. The idea is it makes a whole bunch
@@ -469,7 +471,6 @@ modelOverview <- function(path.run,str.output="NMfolders",folder.out,col.id,covs
 }
 
 ###{ model.diag.all - run model.diagnostics on many runs. But only if it hasn't been done already.
-cat("modelOverviewAll\n")
 #' @param dirs Regular expression. Only directories whose name match
 #'     this will be taken into account.
 modelOverviewAll <- function(path,debug=F,pattern.dirs="^[0-9].*",force=FALSE,...){
