@@ -1,7 +1,7 @@
 ##' make sure all Nonmem results are saved in rds files
 ##'
 ##' @param dir The directory in which to look for nonmem results
-##' @param ... passed to NMscanData
+##' @param ... passed to NMcompRes which will pass them to NMscanData
 ##' @param debug start by calling browser()?
 ##' @export
 
@@ -30,13 +30,22 @@ NMcompAllRes <- function(dir,...,debug=F){
     #     }
     # }
     # )
-    lapply(files.lst,NMcompRes,return=FALSE)
+    lapply(files.lst,NMcompRes,return=FALSE,...)
     
     invisible(return())
 }
 
+##' Read and store nonmem results in rds
+##'
+##' Tries to find out if the output rds should be updated and does so if necessary.
+##' 
+##' @param file a nonmem control stream or output (normally, .mod or .lst).
+##' @param return If TRUE, resulting data structure is invisibly returned. You may want to disable this if the rds is the goal itself. Disabling can save reading the rds if there is nothing to do.
+##' @param ... passed to NMcompRes which will pass them to NMscanData
 ##' @export
-NMcompRes <- function(file,return=FALSE,...){
+
+
+NMcompRes <- function(file,return=TRUE,...){
    
   run <- sub("\\.lst$","",file)
   run <- sub("\\.mod$","",run)
@@ -58,3 +67,5 @@ NMcompRes <- function(file,return=FALSE,...){
   }
   
 }
+
+
