@@ -53,7 +53,7 @@ NMcompRes <- function(file,return=TRUE,...){
   file.rds <- filePathSimple(paste0(run,"_output.rds"))
   wrote <- FALSE
   if(!file.exists(file.rds) || (file.info(file.rds)$mtime<file.info(file.lst)$mtime) ){
-    message(paste0("generating",file.rds))
+    message(paste0("generating ",file.rds))
     data <- NMscanData(file.lst,...)
     saveRDS(data,file=file.rds)
     wrote <- TRUE
