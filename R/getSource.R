@@ -34,6 +34,9 @@ getSource <- function(file,dir.central=NULL,dir.local,overwrite=FALSE,source.dir
         return(invisible())
     }
 
+    dir.local <- filePathSimple(dir.local)
+    dir.central <- filePathSimple(dir.central)
+    
     ## It should be checked that destination folder exists before doing anything.
     if(!dir.exists(dir.local)) {stop("Destination directory (dir.local) must exist.")}
 
@@ -45,7 +48,7 @@ getSource <- function(file,dir.central=NULL,dir.local,overwrite=FALSE,source.dir
     dest = file.path(dir.local,file)
   
   ## do necessary files and dirs exist?
-  if (!file.exists(dir.central) || !file.exists(org)){
+  if (!dir.exists(dir.central) || !file.exists(org)){
     if(file.exists(file.path(dir.local,file))){
       #File exists locally, but not external. Load local
       source(file.path(dest),echo=F)
