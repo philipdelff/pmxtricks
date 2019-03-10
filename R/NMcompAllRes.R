@@ -30,7 +30,7 @@ NMcompAllRes <- function(dir,...,debug=F){
     #     }
     # }
     # )
-    lapply(files.lst,function(x)try(NMcompRes(x),return=FALSE,...))
+    lapply(files.lst,function(x)try(NMcompRes(x,return=FALSE,...)))
     
     invisible(return())
 }

@@ -5,15 +5,17 @@
 ##'
 ##' @param path The run to edit. If a directory is given, the file is assumed to
 ##'     be called input.txt in that folder.
-##' @param section The name of the section to update. Example:
-##'     section="EST" to edit the sections starting by $EST. See NMgetSection
-##' @param newlines The new text. Better be broken into lines in a character
-##'     vector since this is simply written with writeLines.
+##' @param section The name of the section to update. Example: section="EST" to
+##'     edit the sections starting by $EST. See NMgetSection
+##' @param newlines The new text (including "$SECTION"). Better be broken into
+##'     lines in a character vector since this is simply written with
+##'     writeLines.
 ##' @param newpath path to new run. If missing, path is used. If NULL, output is
 ##'     returned rather than written.
 ##' @param backup In case you are overwriting the old file, do you want to
 ##'     backup the file (to say, backup_input.txt)?
-##' @param test Want to see the resulting input.txt and not write it to disk? Default is FALSE.
+##' @param test Want to see the resulting input.txt and not write it to disk?
+##'     Default is FALSE.
 ##' @param debug start by running browser()?
 ##'
 ##' @details The new file will be written with unix-style line endings. 
@@ -39,8 +41,9 @@ NMreplacePart <- function(path,section,newlines,newpath,backup=T,blank.append=T,
         stopifnot(file.exists(newfile))
     }
 
+    ##### I think this split is unnecessary and can cause trouble newlines is a vector of lines.
     ### a \n means a new line, so split by that
-    newlines <- strsplit(newlines,"\n")[[1]]
+    ## newlines <- strsplit(newlines,"\n")[[1]]
     if(blank.append) newlines <- c(newlines,"")
     
 ######
@@ -50,7 +53,7 @@ NMreplacePart <- function(path,section,newlines,newpath,backup=T,blank.append=T,
     
     ## see below why we need to read the lines for now
     lines <- readLines(file)
-    idx.dlines <- NMgetSection(lines=lines,name=section,return="idx",keepEmpty=T,
+    idx.dlines <- NMgetSection(lines=lines,section=section,return="idx",keepEmpty=T,
                                keepName=T,keepComments=T,asOne=T,
                                cleanSpaces=F)
 
