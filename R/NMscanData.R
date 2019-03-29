@@ -89,7 +89,7 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
         dat <- data[[I]]
         cnames <- colnames(dat)
         cnames.left <- cnames
-        
+
         tab.id <- NULL
         if(col.id%in%cnames.left){
             covs.maybe <- findCovs(dat[,cnames.left],cols.id=c(col.id,col.grp))

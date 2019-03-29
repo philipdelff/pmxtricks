@@ -11,7 +11,7 @@ NMscanTables <- function(file,details=F){
         sub(paste0(NAME," *= *"),"",rm1)
     }
     
-    lines.table <- NMgetSection(file,name="TABLE",keepName=F,keepComments=F,keepEmpty=F,asOne=F,simplify=F)
+    lines.table <- NMgetSection(file,section="TABLE",keepName=F,keepComments=F,keepEmpty=F,asOne=F,simplify=F)
 
 
 ### TODO include firstonly

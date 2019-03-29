@@ -31,8 +31,8 @@ test_that("point estimate - arithmetic",{
   
   x <- 1:10
   
-  gm1 <- means(x,type="arithmetic")
-  expect_equal_to_reference(gm1,fileRef)
+  am1 <- means(x,type="arithmetic")
+  expect_equal_to_reference(am1,fileRef)
 })
 
 
@@ -42,7 +42,18 @@ test_that("with confidence interval - arithmetic",{
   
   x <- 1:10
   
-  gm2 <- means(x, type="arithmetic", ci=TRUE)
-  expect_equal_to_reference(gm2,fileRef)
+  am2 <- means(x, type="arithmetic", ci=TRUE)
+  expect_equal_to_reference(am2,fileRef)
+  
+})
+
+test_that("with confidence interval - median",{
+  
+  fileRef <- "testReference/means5.rds"
+  
+  x <- 1:10
+  
+  md1 <- means(x, type="median", ci=TRUE)
+  expect_equal_to_reference(md1,fileRef)
   
 })

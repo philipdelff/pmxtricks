@@ -7,15 +7,17 @@
 ##' @param dist.ci The distribution to use for the confidence interval. Default and only supported is "t". If type=geometric, this is applied after transformation to gaussian.
 ##' @param p.ci probability covered by confidence interval. Default is 0.95
 ##' @param colnames If ci, this defines the column names of the resulting data frame. Default is c("est","ll","ul").
+##' @param format The format of the result. Possible values are df and num.
+
+### ChangeLog
+## 2019-03-14 philipdelff: Added support for median
+### ChangeLog end
 
 ### TODO
-## 2019-02-22 philipdelff: Add support for median
-## for CI:
-## sort(x)[qbinom(c(.025,.975), length(x), 0.5)]
 
 ### TODO end
 
-means <- function(x,type="arithmetic",z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,colnames=c("est","ll","ul")) {
+means <- function(x,type="arithmetic",z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,colnames=c("est","ll","ul"),format = "df") {
 
     type <- gsub("(^ +| +$)","",type)
     type <- tolower(type)
@@ -24,34 +26,63 @@ means <- function(x,type="arithmetic",z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,c
         type <- "arithmetic"
     } else if(type == substr("geometric",1,nchar(type))){
         type <- "geometric"
+    } else if(type == substr("median",1,nchar(type))){
+        type <- "median"
     } else {
         stop("type has to be the first letters of either arithmetic or geometric.")
     }
 
+    stopifnot(format%in%c("df","num"))
     
-  if(type=="geometric"){
-      if(z.rm) x <- x[x!=0]
-        x <- log(x)
-      } else {
+    if( type!="geometric" ) {
         if(z.rm) stop("z.rm can only be TRUE when type==geometric")
-      }
-    est <- mean(x)
-  
-    if(!ci) {
-      out <- est
-      if(type=="geometric") out <- exp(est)
-      return(out)
     }
-      
-    if(!dist.ci=="t") stop("Only t-dist supported.")
-    nobs <- length(x)
-    w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sd(x)/nobs
-    out <- c(est,est-w.ci,est+w.ci)
 
-    out <- setNames(out,colnames)
-    if(type=="geometric"){
-      out <- exp(out)
+    est <- switch(type,
+                geometric = {
+                    if(z.rm) x <- x[x!=0]
+                    exp(mean(log(x)))
+                },
+                arithmetic = {
+                    mean(x)
+                },
+                median = {
+                    median(x)
+                }
+                )
+
+    
+    if(!ci){
+        return(est)
     }
+    
+    if(!dist.ci=="t") stop("Only t-dist supported.")
+
+    nobs <- length(x)
+    out <- switch(type,
+                geometric = {
+                    w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sd(log(x))/nobs
+                    out <- c(est,exp(log(est)-w.ci),exp(log(est)+w.ci))
+                    out
+                },
+                arithmetic = {
+                    w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sd(x)/nobs
+                    out <- c(est,est-w.ci,est+w.ci)
+                    out
+                },
+                median = {
+                    q <- 0.5
+                    x <- sort(x)
+                    w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sqrt(nobs*q*(1-q))
+                    j <- nobs*q - w.ci
+                    k <- nobs*q + w.ci
+                    out <- c(est,x[ceiling(j)],x[ceiling(k)])
+                    out
+                }
+                )
+
+    if(format == "df") out <- lapply(out,data.frame,stringsAsFactors = F)
+    out <- setNames(out,colnames)
+
     out
 }
-

@@ -9,7 +9,7 @@ NMtransInput <- function(file){
 ### the lst file only contains the name of the data file, not the path to it. So we need to find the .mod instead.
     if(grepl("\\.lst$",file)) file <- sub("\\.lst","\\.mod",file)
 
-    lines <- NMgetSection(file,name="INPUT",keepName=F)
+    lines <- NMgetSection(file,section="INPUT",keepName=F)
     lines
 
     line <- gsub(" +"," ",paste(lines,collapse=" "))
@@ -33,7 +33,7 @@ NMtransInput <- function(file){
 ### containing the data. Since it is to be used in a FORTRAN OPEN statement,
 ### this name may not include embedded commas, semi-colons, parentheses, or
 ### spaces.
-    lines.data <- NMgetSection(file,name="DATA",keepName=F,keepComments=F,keepEmpty=F)
+    lines.data <- NMgetSection(file,section="DATA",keepName=F,keepComments=F,keepEmpty=F)
 
     ## pick $DATA and the next string
     lines.data2 <- paste(lines.data,collapse=" ")

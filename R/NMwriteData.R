@@ -26,6 +26,13 @@ NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,
     
     ## col.is.num <- sapply(data.out,is.numeric)
     ## stopifnot(any(col.is.num))
+
+### this function is used to replace .csv or whatever ending is used to .rds, .RData etc. file is path, ext is extension without ., e.g. "rds".
+    transFileName <- function(file,ext){
+        file.new <- sub("\\.[^\\.]+$",paste0(".",ext),file)
+        file.new
+    }
+
     
     cat("Nonmem data file:",file,"\n")
     cat("For NonMem:\n")
@@ -47,15 +54,18 @@ NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,
     if(write.RData){
         name.data <- deparse(substitute(data))
         if(!grepl("\\..+$",file)) stop("filename could not be translated to .RData. Choose a .csv file name.")
-        file.RData <- sub("\\..+$",".RData",file)
+        file.RData <- transFileName(file,"RData")
         ## browser()
         assign(name.data,data.out)
         save(list=name.data,file=file.RData)
         written <- TRUE
     }
     if(write.rds){
+        ## A dot and then something is needed in the name for us to be able to
+        ## translate
         if(!grepl("\\..+$",file)) stop("filename could not be translated to .rds. Choose a .csv file name.")
-        file.rds <- sub("\\..+$",".rds",file)
+
+        file.rds <- transFileName(file,"rds")
         ## browser()
         saveRDS(data.out,file=file.rds)
         written <- TRUE

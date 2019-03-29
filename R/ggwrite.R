@@ -18,6 +18,7 @@
 ##' @param res Resolution. Passed to png.
 ##' @param save Save the plot to the given file or just show? Defaults to
 ##'     TRUE. Hint, if you use an "exportFlag", use save=exportFlag.
+##' @param paper Only used with pdf device. See ?pdf.
 ##' @param debug If TRUE, browser is called to begin with.
 ##' @export
 ##' @return Nothing.
@@ -31,12 +32,12 @@
 ##' ggwrite(p1,stamp=stamp,canvas="wide",save=exportFlag)
 
 ### TODO
-## a "show" arguement is missing. Like "save" this should determine if the plot
+## a "show" argument is missing. Like "save" this should determine if the plot
 ## is printed to screen. Ideally, save and show should work independently, so
 ## that you can do either, both, or none, depending on these two args.
 #### end TODO
 
-ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,debug=F,save=T){
+ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,debug=F,paper="special",save=T){
     require(grid)
     ## labeling?
     ## gridExtra?
@@ -79,7 +80,7 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,debug=F,
             }
             if(type=="pdf"){
                 pdf(file = fn, width = 0.6 * width, 
-                    height = 0.6 * height,onefile=onefile)
+                    height = 0.6 * height,onefile=onefile,paper = paper)
             }
             print1(plot)
             dev.off()

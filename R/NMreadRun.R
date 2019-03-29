@@ -51,7 +51,7 @@ NMreadRun <- function(run){
     
     out$run=runname
     problem <- NMgetSection(runfile
-                           ,name="PROBLEM"
+                           ,section="PROBLEM"
                            ,keepName=F
                            ,keepEmpty=F
                            ,keepComments=F
