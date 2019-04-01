@@ -1,18 +1,35 @@
-
-##' @param run The main title of the plot. Called run becaus you often want a Nonmem run name here.
+##' Plot individual profiles and doses based on NM style dataset
+##' @param run The main title of the plot. Called run becaus you often
+##'     want a Nonmem run name here.
 ##' @param id The name of the subject ID column
-##' @param use.evid2 Should EVID 2 records be used for pred and ipred plotting? The default is to use EVID==2 records if data contains a column called EVID, and this column has at least one value equalling 2.
+##' @param use.evid2 Should EVID 2 records be used for pred and ipred
+##'     plotting? The default is to use EVID==2 records if data
+##'     contains a column called EVID, and this column has at least
+##'     one value equalling 2.
 ##' @param facet splits plots in pages
 ##' @param par.prof Distinguish multiple profiles in dataset.
-##' @details The resulting plot object has been limited on x axis by coord_cartesian. So if you want to adjust x limits on the output from this function, you must use coord_cartesian. xlim does not work.
-##' @export 
+##' @param grp.label Column to use for labeling the sheets (while
+##'     sorting by grp). A typical example is that grp is numeric (say
+##'     dose including 80 and 280) while grp.label is a character
+##'     (including 80 mg and 280 mg). In order to sort correctly, you
+##'     must use the numeric variable for grp. But in order to get
+##'     nice labels, use the character variable for labels.
+##' @details The resulting plot object has been limited on x axis by
+##'     coord_cartesian. So if you want to adjust x limits on the
+##'     output from this function, you must use coord_cartesian. xlim
+##'     does not work.
+##' @export
 
 
 ### change log
-## 2019-03-28 philipdelff:  the two for loops to control faceting is horribly inflexible. Do the plot, then facet. First: for splitting into pages, introduce a variable (column) that groups into the splitting needed. 
+## 2019-04-01 philipdelff: Added support for plotting of doses.
+
+## 2019-03-28 philipdelff: the two for loops to control faceting is
+## horribly inflexible. Do the plot, then facet. First: for splitting
+## into pages, introduce a variable (column) that groups into the
+## splitting needed.
 
 ### end change log
-
 
 #### todo
 
@@ -35,7 +52,7 @@
 
 
 
-ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE", grp = "GRP", amt = "AMT", id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, free.lims = F, logy = F, NPerSheet=12,LLOQ=NULL, use.evid2,facet=id,par.prof=NULL, debug = F){
+ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE", grp = "GRP", amt = "AMT", id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, free.lims = F, logy = F, NPerSheet=12,LLOQ=NULL, use.evid2,facet=id,par.prof=NULL, x.inc,grp.label = grp,debug = F){
 
     if(debug) browser()
     library(ggplot2)
@@ -59,9 +76,12 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
     if(missing(use.evid2)){
         use.evid2 <- !is.null(data[["EVID"]])&&c(2)%in%data[["EVID"]]
     }
-
+    if(missing(run)){
+        run <- ""
+    }
+    
     if(is.numeric(data[,par.prof])) data[,par.prof] <- as.factor(data[,par.prof])
-    if(is.numeric(data[,grp])) data[,grp] <- as.factor(data[,grp])
+    ## if(is.numeric(data[,grp])) data[,grp] <- as.factor(data[,grp])
     
 ########### plot settings ##############
     logbreaks <- c(outer(c(1,2,5),10^c(-10:10)))
@@ -94,15 +114,38 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
            by = get(grp)]
 
     ## this should be done more elegantly
-    DTdata[,
-           sheet:= as.numeric(as.factor(paste(sprintf("%010d",get(grp)),IDcut)))]
+    
+    DTdata$grp.char <- DTdata[,get(grp)]
+
+    
+    ## DTdata[,
+    ##        sheet:= as.numeric(as.factor(paste(sprintf("%010d",get(grp)),IDcut)))]
+    
+    ## DTdata[,
+    ##            sheet:= as.numeric(as.factor(interaction(get(grp),IDcut)))]
+    
+    DTdata$..ROW <- 1:nrow(DTdata)
+    ##    DTdata[with(DTdata,order(get(grp),IDcut,..ROW)),]
+    setorderv(DTdata,cols = c(grp,"IDcut","..ROW"))
+    DTdata[,sheet:= .GRP,.(get(grp),IDcut)]
+
+    
+    ## DTdata[,sheet:=as.numeric(as.factor(get(grp))),IDcut]
+    
+    ## DTdata[,
+    ##        sheet:= as.numeric(as.factor(paste(sprintf("%010d",get(grp)),IDcut)))]
 
     ## add a counter to sheets within grp level - and no of sheets within grp level
     DTdata[,sheetgrp := as.numeric(as.factor(sheet)),get(grp)]
     DTdata[,Nsheetsgrp := max(sheetgrp),get(grp)]
 
-    DTdata[,xmingrp := min(get(x)[EVID == 0],na.rm=T),get(grp)]
-    DTdata[,xmaxgrp := max(get(x)[EVID == 0],na.rm=T),get(grp)]
+    
+    DTdata[,xmingrp :=  NA_real_]
+    DTdata[,xmaxgrp :=  NA_real_]
+    if(!missing(x.inc)) DTdata[,xmingrp := min(x.inc)] 
+    if(!missing(x.inc)) DTdata[,xmaxgrp := max(x.inc)]
+    DTdata[,xmingrp := min(c(get(x)[EVID == 0],xmingrp),na.rm=T),get(grp)]
+    DTdata[,xmaxgrp := max(c(get(x)[EVID == 0],xmaxgrp),na.rm=T),get(grp)]
 
     DTdata[,skipgrp := any(!is.finite(xmingrp)|!is.finite(xmaxgrp)),get(grp)]
 
@@ -195,10 +238,12 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
         xrange <- c(unique(tmp$xmingrp),unique(tmp$xmaxgrp))
         yrange <- c(unique(tmp$ymingrp),unique(tmp$ymaxgrp))
         s.dv.dos <- unique(tmp[,"s.dv.dos"])
-        
-        ptitle <- paste(run, "\n", unique(tmp[,grp]))
+
+        ptitle <- ""
+        if(run != "") ptitle <- paste0(run,".")
+        ptitle <- paste0(ptitle," ",unique(tmp[,grp.label]),".")
         if(unique(tmp$Nsheetsgrp)>1) {
-            ptitle <- paste(run, "\n", group, "\n", unique(tmp$sheetgrp), "/", tmp$Nsheetsgrp)
+            ptitle <- paste0(ptitle, " ",unique(tmp$sheetgrp), "/", tmp$Nsheetsgrp)
 
         }
 
@@ -206,7 +251,11 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
         p <- ggplot(subset(tmp2,EVID==0), aes_string(x = x, y = dv))
 
         if(!is.null(amt)){
-            p <- p+geom_segment(mapping = aes_string(x = x, xend = x, y = 0, yend = "amt2"),data=subset(tmp2,EVID%in%c(1,4)))
+            if(is.null(par.prof)){
+                p <- p+geom_segment(mapping = aes_string(x = x, xend = x, y = 0, yend = "amt2"),data=subset(tmp2,EVID%in%c(1,4)))
+            } else {
+                p <- p+geom_segment(mapping = aes_string(x = x, xend = x, y = 0, yend = "amt2",colour=as.name(par.prof)),data=subset(tmp2,EVID%in%c(1,4)))
+            }
         }
         
         if(is.null(par.prof)){
@@ -273,7 +322,6 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
         }
         
         if (!is.null(facet)){
-            
             p <- p + facet_wrap(reformulate(facet), ncol = 3)
         }
         ##            p <- p + scale_colour_manual(values = c("red", "black"))
