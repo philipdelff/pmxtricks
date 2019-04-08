@@ -76,10 +76,12 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
     if(!"EVID"%in%colnames(data)) x[,"EVID"] <- 0
 
 ### do all 
+    DTdata <- data.table(data)
     
     ## add reset info in separate column
-    data$reset <- NA
-    data$reset[data$EVID%in%c(3,4)] <- data[,get(x)][data$EVID%in%c(3,4)]
+    DTdata$reset <- NA
+    ##    data$reset[data$EVID%in%c(3,4)] <- data[,get(x)][data$EVID%in%c(3,4)]
+    DTdata[EVID%in%c(3,4),reset:=get(x)]
     
     
 ### divide data into obs and sim (if EVID 2 present)
@@ -94,7 +96,6 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
     ## if(is.numeric(data[,grp])) data[,grp] <- as.factor(data[,grp])
     
 ########### plot settings ##############
-    DTdata <- data.table(data)
 
     logbreaks <- c(outer(c(1,2,5),10^c(-10:10)))
 
