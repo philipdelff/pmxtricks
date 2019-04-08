@@ -130,6 +130,7 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,debug=F,
 
     
 ##### Check inputs
+    
     if(missing(file)) file <- NULL
     if(!save) {
         file <- NULL
@@ -151,7 +152,10 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,debug=F,
     type <- "x11"
     fnroot <- NULL
     if(!is.null(file)){
-        type <- sub(".+\\.(.+)$","\\1",file)
+        ## type <- sub(".+\\.(.+)$","\\1",file)
+        
+        type <- sub(".*\\.([^\\.]+)$","\\1",file)
+        cat(type)
         if(!type%in%c("pdf","png")) stop("Only extensions .png and .pdf are supported")
         fnroot <- sub("^(.+)\\..+$","\\1",file)
     }
@@ -164,8 +168,11 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,debug=F,
     
     if(is.list(plot)&&!any(c("gg","gtable")%in%class(plot))) {
         if(onefile){
-            if(type!="pdf"){stop("onefile can only be used with pdf device.")}
-            write1(plot,fn=file,type=type,onefile=T)
+            if(type!="pdf"){
+                warning("onefile can only be used with pdf device. Will not be used.")
+                onefile <- FALSE
+            }
+            write1(plot,fn=file,type=type,onefile=onefile)
         } else {
             
             Nplots <- length(plot)

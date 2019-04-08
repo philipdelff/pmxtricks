@@ -33,6 +33,14 @@
 
 #### todo
 
+## 2019-04-02 philipdelff: scale ranges. Fix within grp, sheet, or
+## totally free.
+
+## 2019-04-02 philipdelff: x and y scales should be controlled individually.
+
+## 2019-04-02 philipdelff: Include possibility of limiting scale by
+## pk, dose, and/or predictions
+
 ## This function performs two different operations. It plots profiles,
 ## and it splits the profiles by faceting and by splitting into a list
 ## of plots. At least the last part of splitting into a list should be
@@ -52,7 +60,7 @@
 
 
 
-ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE", grp = "GRP", amt = "AMT", id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, free.lims = F, logy = F, NPerSheet=12,LLOQ=NULL, use.evid2,facet=id,par.prof=NULL, x.inc,grp.label = grp,debug = F){
+ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE", grp = "GRP", amt = "AMT", id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, par.prof=NULL, x.inc,grp.label = grp, debug = F){
 
     if(debug) browser()
     library(ggplot2)
@@ -67,9 +75,11 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
     ## if data does not contain an EVID column, it is assumed to be only observations
     if(!"EVID"%in%colnames(data)) x[,"EVID"] <- 0
 
+### do all 
+    
     ## add reset info in separate column
     data$reset <- NA
-    data$reset[data$EVID%in%c(3,4)] <- data[,x][data$EVID%in%c(3,4)]
+    data$reset[data$EVID%in%c(3,4)] <- data[,get(x)][data$EVID%in%c(3,4)]
     
     
 ### divide data into obs and sim (if EVID 2 present)
@@ -80,10 +90,12 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
         run <- ""
     }
     
-    if(is.numeric(data[,par.prof])) data[,par.prof] <- as.factor(data[,par.prof])
+    if(is.numeric(data[,get(par.prof)])) data[,par.prof] <- as.factor(data[,par.prof])
     ## if(is.numeric(data[,grp])) data[,grp] <- as.factor(data[,grp])
     
 ########### plot settings ##############
+    DTdata <- data.table(data)
+
     logbreaks <- c(outer(c(1,2,5),10^c(-10:10)))
 
     ## insert columns as labels if NA
@@ -99,8 +111,14 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
 
     ## maxes <- with(data,tapply(dv,list(grp),max,na.rm = T))
     
-    DTdata <- data.table(data)
-
+    if(is.null(amt)) {
+        plot.doses <- FALSE
+        amt <- ".amt"
+        ## just a dummy, for calcs not to fail. Will not be used in plots.
+        DTdata[,.amt := 1]
+    } else {
+        plot.doses <- TRUE
+    }
     DTdata[,s.dv.dos := max(get(dv),na.rm = T)/max(get(amt),na.rm = T),
            by = get(grp)]
     DTdata[,amt2:=get(amt)*s.dv.dos,get(grp)]
@@ -146,7 +164,11 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
     if(!missing(x.inc)) DTdata[,xmaxgrp := max(x.inc)]
     DTdata[,xmingrp := min(c(get(x)[EVID == 0],xmingrp),na.rm=T),get(grp)]
     DTdata[,xmaxgrp := max(c(get(x)[EVID == 0],xmaxgrp),na.rm=T),get(grp)]
+    ## subset.xrange <- "EVID == 0"
+    ## DTdata[,xmingrp := min(c(get(x)[eval(parse(text = subset.xrange))],xmingrp),na.rm=T),get(grp)]
+    ## DTdata[,xmaxgrp := max(c(get(x)[eval(parse(text = subset.xrange))],xmaxgrp),na.rm=T),get(grp)]
 
+    
     DTdata[,skipgrp := any(!is.finite(xmingrp)|!is.finite(xmaxgrp)),get(grp)]
 
     if(any(DTdata[,skipgrp])){
@@ -170,7 +192,7 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
 
 
     
-    ##    xrange <- range(tmp[tmp$EVID==0,x],na.rm=T)
+    ##    xrange <- rangetmp[tmp$EVID==0,x],na.rm=T)
     
     data <- as.data.frame(DTdata)
 
@@ -250,19 +272,27 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
         p <- NULL
         p <- ggplot(subset(tmp2,EVID==0), aes_string(x = x, y = dv))
 
-        if(!is.null(amt)){
-            if(is.null(par.prof)){
-                p <- p+geom_segment(mapping = aes_string(x = x, xend = x, y = 0, yend = "amt2"),data=subset(tmp2,EVID%in%c(1,4)))
-            } else {
-                p <- p+geom_segment(mapping = aes_string(x = x, xend = x, y = 0, yend = "amt2",colour=as.name(par.prof)),data=subset(tmp2,EVID%in%c(1,4)))
-            }
+        if(plot.doses){
+            
+            ## if(is.null(par.prof)){
+            p <- p+geom_segment(mapping = aes_string(x = x, xend = x, y = 0, yend = "amt2",colour=par.prof),data=subset(tmp2,EVID%in%c(1,4)))
+            ## } else {
+            ##     p <- p+geom_segment(mapping = aes_string(x = x, xend = x, y = 0, yend = "amt2",colour=as.name(par.prof)),data=subset(tmp2,EVID%in%c(1,4)))
+            ## }
         }
+
         
+        
+### I can't get a single call to work independently of whether par.prof is given or not.
+        ##  p <- p + geom_point(aes_(shape = as.name(name.obs), colour = as.name(par.prof)))
         if(is.null(par.prof)){
             p <- p + geom_point(aes_(shape = name.obs))
         } else {
-            p <- p + geom_point(aes_(shape = name.obs,colour=as.name(par.prof)))
+            ## p <- p + geom_point(aes_(shape = name.obs))
+            ## p <- p + geom_point(aes_string(shape = name.obs, colour = par.prof))
+            p <- p + geom_point(aes_(shape = name.obs, colour = as.name(par.prof)))
         }
+
         if(use.evid2){
             
 ######not tested
@@ -305,15 +335,18 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
             ## }
         } else {
 
-            if(!is.null(amt)){
+            if(plot.doses){
                 p <- p + scale_y_continuous(sec.axis = sec_axis(~./s.dv.dos, name = ylab2))
             }
         }
         
         p <- p + labs(title = ptitle, x = xlab, y = ylab, colour = "fit")
         
-        if(!free.lims) {
-            p <- p + coord_cartesian(xlim = xrange, ylim = yrange)
+        if(!scales%in%c("free_x","free")){
+            p <- p + coord_cartesian(xlim = xrange)
+        }
+        if(!scales%in%c("free_y","free")){
+            p <- p + coord_cartesian(ylim = yrange)
         }
         ## browser()
         if(!is.null(LLOQ)){
@@ -322,7 +355,7 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
         }
         
         if (!is.null(facet)){
-            p <- p + facet_wrap(reformulate(facet), ncol = 3)
+            p <- p + facet_wrap(reformulate(facet), ncol = 3,scales = scales)
         }
         ##            p <- p + scale_colour_manual(values = c("red", "black"))
         p <- p + theme(legend.position = "bottom",legend.title=element_blank(),legend.box="horizontal")

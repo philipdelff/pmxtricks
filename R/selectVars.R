@@ -6,7 +6,7 @@
 ##' manual investigation every time data[,vars] gives you the annoyingly
 ##' non-informative error "undefined columns selected".
 ##' 
-##' @param data data.frame to select columns from.
+##' @param data data.frame or data.table to select columns from.
 ##' @param vars columns to select. A vector of characters.
 ##' @author Philip Delff
 ##' @export
@@ -14,6 +14,12 @@
 selectVars <- function(data,vars){
     if(!all(vars%in%names(data))){
         stop(paste("\nThe following variables are missing in data:",vars[!vars%in%names(data)]))
-    } 
-    data[,vars]
+    }
+    if("data.table"%in%class(data)){
+        out <- data[,vars,with=FALSE]
+    } else {
+        out <- data[,vars]
+    }
+    return(out)
 }
+

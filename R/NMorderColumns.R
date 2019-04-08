@@ -16,7 +16,7 @@
 ##' @export
 
 
-orderColumns <- function(data,first,last,debug=F){
+NMorderColumns <- function(data,first,last,debug=F){
     if(debug) browser()
     if(missing(first)){
         first <- c("ROW","ID","NTIM","TIME","EVID","CMT","AMT","RATE","DV","MDV","FLAG","OCC","ROUTE","GRP","TRIAL")
@@ -42,6 +42,10 @@ orderColumns <- function(data,first,last,debug=F){
     middlepts[which(notmatched)[order(nms[notmatched])]] <- 1:sum(notmatched)
 
     ord <- order(rowSums(cbind(firstpts,middlepts*1E3,lastpts*1E5,lowerpts*1e7),na.rm=TRUE))
-    data.out <- data[,nms[ord]]
+    if(is.data.table(data)){
+        data.out <- data[,nms[ord],with=F]
+    } else {
+        data.out <- data[,nms[ord]]
+    }
     data.out
 }
