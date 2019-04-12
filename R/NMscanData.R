@@ -308,6 +308,13 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
         }
     }
 
+    tab.run <- NULL
+    if(!is.null(tab.id)){
+        tab.run <- findCovs(tab.id)
+        if(structure!="full"){
+            tab.id <- tab.id[,setdiff(names(tab.id),colnames(tab.run))]
+        }
+    }
 
     if(use.input&&reconstructRows){
         ## browser()
@@ -328,13 +335,20 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
 ###}
 
     stopifnot(max(table(col.row))==1)
-    
-    list.str <- list(col.row=col.row,
-                     col.id=col.id,
-                     col.occ=col.occ,
-                     col.grp=col.grp)
 
-    list(row=tab.row,id=tab.id,occ=tab.occ,list.str=list.str)
+
+    
+    list.str <- list(
+        col.id=col.id,
+        col.row=col.row,
+        col.occ=col.occ,
+        col.grp=col.grp)
+    
+    list(run=tab.run,
+         row=tab.row,
+         id=tab.id,
+         occ=tab.occ,
+         list.str=list.str)
     
 }
 

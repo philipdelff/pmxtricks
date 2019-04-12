@@ -9,7 +9,7 @@
 NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,write.RData=F,write.rds=write.csv,force.row=FALSE,debug=FALSE){
     if(debug) browser()
     stopifnot(is.data.frame(data))
-    data.out <- data
+    data.out <- as.data.frame(data)
     if(!is.null(drop)) data.out <- data.out[,-which(names(data.out)%in%drop),drop=FALSE]
 
     if(drop.lowercase) data.out <- data.out[,which(toupper(names(data.out))==names(data.out))]

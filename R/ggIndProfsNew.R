@@ -33,6 +33,8 @@
 
 #### todo
 
+## 2019-04-09 philipdelff: doses should be added by x before plotting
+
 ## 2019-04-02 philipdelff: scale ranges. Fix within grp, sheet, or
 ## totally free.
 
@@ -91,8 +93,14 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
     if(missing(run)){
         run <- ""
     }
-    
-    if(is.numeric(data[,get(par.prof)])) data[,par.prof] <- as.factor(data[,par.prof])
+
+    if(is.null(par.prof)) {
+        par.prof <- "..par.prof"
+        DTdata[,..par.prof:="profile"]
+    }
+    if(is.numeric(DTdata[,get(par.prof)])) DTdata[,c(par.prof):=list(as.factor(get(par.prof)))]
+##        DTdata[,get(par.prof):=as.factor(get(par.prof))]
+  
     ## if(is.numeric(data[,grp])) data[,grp] <- as.factor(data[,grp])
     
 ########### plot settings ##############
@@ -220,7 +228,6 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
         ##        tmp$IDnew <- as.numeric(as.factor(tmp[,id]))
         ##        tmp$IDcut <- ((tmp$IDnew)-1) %/% NPerSheet + 1 
         
-#### continue from here....
         
 #### Set ranges.
 ### xrange should only depend on obs - not model
@@ -343,12 +350,6 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
         
         p <- p + labs(title = ptitle, x = xlab, y = ylab, colour = "fit")
         
-        if(!scales%in%c("free_x","free")){
-            p <- p + coord_cartesian(xlim = xrange)
-        }
-        if(!scales%in%c("free_y","free")){
-            p <- p + coord_cartesian(ylim = yrange)
-        }
         ## browser()
         if(!is.null(LLOQ)){
             p <- p+geom_hline(aes_(yintercept=as.name(LLOQ),linetype=name.lloq))
@@ -362,6 +363,26 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
         p <- p + theme(legend.position = "bottom",legend.title=element_blank(),legend.box="horizontal")
         ##        outlist.grp <- c(outlist.grp, list(p))
         ## not done yet - replacce unique(12) by Noofsheets
+
+        ## if(!scales%in%c("free_x","free")){
+        ##     p <- p + coord_cartesian(xlim = xrange)
+        ## }
+        ## if(!scales%in%c("free_y","free")){
+        ##     p <- p + coord_cartesian(ylim = yrange)
+        ## }
+
+        
+        xlim <- NULL
+        if(scales%in%c("free","free_x")) xlim <- NULL else xlim <- xrange
+        if(scales%in%c("free","free_y")) ylim <- NULL else ylim <- yrange
+        
+        if(!scales%in%c("free")){
+            p <- p + coord_cartesian(
+                         xlim = xlim,
+                         ylim = ylim
+                     )
+        }
+
         
         cat(paste(paste(group, " ", unique(tmp$sheetgrp), "/", unique(tmp$Nsheetsgrp), sep = ""), "created.\n" ))
         ##            cat("s.dv.dos is",s.dv.dos,"\n")

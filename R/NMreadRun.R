@@ -18,7 +18,8 @@
 
 
 
-NMreadRun <- function(run){
+NMreadRun <- function(run,debug=F){
+    if(debug) browser()
     library(nonmem2R)
     ## for now we can assume run is a lst file
     ## runbase <- sub("\\.lst","",run)
