@@ -34,6 +34,7 @@ NMcode2R <- function(text){
     
 ### functions
     text <- gsub("EXP *\\(","exp(",x=text)
+    text <- gsub("LOG *\\(","log(",x=text)
 
 ### variable indexing
     text <- gsub("\\(([0-9]*)\\)","[\\1]",x=text)

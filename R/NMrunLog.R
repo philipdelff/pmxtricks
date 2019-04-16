@@ -1,3 +1,9 @@
+##' get an overview of your Nonmem runs
+##'
+##' @param dir The directory in which to search for runs
+##' @param runs Runs to include in case you only want a specific subset.
+##' @param runs.omit Runs to omit in case you want all but these.
+##' @export
 
 ## TODO add ParNearBoundary
 ## TODO wrap in try.

@@ -63,7 +63,6 @@
 
 
 ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE", grp = "GRP", amt = "AMT", id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, par.prof=NULL, x.inc,grp.label = grp, debug = F){
-
     if(debug) browser()
     library(ggplot2)
     library(scales)
@@ -78,6 +77,15 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
     if(!"EVID"%in%colnames(data)) x[,"EVID"] <- 0
 
 ### do all 
+
+    ## helper function. Get a default value if data is empty or na only.
+    na.or.eval <- function(fun,x,default=NA_real_,...) {
+        if(length(x)==0||length(x[is.finite(x)])==0) out <- default
+        else out <- fun(x,...)
+        out
+    }
+
+
     DTdata <- data.table(data)
     
     ## add reset info in separate column
@@ -99,8 +107,8 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
         DTdata[,..par.prof:="profile"]
     }
     if(is.numeric(DTdata[,get(par.prof)])) DTdata[,c(par.prof):=list(as.factor(get(par.prof)))]
-##        DTdata[,get(par.prof):=as.factor(get(par.prof))]
-  
+    ##        DTdata[,get(par.prof):=as.factor(get(par.prof))]
+    
     ## if(is.numeric(data[,grp])) data[,grp] <- as.factor(data[,grp])
     
 ########### plot settings ##############
@@ -128,17 +136,25 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
     } else {
         plot.doses <- TRUE
     }
-    DTdata[,s.dv.dos := max(get(dv),na.rm = T)/max(get(amt),na.rm = T),
-           by = get(grp)]
-    DTdata[,amt2:=get(amt)*s.dv.dos,get(grp)]
+    ##    DTdata[,s.dv.dos := max(get(dv),na.rm = T)/max(get(amt),na.rm = T),
+    ##           by = get(grp)]
+    
+    ## vartmp <- "s.dv.dos"
+    
+
+    ## DV is ignored by nonmem if EVID != 0. We do the same.
+    DTdata[EVID!=0,(dv):=NA]
+    
+    DTdata[, s.dv.dos:=na.or.eval(max,get(dv),default=1,na.rm = T)/max(get(amt),na.rm = T), by = grp]
+    DTdata[,amt2:=get(amt)*s.dv.dos,by=grp]
 
     DTdata[,
            IDnew := as.numeric(as.factor(get(id))),
-           by = get(grp)]
+           by = grp]
 
     DTdata[,
            IDcut := ((IDnew)-1) %/% NPerSheet + 1 ,
-           by = get(grp)]
+           by = grp]
 
     ## this should be done more elegantly
     
@@ -154,7 +170,8 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
     DTdata$..ROW <- 1:nrow(DTdata)
     ##    DTdata[with(DTdata,order(get(grp),IDcut,..ROW)),]
     setorderv(DTdata,cols = c(grp,"IDcut","..ROW"))
-    DTdata[,sheet:= .GRP,.(get(grp),IDcut)]
+    
+    DTdata[,sheet:= .GRP,c(grp,"IDcut")]
 
     
     ## DTdata[,sheet:=as.numeric(as.factor(get(grp))),IDcut]
@@ -163,35 +180,43 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
     ##        sheet:= as.numeric(as.factor(paste(sprintf("%010d",get(grp)),IDcut)))]
 
     ## add a counter to sheets within grp level - and no of sheets within grp level
-    DTdata[,sheetgrp := as.numeric(as.factor(sheet)),get(grp)]
-    DTdata[,Nsheetsgrp := max(sheetgrp),get(grp)]
+    DTdata[,sheetgrp := as.numeric(as.factor(sheet)),grp]
+    DTdata[,Nsheetsgrp := max(sheetgrp),grp]
 
     
     DTdata[,xmingrp :=  NA_real_]
     DTdata[,xmaxgrp :=  NA_real_]
     if(!missing(x.inc)) DTdata[,xmingrp := min(x.inc)] 
     if(!missing(x.inc)) DTdata[,xmaxgrp := max(x.inc)]
-    DTdata[,xmingrp := min(c(get(x)[EVID == 0],xmingrp),na.rm=T),get(grp)]
-    DTdata[,xmaxgrp := max(c(get(x)[EVID == 0],xmaxgrp),na.rm=T),get(grp)]
+    
+    ## DTdata[,xmingrp := min(c(get(x)[EVID == 0],xmingrp),na.rm=T),grp]
+    ## DTdata[,xmaxgrp := max(c(get(x)[EVID == 0],xmaxgrp),na.rm=T),grp]
+
+    DTdata[,xmingrp := na.or.eval(min,c(get(x)[EVID == 0],xmingrp),na.rm=T),grp]
+    DTdata[,xmaxgrp := na.or.eval(max,c(get(x)[EVID == 0],xmaxgrp),na.rm=T),grp]
     ## subset.xrange <- "EVID == 0"
     ## DTdata[,xmingrp := min(c(get(x)[eval(parse(text = subset.xrange))],xmingrp),na.rm=T),get(grp)]
     ## DTdata[,xmaxgrp := max(c(get(x)[eval(parse(text = subset.xrange))],xmaxgrp),na.rm=T),get(grp)]
 
-    
     DTdata[,skipgrp := any(!is.finite(xmingrp)|!is.finite(xmaxgrp)),get(grp)]
 
-    if(any(DTdata[,skipgrp])){
+    if(nrow(DTdata[isTRUE(skipgrp)])>0){
+        
         warning("These group levels have no valid observations. Skipping:",
                 paste(DTdata[isTRUE(skipgrp),unique(get(grp))])
                 )
     }
     
-    DTdata[,ymingrp := min(get(dv)[EVID == 0|EVID==2&get(x)>=xmingrp&get(x)<=xmaxgrp],na.rm=T),get(grp)]
-    DTdata[,ymaxgrp := max(get(dv)[EVID == 0|EVID==2&get(x)>=xmingrp&get(x)<=xmaxgrp],na.rm=T),get(grp)]
+    ## DTdata[,ymingrp := min(get(dv)[EVID == 0|EVID==2&get(x)>=xmingrp&get(x)<=xmaxgrp],na.rm=T),grp]
+    ## DTdata[,ymaxgrp := max(get(dv)[EVID == 0|EVID==2&get(x)>=xmingrp&get(x)<=xmaxgrp],na.rm=T),grp]
+    DTdata[,ymingrp := na.or.eval(min,get(dv)[EVID == 0|EVID==2&get(x)>=xmingrp&get(x)<=xmaxgrp],na.rm=T),grp]
+    DTdata[,ymaxgrp := na.or.eval(max,get(dv)[EVID == 0|EVID==2&get(x)>=xmingrp&get(x)<=xmaxgrp],na.rm=T),grp]
     
     if(logy == T){
-        DTdata[,ymingrp := min(get(dv)[EVID == 0|EVID==2&get(x)>=xmingrp&get(x)<=xmaxgrp&get(x)>0],na.rm=T),get(grp)]
-        DTdata[,ymaxgrp := max(get(dv)[EVID == 0|EVID==2&get(x)>=xmingrp&get(x)<=xmaxgrp&get(x)>0],na.rm=T),get(grp)]
+        ## DTdata[,ymingrp := min(get(dv)[EVID == 0|EVID==2&get(x)>=xmingrp&get(x)<=xmaxgrp&get(x)>0],na.rm=T),get(grp)]
+        ## DTdata[,ymaxgrp := max(get(dv)[EVID == 0|EVID==2&get(x)>=xmingrp&get(x)<=xmaxgrp&get(x)>0],na.rm=T),get(grp)]
+        DTdata[,ymingrp := na.or.eval(min,get(dv)[EVID == 0|EVID==2&get(x)>=xmingrp&get(x)<=xmaxgrp&get(x)>0],na.rm=T),get(grp)]
+        DTdata[,ymaxgrp := na.or.eval(max,get(dv)[EVID == 0|EVID==2&get(x)>=xmingrp&get(x)<=xmaxgrp&get(x)>0],na.rm=T),get(grp)]
     }
 
 
@@ -223,8 +248,9 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
     ## for(G in 1:length(lvls)){
     
     ## lapply(1:length(lvls),function(G){
-    outlist <- by(data,data$sheet,function(tmp){
-        ##        tmp <- data[data[,grp]==lvls[G],]
+    
+    ##    n.plots <- 0
+    outlist <- by(data,data$sheet,function(tmp){##        tmp <- data[data[,grp]==lvls[G],]
         ##        tmp$IDnew <- as.numeric(as.factor(tmp[,id]))
         ##        tmp$IDcut <- ((tmp$IDnew)-1) %/% NPerSheet + 1 
         
@@ -269,16 +295,26 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
         yrange <- c(unique(tmp$ymingrp),unique(tmp$ymaxgrp))
         s.dv.dos <- unique(tmp[,"s.dv.dos"])
 
+        
         ptitle <- ""
-        if(run != "") ptitle <- paste0(run,".")
-        ptitle <- paste0(ptitle," ",unique(tmp[,grp.label]),".")
-        if(unique(tmp$Nsheetsgrp)>1) {
-            ptitle <- paste0(ptitle, " ",unique(tmp$sheetgrp), "/", tmp$Nsheetsgrp)
+        if(run != "") ptitle <- paste0(run,". ")
+        ## ptitle <- paste0(ptitle," ",paste(c(
+        ##                                 unique(tmp[,grp.label])
+        ##                             ),collapse=", "),".")
+        ## df.tmp <- unique(tmp[,grp.label,drop=F])
 
+        ltmp <- lapply(unique(tmp[,grp.label,drop=F]),as.character)
+        tmpnames = data.frame(var=names(ltmp),val=c(sapply(ltmp,identity)))
+        ptitle <- paste0(ptitle,paste(within(tmpnames,{yo=paste(var,val,sep="=")})$yo,collapse=", "),".")
+        
+        if(unique(tmp$Nsheetsgrp)>1) {
+            ptitle <- paste0(ptitle, " ",unique(tmp$sheetgrp), "/", unique(tmp$Nsheetsgrp),".")
         }
 
+        ## if(unique(tmp2$sheet)==30) browser()
         p <- NULL
-        p <- ggplot(subset(tmp2,EVID==0), aes_string(x = x, y = dv))
+        ## if(unique(tmp2$sheet)==30) browser()
+        p <- ggplot(tmp2, aes_string(x = x, y = dv))
 
         if(plot.doses){
             
@@ -293,12 +329,14 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
         
 ### I can't get a single call to work independently of whether par.prof is given or not.
         ##  p <- p + geom_point(aes_(shape = as.name(name.obs), colour = as.name(par.prof)))
-        if(is.null(par.prof)){
-            p <- p + geom_point(aes_(shape = name.obs))
-        } else {
-            ## p <- p + geom_point(aes_(shape = name.obs))
-            ## p <- p + geom_point(aes_string(shape = name.obs, colour = par.prof))
-            p <- p + geom_point(aes_(shape = name.obs, colour = as.name(par.prof)))
+        if(nrow(subset(tmp2,EVID==0))>0){
+            if(is.null(par.prof)){
+                p <- p + geom_point(aes_(shape = name.obs))
+            } else {
+                ## p <- p + geom_point(aes_(shape = name.obs))
+                ## p <- p + geom_point(aes_string(shape = name.obs, colour = par.prof))
+                p <- p + geom_point(aes_(shape = name.obs, colour = as.name(par.prof)))
+            }
         }
 
         if(use.evid2){
@@ -338,12 +376,18 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
             ##     scale_y_log10(breaks = logbreaks,label=comma,
             ##                   sec.axis = sec_axis(~./s.dv.dos, name = ylab2))
             ## } else {
-            p <- p + scale_y_log10(breaks = logbreaks,label=comma)
-
+            if(plot.doses){
+                p <- p + scale_y_log10(breaks = logbreaks,label=comma,
+                                       sec.axis = sec_axis(~./s.dv.dos, name = ylab2,label=comma))
+                
+            } else {
+                p <- p + scale_y_log10(breaks = logbreaks,label=comma)
+            }
             ## }
         } else {
 
             if(plot.doses){
+                if(unique(tmp2$sheet)==30) browser()
                 p <- p + scale_y_continuous(sec.axis = sec_axis(~./s.dv.dos, name = ylab2))
             }
         }
@@ -373,9 +417,9 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
 
         
         xlim <- NULL
-        if(scales%in%c("free","free_x")) xlim <- NULL else xlim <- xrange
-        if(scales%in%c("free","free_y")) ylim <- NULL else ylim <- yrange
-        
+        if(scales%in%c("free","free_x")||any(is.na(xrange))) xlim <- NULL else xlim <- xrange
+        if(scales%in%c("free","free_y")||any(is.na(xrange))) ylim <- NULL else ylim <- yrange
+
         if(!scales%in%c("free")){
             p <- p + coord_cartesian(
                          xlim = xlim,
@@ -383,8 +427,11 @@ ggIndProfNew <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred="IPRE"
                      )
         }
 
-        
-        cat(paste(paste(group, " ", unique(tmp$sheetgrp), "/", unique(tmp$Nsheetsgrp), sep = ""), "created.\n" ))
+        ##        n.plots <- n.plots+1 cat(paste0(paste(n.plots,": ",
+        ##   unique(tmp$sheetgrp), "/", unique(tmp$Nsheetsgrp), sep = ""),
+        ##   "created.\n" ))
+        ##        if(unique(tmp2$sheet)==30) browser()
+        message(paste0(unique(tmp2$sheet),": ", ptitle, " created." ))
         ##            cat("s.dv.dos is",s.dv.dos,"\n")
         p
     }
