@@ -17,8 +17,9 @@
 
 ### TODO end
 
-means <- function(x,type="arithmetic",z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,colnames=c("est","ll","ul"),format = "df") {
+means <- function(x,type="arithmetic",z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,colnames=c("est","ll","ul"),format = "df",debug=F) {
 
+    
     type <- gsub("(^ +| +$)","",type)
     type <- tolower(type)
 
@@ -39,17 +40,17 @@ means <- function(x,type="arithmetic",z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,c
     }
 
     est <- switch(type,
-                geometric = {
-                    if(z.rm) x <- x[x!=0]
-                    exp(mean(log(x)))
-                },
-                arithmetic = {
-                    mean(x)
-                },
-                median = {
-                    median(x)
-                }
-                )
+                  geometric = {
+                      if(z.rm) x <- x[x!=0]
+                      exp(mean(log(x)))
+                  },
+                  arithmetic = {
+                      mean(x)
+                  },
+                  median = {
+                      median(x)
+                  }
+                  )
 
     
     if(!ci){
@@ -60,28 +61,42 @@ means <- function(x,type="arithmetic",z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,c
 
     nobs <- length(x)
     out <- switch(type,
-                geometric = {
-                    w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sd(log(x))/nobs
-                    out <- c(est,exp(log(est)-w.ci),exp(log(est)+w.ci))
-                    out
-                },
-                arithmetic = {
-                    w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sd(x)/nobs
-                    out <- c(est,est-w.ci,est+w.ci)
-                    out
-                },
-                median = {
-                    q <- 0.5
-                    x <- sort(x)
-                    w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sqrt(nobs*q*(1-q))
-                    j <- nobs*q - w.ci
-                    k <- nobs*q + w.ci
-                    out <- c(est,x[ceiling(j)],x[ceiling(k)])
-                    out
-                }
-                )
+                  geometric = {
+                      w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sd(log(x))/nobs
+                      out <- c(est,exp(log(est)-w.ci),exp(log(est)+w.ci))
+                      out
+                  },
+                  arithmetic = {
+                      w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sd(x)/nobs
+                      out <- c(est,est-w.ci,est+w.ci)
+                      out
+                  },
+                  median = {
+                      if(nobs<2){
+                          out <- c(est,NA,NA)
+                      } else {
 
-    if(format == "df") out <- lapply(out,data.frame,stringsAsFactors = F)
+                          q <- 0.5
+                          x <- sort(x)
+                          w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sqrt(nobs*q*(1-q))
+                          j <- nobs*q - w.ci
+                          k <- nobs*q + w.ci
+                          ## if(length(x[ceiling(j)])<1) browser()
+
+                          ilow <- ceiling(j)
+                          if(ilow < 1) ilow <- 1
+                          ihigh <- ceiling(k)
+                          if(ihigh > nobs) ihigh <- nobs
+                          
+                          out <- c(est,x[ilow],x[ihigh])
+                      }
+                      out
+                  }
+                  )
+    
+
+    if(format == "df") out <- do.call(data.frame,c(lapply(out,identity),stringsAsFactors=F))
+    ## if(debug) browser()
     out <- setNames(out,colnames)
 
     out
