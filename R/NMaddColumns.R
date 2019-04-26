@@ -9,13 +9,13 @@
 ##'                        stringsAsFactors=F)
 ##' @export
 
-NMaddColumns <- function(data,df){
-
+NMaddColumns <- function(data,df,by,debug=T){
+    if(debug) browser()
     data.new <- lapply(data,function(d){
-        if(!is.data.frame(d)) return(d)
-        d1 <- mergeCheck(d,df.races,all.x=T)
-
-        d1
+        if(!is.data.frame(d)||!all(by%in%names(d))) return(d)
+        d2 <- try( mergeCheck(d,df,by=by,all.x=T))
+        if("try-error"%in%class(d2)) d2 <- d
+        d2
     })
 
 }

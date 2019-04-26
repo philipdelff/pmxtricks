@@ -20,12 +20,14 @@
 ## save all plots and tables in a pdf
 #### todo end
 
+
 modelOverview <- function(path.run,str.output="NMfolders",folder.out,col.id,covs.num,covs.char,var.occ="OCC",var.occ.char=var.occ,covs.num.iov,covs.char.iov,write.output,GRP="GRP",grp=GRP,stamp=NULL,logy=T,LLOQ,
                           args.ggIndProf=NULL,grp.trick=NULL,
                           regex.iiv="^ETAIIV",
                           debug=F){
 
-###{ checks of arguments
+#### Section start: checks of arguments ####
+
     if(is.logical(debug)&&debug) debug <- 0
     debug.pos <- 0
     if(!is.logical(debug)&&debug==debug.pos) {browser()}
@@ -37,9 +39,12 @@ modelOverview <- function(path.run,str.output="NMfolders",folder.out,col.id,covs
         ##     grp <- grp.trick
         GRP <- NULL
     }
-###}
+###  Section end: checks of arguments
 
-###{ where to store the output under dir.plots, dir.tables
+
+
+#### Section start: where to store the output under dir.plots, dir.tables ####
+
 #### Option 1 -
 ### output folders shared by all models - one in dir.plots, one in dir.tables
 ### files names by model name
@@ -55,7 +60,7 @@ modelOverview <- function(path.run,str.output="NMfolders",folder.out,col.id,covs
 
     }
 
-#### Option 2 - output saved within the nonmem run folder.
+### Option 2 - output saved within the nonmem run folder.
     if(str.output=="NMfolders"){
         ##        rundir <- list.files(folder.runs,pattern=mod,full.names=T)
         ##        folder.out <- file.path(rundir,"model_summary")
@@ -67,10 +72,14 @@ modelOverview <- function(path.run,str.output="NMfolders",folder.out,col.id,covs
     }
 
     all.output <- list()
-###}
+###  Section end: where to store the output under dir.plots, dir.tables
 
     
-###{ read data
+
+    
+
+#### Section start: read data ####
+
     message("Reading data tables from Nonmem run")
     debug.pos <- 1
     if(debug==debug.pos) {browser()}
@@ -111,9 +120,12 @@ modelOverview <- function(path.run,str.output="NMfolders",folder.out,col.id,covs
         
     
     message("Reading data tables done")
-###}
+###  Section end: read data
 
-###{ GOF plots panel
+
+
+#### Section start: GOF plots panel ####
+
     message("QCP panel of GOF plots")
     debug.pos <- 2
     if(debug==debug.pos) {browser()}
@@ -140,7 +152,7 @@ modelOverview <- function(path.run,str.output="NMfolders",folder.out,col.id,covs
         dev.off()
     }
 
-###}
+###  Section end: GOF plots panel
 
 
 
@@ -468,75 +480,5 @@ modelOverview <- function(path.run,str.output="NMfolders",folder.out,col.id,covs
     ## }
 
 ###}
-}
-
-###{ model.diag.all - run model.diagnostics on many runs. But only if it hasn't been done already.
-#' @param dirs Regular expression. Only directories whose name match
-#'     this will be taken into account.
-modelOverviewAll <- function(path,debug=F,pattern.dirs="^[0-9].*",force=FALSE,...){
-    if(debug) browser()
-
-    modeldirs <- list.files(path,pattern=pattern.dirs)
-    ## todo Check that dirs found
-
-### todo: print the ones that are omitted due to missing table files.
-### find existing all outputfile
-    ## allouts <- unlist(lapply(outputfile,function(filename)
-    ##     list.files(file.path(path,modeldirs),pattern=paste(filename,"$",sep=""),recursive=T,full.names=T)
-    ##     ))
-
-    allouts <- list.files(file.path(path,modeldirs),pattern=paste("^output.txt$"),recursive=T,full.names=T)
-    
-    ##    filenames <- basename(allouts)
-
-    ## reduce by removing the ones that contain a non-empty dir called
-    ## model_diagnostics
-    
-    up2date <- sapply(dirname(allouts),function(dir){
-        if(force) {
-            return(FALSE)
-        } else {
-            dir.diag <- file.path(dir,"model_summary")
-            return(dir.exists(dir.diag)&&length(list.files(dir.diag)))
-        }
-    })
-    allouts <- allouts[!up2date]
-    if(!length(allouts)) {
-        cat("Nothing to be done.\n")
-        return(invisible())
-    }
-    
-#### exclude models that are still running
-    running <- sapply(allouts,function(outfile)length(list.files(dirname(outfile),pattern="^OUTPUT$"))>0)
-    allouts <- allouts[!running]
-    if(!length(allouts)) {
-        cat("Nothing to be done.\n")
-        return(invisible())
-    }
-    
-#### some problems lead to huge output.txt files. We dont want to search those.
-    file.ok <- sapply(allouts,function(outfile){
-        file.size(outfile)<2e5
-    })
-    if(any(!file.ok)) warning ("an output.txt was too large. Check this yourself.")
-    allouts <- allouts[file.ok]
-    
-    if(!length(allouts)) {
-        cat("Nothing to be done.\n")
-        return(invisible())
-    }
-    ##    filenames <- basename(allouts)
-
-
-    
-    ## these are relative to path
-    allpaths <- dirname(allouts)
-
-    silent <- lapply(1:length(allpaths),function(N){
-        print(allpaths[N])
-        modelOverview(path=allpaths[N],...)
-    }
-    )
-    return(invisible())
 }
 
