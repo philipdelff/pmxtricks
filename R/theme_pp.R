@@ -2,15 +2,21 @@
 ##'
 ##' @param ... arguments passed to theme() as last thing.
 
-theme_pp <- function(theme0 = ggplot2::theme_classic,...){
+theme_pp <- function(theme0 = ggplot2::theme_bw,...){
     theme1 <- 
         theme0()+
-        theme(
-            ##        theme0=theme_classic,
-            axis.text.x = element_blank(),
-            axis.text.y = element_blank(),
-            axis.ticks = element_blank(),
-            legend.position="bottom"
+
+    ## title font and margins
+    theme(plot.title=element_text(size=18,face="bold",hjust=.5,margin=unit(c(3,0,3,0),"mm")))+
+
+### axis
+        theme(axis.text = element_text(size = 15,colour="black"),
+### distance from axis tick labels (values) to tick marks
+              axis.text.x = element_text(margin=unit(c(2, 0, 0, 0), "mm")),
+              axis.text.y = element_text(margin=unit(c(0, 2, 0, 0), "mm")),
+### legnth of tick marks
+              axis.ticks.length  = unit(2,"mm"),
+              legend.position="bottom"
         )
     
     ##        theme(plot.title=element_text(size=18,face="bold",hjust=.5,margin=unit(c(
@@ -20,10 +26,10 @@ theme_pp <- function(theme0 = ggplot2::theme_classic,...){
         ## increment font size in legend
         theme(legend.text=element_text(size=16,colour="black"))+
 ### axis
-        theme(axis.title= element_text(size = 16,colour="black"))+
-        ## theme(
-        ##     axis.title.x = element_text(margin = unit(c(8, 0, 8, 0), "mm")),
-        ##     axis.title.y = element_text(margin = unit(c(0, 6, 0, 0), "mm")))+
+        theme(axis.title= element_text(size = 16,colour="black"),
+            axis.title.x = element_text(margin = unit(c(8, 0, 8, 0), "mm")),
+            axis.title.y = element_text(margin = unit(c(0, 6, 0, 0), "mm"))
+            )+
         ## ### text size in facet labels
         theme(strip.text = element_text(size = 16,colour="black"))+
         ## ### background colour for the facet labels
@@ -33,7 +39,10 @@ theme_pp <- function(theme0 = ggplot2::theme_classic,...){
         ## ### remove grid lines
         theme(panel.grid.minor = element_blank(),
               panel.grid.major = element_blank())+
-        theme(panel.spacing = unit(4, "lines"))
+        theme(panel.spacing = unit(4, "lines"))+
+        ## Captions are only available in ggplot 2.2.1
+        theme(plot.caption=element_text(size=6,
+                                        colour="grey"))
 
     ## if(!missing(...)) this.theme <- this.theme()+theme(...)
 ### taking a chance here - not sure. If it does, we can just add it

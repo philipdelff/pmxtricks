@@ -155,7 +155,6 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,debug=F,
         ## type <- sub(".+\\.(.+)$","\\1",file)
         
         type <- sub(".*\\.([^\\.]+)$","\\1",file)
-        cat(type)
         if(!type%in%c("pdf","png")) stop("Only extensions .png and .pdf are supported")
         fnroot <- sub("^(.+)\\..+$","\\1",file)
     }
