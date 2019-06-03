@@ -62,12 +62,12 @@ means <- function(x,type="arithmetic",z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,c
     nobs <- length(x)
     out <- switch(type,
                   geometric = {
-                      w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sd(log(x))/nobs
+                      w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sd(log(x))/sqrt(nobs)
                       out <- c(est,exp(log(est)-w.ci),exp(log(est)+w.ci))
                       out
                   },
                   arithmetic = {
-                      w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sd(x)/nobs
+                      w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sd(x)/sqrt(nobs)
                       out <- c(est,est-w.ci,est+w.ci)
                       out
                   },

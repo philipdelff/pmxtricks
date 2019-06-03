@@ -8,7 +8,7 @@ which ones.}
 selectVars(data, vars)
 }
 \arguments{
-\item{data}{data.frame to select columns from.}
+\item{data}{data.frame or data.table to select columns from.}
 
 \item{vars}{columns to select. A vector of characters.}
 }

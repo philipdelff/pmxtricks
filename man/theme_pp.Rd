@@ -4,7 +4,7 @@
 \alias{theme_pp}
 \title{A custom theme - aim is powerpoint}
 \usage{
-theme_pp(...)
+theme_pp(theme0 = ggplot2::theme_bw, ...)
 }
 \arguments{
 \item{...}{arguments passed to theme() as last thing.}

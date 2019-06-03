@@ -9,6 +9,8 @@ NMscanData(file, col.id = "ID", col.row = "ROW", col.grp = NULL,
   reconstructRows = F, debug = F)
 }
 \arguments{
+\item{file}{A nonmem control stream or output file from nonmem (.mod or .lst)}
+
 \item{col.grp}{If present, ID and OCC level info is grouped by col.grp. So should only be needed for cross-over.}
 }
 \description{

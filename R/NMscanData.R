@@ -229,10 +229,8 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
         
     }
 ###}
-
 ###{ handle input data
     if(use.input){
-        ## browser()
 
         data.input <- NMtransInput(file)
         
@@ -240,17 +238,21 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
         
         if(!is.null(tab.row)){
             ## browser()
+            
             data.output <- tab.row
             cnames.out <- colnames(data.output)
             ## we need col.row
             stopifnot(col.row%in%cnames.in)
             stopifnot(col.row%in%cnames.out)
-
+            
             vars.to.recover <- cnames.in[!cnames.in%in%cnames.out]
             dim.out.0 <- dim(data.output)
             data.output.out <- merge(data.output,data.input[,unique(c(col.row,vars.to.recover))],by=col.row,all.x=T)
             dim.out.1 <- dim(data.output.out)
-            stopifnot(all((dim.out.0+c(0,length(vars.to.recover)))==dim.out.1))
+
+            if(!all((dim.out.0+c(0,length(vars.to.recover)))==dim.out.1)){
+                stop("Merge with input data resulted in unexpected number of columns. Please make sure that the $INPUT field in the .lst file matches the input dataset.")
+            }
             data.output.out$nmout <- TRUE
 
             tab.row <- data.output.out[order(data.output.out[,col.row]),]
@@ -265,7 +267,7 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
             stopifnot(all(cols.by%in%colnames(data.in)))
             vars.common <- intersect(cnames.in,cnames.out)
             if(length(vars.common)){
-                warning("common variables in input and output. Only the ones from output are kept.")
+                message("common variables in input and output. Only the ones from output are kept.")
             }
             vars.to.recover <- cnames.in[!cnames.in%in%cnames.out]
             cnames.in.no.id <- cnames.in[!cnames.in%in%cols.by]

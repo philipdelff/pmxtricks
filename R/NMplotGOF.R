@@ -1,6 +1,6 @@
 ##' data is all rows
 
-NMplotGOF <- function(data,res=CWRES,ipre=IPRED,time=TIME,debug=F){
+NMplotGOF <- function(data,res=CWRES,ipre=IPRED,time=TIME,arrange=T,debug=F){
     
     if(debug) browser()
 
@@ -24,7 +24,10 @@ NMplotGOF <- function(data,res=CWRES,ipre=IPRED,time=TIME,debug=F){
     p3 <- ggplot(data,aes(!!ipre,IWRES))+geom_point()+geom_smooth(colour=2)
     p4 <- ggplot(data,aes(!!time,CWRES))+geom_point()+geom_smooth(colour=2)
     
-    ## grid.arrange(p1,p2,p3,p4,ncol=2)
-    all.ps <- arrangeGrob(p1,p2,p3,p4,ncol=2)
+    if(arrange){
+        all.ps <- arrangeGrob(p1,p2,p3,p4,ncol=2)
+    } else {
+        all.ps <- list(p1,p2,p3,p4)
+    }
     all.ps
 }

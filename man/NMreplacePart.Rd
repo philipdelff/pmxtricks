@@ -2,20 +2,21 @@
 % Please edit documentation in R/NMreplacePart.R
 \name{NMreplacePart}
 \alias{NMreplacePart}
-\title{replace ("dollar") parts of a nonmem control stream}
+\title{replace ($)sections of a nonmem control stream}
 \usage{
-NMreplacePart(path, dollar, newlines, newpath, backup = T,
+NMreplacePart(path, section, newlines, newpath, backup = T,
   blank.append = T, test = F, debug = F)
 }
 \arguments{
 \item{path}{The run to edit. If a directory is given, the file is assumed to
 be called input.txt in that folder.}
 
-\item{dollar}{The name of the dollar section to update. Example:
-dollar="EST". See findDollar.}
+\item{section}{The name of the section to update. Example: section="EST" to
+edit the sections starting by $EST. See NMgetSection}
 
-\item{newlines}{The new text. Better be broken into lines in a character
-vector since this is simply written with writeLines.}
+\item{newlines}{The new text (including "$SECTION"). Better be broken into
+lines in a character vector since this is simply written with
+writeLines.}
 
 \item{newpath}{path to new run. If missing, path is used. If NULL, output is
 returned rather than written.}
@@ -23,13 +24,14 @@ returned rather than written.}
 \item{backup}{In case you are overwriting the old file, do you want to
 backup the file (to say, backup_input.txt)?}
 
-\item{test}{Want to see the resulting input.txt and not write it to disk? Default is FALSE.}
+\item{test}{Want to see the resulting input.txt and not write it to disk?
+Default is FALSE.}
 
 \item{debug}{start by running browser()?}
 }
 \description{
-Just give the dollar name, the new lines and the file path, and the
-"dollar section", and the input to Nonmem will be updated.
+Just give the section name, the new lines and the file path, and the
+"$section", and the input to Nonmem will be updated.
 }
 \details{
 The new file will be written with unix-style line endings.

@@ -4,12 +4,21 @@
 \alias{geomean}
 \title{calculate geometric  mean}
 \usage{
-geomean(x, z.rm = F)
+geomean(x, z.rm = FALSE, ci = FALSE, dist.ci = "t", p.ci = 0.95,
+  colnames = c("est", "ll", "ul"))
 }
 \arguments{
 \item{x}{vector to calculate the geometric mean of}
 
 \item{z.rm}{removes zeros before calculation?}
+
+\item{ci}{if TRUE, a data.frame including point estimate and confidence interval returned. If FALSE, a numeric representing the mean value returned.}
+
+\item{dist.ci}{The distribution to use for the confidence interval. Default and only supported is "t".}
+
+\item{p.ci}{probability covered by confidence interval. Default is 0.95}
+
+\item{colnames}{If ci, this defines the column names of the resulting data frame. Default is c("est","ll","ul").}
 }
 \description{
 calculate geometric  mean

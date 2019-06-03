@@ -9,7 +9,7 @@
 ##'                        stringsAsFactors=F)
 ##' @export
 
-NMaddColumns <- function(data,df,by,debug=T){
+NMaddColumns <- function(data,df,by,debug=F){
     if(debug) browser()
     data.new <- lapply(data,function(d){
         if(!is.data.frame(d)||!all(by%in%names(d))) return(d)

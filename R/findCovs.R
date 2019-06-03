@@ -17,6 +17,10 @@
 ##' ### need a new data.frame to test for length(cols.id)>1
 
 
+## this should be faster with data.table. This can be used (but does not work with cols.id):
+## DT = as.data.table(data)
+## unique(DT[,sapply(DT,function(x)length(unique(x))==1),with=F])
+
 findCovs <- function(data,cols.id=NULL,cols.drop=NULL,debug=F){
     if(debug) browser()
     

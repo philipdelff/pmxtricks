@@ -1,6 +1,6 @@
-###{ model.diag.all - run model.diagnostics on many runs. But only if it hasn't been done already.
-#' @param dirs Regular expression. Only directories whose name match
-#'     this will be taken into account.
+##' run modelOverview on many runs. But only if it hasn't been done already.
+##' @param dirs Regular expression. Only directories whose name match
+##'     this will be taken into account.
 modelOverviewAll <- function(path,debug=F,pattern.dirs="^[0-9].*",force=FALSE,...){
     if(debug) browser()
 

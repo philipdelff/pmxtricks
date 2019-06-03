@@ -4,7 +4,7 @@
 \alias{NMgetSection}
 \title{extract sections of Nonmem control streams}
 \usage{
-NMgetSection(file, lines, name, return = "text", keepEmpty = FALSE,
+NMgetSection(file, lines, section, return = "text", keepEmpty = FALSE,
   keepName = TRUE, keepComments = TRUE, asOne = TRUE,
   simplify = TRUE, cleanSpaces = FALSE)
 }
@@ -14,7 +14,7 @@ NMgetSection(file, lines, name, return = "text", keepEmpty = FALSE,
 \item{lines}{Text lines to process. This is an alternative to use the file
 argument.}
 
-\item{name}{The name of section to extract. Examples: "INPUT", "PK",
+\item{section}{The name of section to extract. Examples: "INPUT", "PK",
 "TABLE", etc.}
 
 \item{return}{If "text", plain text lines are returned. If "idx", matching
@@ -27,11 +27,17 @@ TRUE. It can only be FALSE, if return"idx".}
 
 \item{keepComments}{Keep comment lines?}
 
-\item{asOne}{If multiple hits, concatenate into one. This will most often be relevant with name="TABLE". If FALSE, a list will be returned, each element representing a table. Default is TRUE. So if you want to process the tables separately, you probably want FALSE here.}
+\item{asOne}{If multiple hits, concatenate into one. This will most often be
+relevant with name="TABLE". If FALSE, a list will be returned, each
+element representing a table. Default is TRUE. So if you want to process
+the tables separately, you probably want FALSE here.}
 
-\item{simplify}{If asOne=FALSE, do you want the result to be simplified if only one table is found? Default is TRUE which is desirable for interactive analysis. For programming, you probably want FALSE.}
+\item{simplify}{If asOne=FALSE, do you want the result to be simplified if
+only one table is found? Default is TRUE which is desirable for
+interactive analysis. For programming, you probably want FALSE.}
 
-\item{cleanSpaces}{If TRUE, leading and trailing are removed, and multiplied succeeding white spaces are reduced to single white spaces.}
+\item{cleanSpaces}{If TRUE, leading and trailing are removed, and multiplied
+succeeding white spaces are reduced to single white spaces.}
 }
 \description{
 extract sections of Nonmem control streams

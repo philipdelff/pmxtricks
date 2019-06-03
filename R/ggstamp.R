@@ -63,7 +63,7 @@ ggstamp <- function(plot, stamp = "no stamp",time=Sys.time()) {
                                ggplot={if(sum(unlist(packageVersion("ggplot2")[1,])*c(1000)^c(2:0))<2002001){
                                            stop("You need to use ggplot 2.2.1 or newer to use stamps on ggplot objects")
                                        }
-                                           plot+labs(caption=caption)+theme(plot.caption=element_text(size=6, colour="grey"))},
+                                           plot+ggplot2::labs(caption=caption)+theme(plot.caption=element_text(size=6, colour="grey"))},
                                gtable={
                                    arrangeGrob(plot, bottom = textGrob(caption, gp=gpar(font=1, col = "grey", cex = 0.5)),heights=c(0.98,0.02))
 
