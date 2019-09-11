@@ -3,9 +3,9 @@
 #' @param file path to NONMEM table file
 #' @param silent logical stating whether or not information is
 #'     printed.
-#' @param skip Amount of lines skipes in the start of the file. Some
+#' @param skip Number of lines skipes in the start of the file. Some
 #'     files have additional headers so if table looks wierd try
-#'     adding 1 to skip.
+#'     adding 1 to skip. Notice that the lines TABLE 1 etc from Nonmem will be handled automatically.
 #'
 #' @return Nonmem table as df.
 #' @author Philip Delff
@@ -33,8 +33,15 @@ NMreadTab <- function(file, silent=F,skip ,sep=" ",debug=F) {
     idx.cnames <- idx.tabh+1
 
     idx.data <- setdiff(1:length(lines),c(idx.tabh,idx.cnames))
-    idx.data
+    ## idx.data
 
+    if(sep==" ") {
+        lines <- sub("^ +","",lines)
+        lines <- gsub(" +",";",lines)
+        sep <- ";"
+        }
+    
+    
     data <- read.table(text=paste(lines[c(idx.cnames[1],idx.data)],collapse="\n"),sep=sep,header=T)
     data$LINENO <- idx.data
 

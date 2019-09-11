@@ -14,6 +14,10 @@
 ##'     (including 80 mg and 280 mg). In order to sort correctly, you
 ##'     must use the numeric variable for grp. But in order to get
 ##'     nice labels, use the character variable for labels.
+##' @param debug Start by calling debug()?
+##' @param debug.sheet If something goes wrong when plotting, this may
+##'     be the debug method to use. Pass an integer to call browser()
+##'     when creating the corresponding sheet.
 ##' @details The resulting plot object has been limited on x axis by
 ##'     coord_cartesian. So if you want to adjust x limits on the
 ##'     output from this function, you must use coord_cartesian. xlim
@@ -62,7 +66,7 @@
 
 
 
-ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp, amt = "AMT", id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, par.prof=NULL, x.inc,grp.label = grp, debug = F){
+ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp, amt = "AMT", id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, par.prof=NULL, x.inc,grp.label = grp, debug = F, debug.sheet){
     if(debug) browser()
     library(ggplot2)
     library(scales)
@@ -218,7 +222,10 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
     ## DTdata[,xmingrp := min(c(get(x)[eval(parse(text = subset.xrange))],xmingrp),na.rm=T),get(grp)]
     ## DTdata[,xmaxgrp := max(c(get(x)[eval(parse(text = subset.xrange))],xmaxgrp),na.rm=T),get(grp)]
 
-    DTdata[,skipgrp := any(!is.finite(xmingrp)|!is.finite(xmaxgrp)),get(grp)]
+##    browser()
+  ### by=get(grp) was changed to by=eval(grp) because the former didnt work with only one patient.
+##     DTdata[,skipgrp := any(!is.finite(xmingrp)|!is.finite(xmaxgrp)),get(grp)]
+    DTdata[,skipgrp := any(!is.finite(xmingrp)|!is.finite(xmaxgrp)),by=eval(grp)]
 
     if(nrow(DTdata[isTRUE(skipgrp)])>0){
         
@@ -270,8 +277,9 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
     ## lapply(1:length(lvls),function(G){
     
     ##    n.plots <- 0
-    outlist <- by(data,data$sheet,function(tmp){##        tmp <- data[data[,grp]==lvls[G],]
-##        browser()
+    if(missing(debug.sheet)) debug.sheet <- NULL
+    outlist <- by(data,data$sheet,ds=debug.sheet,FUN=function(tmp,ds){##        tmp <- data[data[,grp]==lvls[G],]
+        if(!is.null(ds) && debug.sheet==unique(tmp$sheet)) browser()
 ##        tmp$IDnew <- as.numeric(as.factor(tmp[,id]))
         ##        tmp$IDcut <- ((tmp$IDnew)-1) %/% NPerSheet + 1 
         
@@ -358,7 +366,7 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
             } else {
                 ## p <- p + geom_point(aes_(shape = name.obs))
                 ## p <- p + geom_point(aes_string(shape = name.obs, colour = par.prof))
-                p <- p + geom_point(aes_(shape = name.obs, colour = as.name(par.prof)))
+                p <- p + geom_point(aes_(shape = eval(name.obs), colour = as.name(par.prof)))
             }
         }
 

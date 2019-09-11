@@ -4,8 +4,10 @@
 ##' @param file a .lst or a .mod. No matter which you provide, the .mod is required and is the only one to be read.
 ##' @export
 
-NMtransInput <- function(file){
+NMtransInput <- function(file,debug=F){
 
+if(debug) browser()
+    
 ### the lst file only contains the name of the data file, not the path to it. So we need to find the .mod instead.
     if(grepl("\\.lst$",file)) file <- sub("\\.lst","\\.mod",file)
 

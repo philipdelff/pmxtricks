@@ -145,7 +145,6 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
 ##            p.iiv.covsc <- ggplot(etas.covs.c,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)
             ## all.output[["iiv.covsc"]] <- p.iiv.covsc
   
-
             DT <- data.table(etas.l2.c)
             DT[,dose]   
 

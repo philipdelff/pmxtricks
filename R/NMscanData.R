@@ -10,6 +10,8 @@
 
 
 ### todo
+## check if variables are consistent within ROW: ID (others?) This is fatal and will happen when using long ID's and non-matching format when writing tables from Nonmem.
+
 ## bug: skip input data if not found.
 
 ## exit if no tables are found
@@ -232,7 +234,7 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
 ###{ handle input data
     if(use.input){
 
-        data.input <- NMtransInput(file)
+        data.input <- NMtransInput(file,debug=F)
         
         cnames.in <- colnames(data.input)
         

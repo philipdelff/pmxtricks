@@ -10,7 +10,7 @@
 
 ## replaced a few plyr calls and changed function calls 
 
-## checks if inpu file exists. If not, it just outputs the output data.
+## checks if input file exists. If not, it just outputs the output data.
 
 #### end change log
 
@@ -31,6 +31,8 @@
 NMscan <- function(path.run,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC",structure="full",use.input=T,reconstructRows=F,debug=F){
     if(debug) browser()
 
+stop("Use NMscanData instead")
+    
     ### at least plyr::arrange is used
     library(plyr)
 

@@ -18,8 +18,6 @@ NMplotFit <- function(data,grp="dose",par.time="TIME",par.ntim="NOMTIME",log.y=F
         }
     }
     
-    drow[,c("DVmean","DVmean.l","DVmean.u"):=means(DV,ci=T,type=type.mean),by=c(grp,par.ntim)]
-    drow[,c("PREDmean","PREDmean.l","PREDmean.u"):=means(PRED,ci=T,type=type.mean),by=c(grp,par.ntim)]
     
     p <- ggplot(drow)
     if(plot.obs){
@@ -28,14 +26,19 @@ NMplotFit <- function(data,grp="dose",par.time="TIME",par.ntim="NOMTIME",log.y=F
     if(plot.ipre){
         p <- p + geom_line(aes_string(par.time,"IPRED",colour="IDwithin"))
     }
-    if(plot.predmean){
-        p <- p + geom_line(aes_string(par.ntim,"PREDmean"),size=1.2,inherit.aes=F)
-    }
-    if(plot.dvmean){
-        p <- p + geom_point(aes_string(x=par.ntim,"DVmean"),size=2,colour=2)
-    }
-    if(plot.dvrange){
-        p <- p + geom_errorbar(aes_string(x=par.ntim,ymin="DVmean.l",ymax="DVmean.u"),inherit.aes=F,colour=2)
+
+    if(par.ntim%in%names(data)){
+        drow[,c("DVmean","DVmean.l","DVmean.u"):=means(DV,ci=T,type=type.mean),by=c(grp,par.ntim)]
+        drow[,c("PREDmean","PREDmean.l","PREDmean.u"):=means(PRED,ci=T,type=type.mean),by=c(grp,par.ntim)]
+        if(plot.predmean){
+            p <- p + geom_line(aes_string(par.ntim,"PREDmean"),size=1.2,inherit.aes=F)
+        }
+        if(plot.dvmean){
+            p <- p + geom_point(aes_string(x=par.ntim,"DVmean"),size=2,colour=2)
+        }
+        if(plot.dvrange){
+            p <- p + geom_errorbar(aes_string(x=par.ntim,ymin="DVmean.l",ymax="DVmean.u"),inherit.aes=F,colour=2)
+        }
     }
     if(facet){
         p <- p + facet_wrap(as.formula(paste0("~",grp)),scales="free")

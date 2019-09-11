@@ -49,8 +49,8 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,debug=F,
 ### print1 does the actual printing to the device. Because if the plot is a table it must be written with draw.grid
     print1 <- function(plot){
         if("gtable"%in%class(plot)) {
-            cat("using grid.draw\n")
-            grid.draw(plot)
+            cat("using grid::grid.draw\n")
+            grid::grid.draw(plot)
         } else {
             print(plot)
         }

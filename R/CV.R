@@ -5,6 +5,9 @@
 ##'     calculated. This is sqrt(exp(var(log(x))-1).
 
 
+### for a Nonmem Omega parameter, do
+## CV=sqrt(exp(Omega)-1)
+
 CV <- function(x,log=F) {
     if(log){
         cv <- sqrt(exp(var(log(x)))-1)

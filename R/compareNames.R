@@ -1,4 +1,16 @@
-
+##' Compare element names in lists
+##'
+##' Useful interactive tool when merging or binding objects
+##' together. It lists the union of element names and indicates in
+##' which of the objects they are present. It does not compare
+##' contents of the elements at all.
+##' 
+##' @param ... objects which element names to compare
+##' @param keepNames If TRUE, the original dataset names are used in reported
+##'     table. If not, generic x1, x2,... are used. The latter may be preferred
+##'     for readability.
+##' @param debug If TRUE, browser is called to begin with.
+##' @export
 
 ### Todo
 
@@ -8,7 +20,7 @@
 
 ### End todo
 
-compareNames <- function(...,debug=F){
+compareNames <- function(...,keepNames=T,debug=F){
     ## Compares the names of the contents of lists (can be
     ## data.frames). This is useful when combining datasets to get an
     ## overview of compatibility.
@@ -17,7 +29,11 @@ compareNames <- function(...,debug=F){
 
     dots <- list(...)
     if(length(dots)<2) stop("At least two objects must be supplied")
-    names.dots <- setdiff(as.character(match.call(expand.dots=T)),as.character(match.call(expand.dots=F)))
+    if(keepNames){
+        names.dots <- setdiff(as.character(match.call(expand.dots=T)),as.character(match.call(expand.dots=F)))
+    } else {
+        names.dots <- paste0("x",seq(length(dots)))
+    }
     
     cnames <- lapply(dots,function(x)sort(names(x)))
 
@@ -26,11 +42,7 @@ compareNames <- function(...,debug=F){
     mat.nms <- do.call(data.frame,lapply(cnames,function(x)ifelse(allnms%in%x,rep("x",length(allnms)),rep("",length(allnms)))))
     
     rownames(mat.nms) <- allnms
-    ## arrange not easy to use here. do with order instead.
-    ##    mat.nms <- arrange(cbind(Var=allnms,mat.nms),x1,x2,Var)
-    ##     mat.nms <- cbind(Var=allnms,mat.nms)
-    ## colnames(mat.nms) <- c("Var",names.dots)
-    ##    mat.nms
+
     colnames(mat.nms) <- names.dots
 
     ## browser()

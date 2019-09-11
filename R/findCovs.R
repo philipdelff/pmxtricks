@@ -23,6 +23,12 @@
 
 findCovs <- function(data,cols.id=NULL,cols.drop=NULL,debug=F){
     if(debug) browser()
+
+    was.data.table <- F
+    if(is.data.table(data)){
+        was.data.table <- T
+        data <- as.data.frame(data)
+    }
     
     cnames <- colnames(data)
     cnames.no.id <- setdiff(cnames,cols.id)
@@ -43,6 +49,8 @@ findCovs <- function(data,cols.id=NULL,cols.drop=NULL,debug=F){
     if(!is.null(cols.id)){
         reduced.in <- reduced.in[do.call(order,reduced.in[,cols.id,drop=F]),]
     }
+
+    if(was.data.table) reduced.in <- as.data.table(reduced.in)
     reduced.in
 
 }

@@ -23,7 +23,8 @@ NMrunLog <- function(dir,runs,runs.omit,debug=F){
         runs.omit <- sub("\\.lst$|\\.mod$","",runs.omit)
         runs <- setdiff(runs,runs.omit)
     }
-    
+
+    if(length(runs)<1) stop("No runs matched.")
     if(!missing(dir)) runs <- lapply(runs,function(run) filePathSimple(dir,run))
     
     tab <- do.call(rbind,lapply(runs,

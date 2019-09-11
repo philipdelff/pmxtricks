@@ -6,6 +6,7 @@
 sumofork <- function (model, use.model.path = TRUE, tableType = 2, format.estimate = "% -#6.4g", 
                       format.rse = "%#6.3g") 
 {
+    library(nonmem2R)
     file.path <- ""
     model.path.ok <- FALSE
     if (exists("model.path")) {
@@ -68,7 +69,7 @@ sumofork <- function (model, use.model.path = TRUE, tableType = 2, format.estima
         tmp2 <- gsub(" +", " ", tmp1)
         epsShrink <- as.numeric(strsplit(tmp2, split = " ")[[1]])
     }
-    Ext <- extload(model)
+    Ext <- nonmem2R::extload(model)
     Cov <- diag(0, length(Ext$theta))
     conditionNumber <- NA
     if (covSuccessful) {

@@ -16,9 +16,10 @@ readVPC <- function(file,ifMissing=NULL,debug=F){
     if(!is.null(vpc1$strata)){    
         stratified <- TRUE
         nstrata <- length(vpc1$strata.names)
-        if(length(vpc1$result.tables)!=nstrata) {
-            stop("number of tables not equal to number of strata. Don't know how to handle this.")
-        }
+### this check makes sense. Problem is that last elem in list seems to hold strata info. To be updated.
+        ## if(length(vpc1$result.tables)!=nstrata) {
+        ##     stop("number of tables not equal to number of strata. Don't know how to handle this.")
+        ## }
         
         
         data <- lapply(1:nstrata,function(x){

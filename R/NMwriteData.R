@@ -1,4 +1,27 @@
+##' Write dataset for use in Nonmem (and R)
+##'
+##' Instead of trying to remember the arguments to pass to write.csv, use this
+##' wrapper. It does much more. It tells you what to write in $DATA and $INPUT
+##' in nonmem, and it exports a rds file as well which is highly preferable for
+##' use in R. 
+##'
+##' @param data The dataset to write to Nonmem.
+##' @param file
+##' @param drop=NULL
+##' @param drop.lowercase=FALSE
+##' @param write.csv=TRUE
+##' @param write.RData In case you want to save to .RData object. Not recommended. Use write.rds instead.
+##' @param write.rds=write.csv
+##' @param force.row=FALSE
+##' @param script If provided, the object will be stamped with this script name before saved to rds.
+##' @param debug=FALSE
+##'
+##' @family Nonmem
+##' @export
+
 ### Todo
+
+## support for data.table?
 
 ## The printed message should not contain lowercase names
 
@@ -6,7 +29,10 @@
 
 ## Check that file ends in either csv or txt
 
-NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,write.RData=F,write.rds=write.csv,force.row=FALSE,debug=FALSE){
+### end todo
+
+
+NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,write.RData=F,write.rds=write.csv,force.row=FALSE,script,debug=FALSE){
     if(debug) browser()
     stopifnot(is.data.frame(data))
     data.out <- as.data.frame(data)
@@ -14,7 +40,6 @@ NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,
 
     if(drop.lowercase) data.out <- data.out[,which(toupper(names(data.out))==names(data.out))]
 
-   
     ## I guess we should always quote. Strings could contain commas.
     ## quote <- TRUE
     ## no, we must not quote. ID is often a character. If quoted, nonmem will not be able to read. So avoid commas in strings. Maybe look for commas and report error if found?
@@ -55,6 +80,7 @@ NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,
         name.data <- deparse(substitute(data))
         if(!grepl("\\..+$",file)) stop("filename could not be translated to .RData. Choose a .csv file name.")
         file.RData <- transFileName(file,"RData")
+        if(!missing(script)) stampObj(data.out,script=script,writtenTo=file.RData)
         ## browser()
         assign(name.data,data.out)
         save(list=name.data,file=file.RData)
@@ -67,6 +93,7 @@ NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,
 
         file.rds <- transFileName(file,"rds")
         ## browser()
+        if(!missing(script)) stampObj(data.out,script=script,writtenTo=file.rds)
         saveRDS(data.out,file=file.rds)
         written <- TRUE
     }
