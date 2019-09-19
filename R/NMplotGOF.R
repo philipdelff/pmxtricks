@@ -1,4 +1,15 @@
-##' data is all rows
+##' A standard panel of residual plots
+##' @param data is all rows from the Nonmem output. Only the EVID==0 subset will
+##'     be used.
+##' @param res The individual residuals (how to derive them from data)
+##' @param ipre expression for individual predictions
+##' @param time Time variable (normally TIME or NOMTIME or TAPD)
+##' @param arrange If true, the plots will be arranged with arrangeGrob. If not, they will be returned as individual plots in a list.
+##' @param debug Start by runing bowser?
+##' @details All parameters must be given as expressions (no quotes)
+
+##### Don't export yet. Needs to be elaborated a bit.
+
 
 NMplotGOF <- function(data,res=CWRES,ipre=IPRED,time=TIME,arrange=T,debug=F){
     

@@ -1,7 +1,12 @@
 ##' run modelOverview on many runs. But only if it hasn't been done already.
-##' @param dirs Regular expression. Only directories whose name match
+##' @param path The directory in which to look for runs
+##' @param pattern.dirs Regular expression. Only directories whose name match
 ##'     this will be taken into account.
-modelOverviewAll <- function(path,debug=F,pattern.dirs="^[0-9].*",force=FALSE,...){
+##' @param force Include runs in the summary even if not found.
+##' @param debug start by calling browser()?
+##' @export
+
+modelOverviewAll <- function(path,pattern.dirs="^[0-9].*",force=FALSE,debug=F,...){
     if(debug) browser()
 
     modeldirs <- list.files(path,pattern=pattern.dirs)
@@ -62,7 +67,7 @@ modelOverviewAll <- function(path,debug=F,pattern.dirs="^[0-9].*",force=FALSE,..
 
     silent <- lapply(1:length(allpaths),function(N){
         print(allpaths[N])
-        modelOverview(path=allpaths[N],...)
+        modelOverview(path.run=allpaths[N],...)
     }
     )
     return(invisible())

@@ -1,14 +1,14 @@
 #' Read a table file from NONMEM 
 #'
 #' @param file path to NONMEM table file
-#' @param silent logical stating whether or not information is
-#'     printed.
-#' @param skip Number of lines skipes in the start of the file. Some
-#'     files have additional headers so if table looks wierd try
-#'     adding 1 to skip. Notice that the lines TABLE 1 etc from Nonmem will be handled automatically.
-#'
+#' @param silent logical stating whether or not information is printed.
+#' @param skip Number of lines skipes in the start of the file. Some files have
+#'     additional headers so if table looks wierd try adding 1 to skip. Notice
+#'     that the lines TABLE 1 etc from Nonmem will be handled automatically.
+#' @param sep The seperator to use in read.table. If " " is used, any number of blanks will work as one separator in the datafile. This should be OK for Nonmem output as the function is intended for but may be a problem for other tables.
 #' @return Nonmem table as df.
 #' @author Philip Delff
+#' @importFrom utils read.table
 #' @export
 
 

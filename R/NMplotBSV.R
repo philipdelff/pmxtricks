@@ -1,10 +1,33 @@
-
+##' Generate distribution plots of between-occasion variability terms from
+##' Nonmem
+##' @param A dataset - will be converted to data.frame so data.table is OK.
+##' @param regex.eta A regular expression defining the naming of the ETA's of
+##'     interest.
+##' @param col.id The name of the id column in data. Default is ID like Nonmem.
+##' @param covs.num Names of columns containing numerical covariates to plot
+##'     the random effects against.
+##' @param covs.char Names of columns containing categorical covariates to
+##'     plot the random effects against.
+##' @param var.occ The name of the numerical occasion variable (if the model has
+##'     say OCC=1:10).
+##' @param var.occ.char The name of the character representation of occasions,
+##'     if one exists. This column could contain "Screening", "Visit 2",
+##'     "Visit 3" etc.
+##' @param fun.file If saving plots, this function can be used to translate the
+##'     file names. The inputs given to the function argument are
+##'     "iov_pairs.png" and "iov_covs_n.png".
+##' @param save Save the generated plots?
+##' @param stamp If saving the plots, a stamp to add. See ggstamp.
+##' @param debug Start by running browser()?
+##' @import ggplot2
+##' @import data.table
+##' @import stats
+##' @importFrom tidyr gather_
+##' @importFrom GGally ggpairs
+##' @seealso NMplotBOV
 ##' @export
 
-NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fun.file=identity,save=FALSE,stamp=NULL,debug=F){###{ plot IIV random effects
-    if(debug) {browser()}
-
-    library(data.table)
+NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fun.file=identity,save=FALSE,stamp=NULL,debug=F){if(debug) {browser()}
     
     pkpars <- as.data.frame(data)
 
@@ -146,7 +169,6 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
             ## all.output[["iiv.covsc"]] <- p.iiv.covsc
   
             DT <- data.table(etas.l2.c)
-            DT[,dose]   
 
             DT2 <- melt(DT,measure.vars="dose",id.vars=c("ID","param","value"),value.name="val.cov",value.factor=T)
             p.iiv.covsc.dt <- ggplot(DT2,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)

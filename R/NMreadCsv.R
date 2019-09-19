@@ -6,6 +6,7 @@
 ##' @param ... passed to read.csv
 ##' @details This is just a shortcut to read.csv so you don't have to remember
 ##'     how to read the data that was exported for nonmem.
+##' @importFrom utils read.csv
 ##' @export
 NMreadCsv <- function(file,na.strings=".",header=TRUE,stringsAsFactors=FALSE,...){
     read.csv(file=file,na.strings=na.strings,header=header,stringsAsFactors=stringsAsFactors,...)

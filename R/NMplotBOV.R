@@ -1,7 +1,29 @@
+##' Generate distribution plots of between-occasion variability terms from
+##' Nonmem
+##' @param A dataset - will be converted to data.frame so data.table is OK.
+##' @param regex.eta A regular expression defining the naming of the ETA's of
+##'     interest.
+##' @param col.id The name of the id column in data. Default is ID like Nonmem.
+##' @param covs.num.iov Names of columns containing numerical covariates to plot
+##'     the random effects against.
+##' @param covs.char.iov Names of columns containing categorical covariates to
+##'     plot the random effects against.
+##' @param var.occ The name of the numerical occasion variable (if the model has
+##'     say OCC=1:10).
+##' @param var.occ.char The name of the character representation of occasions,
+##'     if one exists. This column could contain "Screening", "Visit 2",
+##'     "Visit 3" etc.
+##' @param fun.file If saving plots, this function can be used to translate the
+##'     file names. The inputs given to the function argument are
+##'     "iov_pairs.png" and "iov_covs_n.png".
+##' @param save Save the generated plots?
+##' @param stamp If saving the plots, a stamp to add. See ggstamp.
+##' @param debug Start by running browser()?
+##' @import ggplot2
+##' @importFrom tidyr gather
+##' @importFrom GGally ggpairs
+##' @seealso NMplotBSV
 ##' @export
-
-###{ IOV random effects
-## message("IOV random effects plots...")
 
 
 

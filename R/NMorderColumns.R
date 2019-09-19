@@ -13,6 +13,7 @@
 ##' @param last Columns to sort after alphabetic ordering. Default is none.
 ##' @param debug Start by calling browser()?
 ##' @author Philip Delff
+##' @importFrom data.table is.data.table
 ##' @export
 
 

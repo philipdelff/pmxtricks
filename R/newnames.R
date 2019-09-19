@@ -1,12 +1,13 @@
 ##' rename list elements with standard evaluation
 ##'
 ##' @param data A list (which can be a data.frame)
-##' @param names A list that contains elements "old" and "new" of
-##'     equal length.
-##' @param If names$new contains a name of an existing element in
+##' @param names A list that contains elements "old" and "new" of equal length.
+##' @param overwrite If names$new contains a name of an existing element in
 ##'     data, should it be overwritten?
 ##' @param skipMissing Just skip if names refers to non-existing elements?
 ##' @param debug Start by calling browser()?
+##' @details This function is a pmxtricks internal. When using data.table, use
+##'     setnames instead which is based on the same idea as this.
 
 newNames <- function(data,names,overwrite=F,skipMissing=TRUE,debug=F){
     if(debug) browser()

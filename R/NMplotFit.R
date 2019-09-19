@@ -1,3 +1,22 @@
+##' Plot individual observations together with individual and/or population predictions
+##'
+##' @param data
+##' @param grp
+##' @param par.time
+##' @param par.ntim Used if plotting population means
+##' @param log.y
+##' @param plot.obs
+##' @param plot.ipre
+##' @param plot.dvmean
+##' @param plot.dvrange
+##' @param plot.predmean
+##' @param facet
+##' @param type.mean
+##' @param debug
+##' @import data.table
+##' @import ggplot2
+##' @seealso NMplotGOF
+
 ## not ready, don't export yet
 
 NMplotFit <- function(data,grp="dose",par.time="TIME",par.ntim="NOMTIME",log.y=F,plot.obs=T,plot.ipre=T,plot.dvmean=F,plot.dvrange=F,plot.predmean=F,facet=T,type.mean,debug=F){
