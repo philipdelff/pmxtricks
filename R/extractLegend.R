@@ -12,6 +12,7 @@
 ##'                                nrow=1),
 ##'                                mylegend, nrow=2,heights=c(10, 1))
 ##' @family plotting
+##' @importFrom ggplot2 ggplot_gtable ggplot_build
 ##' @export
 
 extractLegend <- function(p){

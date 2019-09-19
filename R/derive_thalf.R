@@ -1,13 +1,21 @@
 ### most of these functions are t1/2 functions. But functions to calculate more derived parameters follow.
 
 
-##' 1 absorption depot, 2 compartments
+##' Thalf for 1 absorption depot, 2 compartments
 ##'
-##' Can take multiple parameter sets and return a data.frame of halftimes.
-##' @export
+##' @description Can take multiple parameter sets and return a data.frame of halftimes.
+##' @param pars A parameter table. Thalf will be calculated for all rows.
+##' @param cl The name of the column with clearance values. Can represent CL/F if volume variables do the same.
+##' @param ka The name of the column representing absorption rate.
+##' @param v2 The name of the column with central volume (see cl as well).
+##' @param q The name of the column with intercompartmental clearance.
+##' @param v3 The name of the column with peripharel volume (see cl as well).
+##' @param transform Add results to existing dataset?
+##' 
+##' @param debug Start by calling browser()
 ## For thalf, I think this is the one to use. Would be good to generalise this to use for simpler systems.
 
-thalf_1a2c <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",mutate=F,debug=F){
+thalf_1a2c <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=F,debug=F){
     if(debug)browser()
 
     varnames <- c(cl,ka,v2,q,v3)
@@ -30,7 +38,7 @@ thalf_1a2c <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",mutate=F,debu
 
     ths2 <- t(thalves)
     
-    if(mutate){
+    if(transform){
         colnames(ths2) <- paste("th",1:ncol(ths2),sep="")
         ths2 <- cbind(pars,ths2)
     }
@@ -42,24 +50,31 @@ thalf_1a2c <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",mutate=F,debu
 
 
 ### This is only 1st order models, single-depot abs. One row of parameters only. Use thalf.1a.1c instead.
-thalf.1a.1c.one <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
-    if(debug)browser()
-    pars.u <- unique(pars[,c(cl,ka,v2)])
-    ##    print(pars.u[,cl])
-    Asys <- matrix(unlist(c(-pars.u[ka],0,pars.u[ka],-pars.u[cl]/pars.u[v2])),nrow=2,byrow=TRUE)
-    ##    eigen(Asys)
-    ## This is the true Half time - which equals the absorption half time
-    thalf.fast <- log(2)/-min(eigen(Asys)$values)
-    thalf.term <- log(2)/-max(eigen(Asys)$values)
-    thalf <- list(init=thalf.fast,term=thalf.term)
-    return(thalf)
-}
+## thalf.1a.1c.one <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
+##     if(debug)browser()
+##     pars.u <- unique(pars[,c(cl,ka,v2)])
+##     ##    print(pars.u[,cl])
+##     Asys <- matrix(unlist(c(-pars.u[ka],0,pars.u[ka],-pars.u[cl]/pars.u[v2])),nrow=2,byrow=TRUE)
+##     ##    eigen(Asys)
+##     ## This is the true Half time - which equals the absorption half time
+##     thalf.fast <- log(2)/-min(eigen(Asys)$values)
+##     thalf.term <- log(2)/-max(eigen(Asys)$values)
+##     thalf <- list(init=thalf.fast,term=thalf.term)
+##     return(thalf)
+## }
 
 
 
 
-### This is only 1st order models, single-depot abs.
-thalf.1a.1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
+##' Thalf for 1 absorption depot, 1 compartment
+##'
+##' @description Can take multiple parameter sets and return a data.frame of halftimes.
+##' @param pars A parameter table. Thalf will be calculated for all rows.
+##' @param cl The name of the column with clearance values. Can represent CL/F if volume variables do the same.
+##' @param ka The name of the column representing absorption rate.
+##' @param v2 The name of the column with central volume (see cl as well).
+##' @param debug Start by calling browser()?
+thalf_1a1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
     if(debug)browser()
     ## the rest for each row
     pars$atempROW <- 1:nrow(pars)
@@ -83,8 +98,13 @@ thalf.1a.1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
 }
 
 
-### This is only 1st order models, single-depot abs through abs transit compartments.
-thalf.trans.1c <- function(pars,cl="CL",ka="KA1",vc="VC",debug=F){
+##' Thalf for 1st order models, single-depot abs through any number of transit compartments.
+##' @param pars A parameter table. Thalf will be calculated for all rows.
+##' @param cl The name of the column with clearance values. Can represent CL/F if volume variables do the same.
+##' @param ka The name of the column representing absorption rate.
+##' @param vc The name of the column with central volume (see cl as well).
+##' @param debug Start by calling browser()?
+thalf_trans_1c <- function(pars,cl="CL",ka="KA1",vc="VC",debug=F){
     if(debug)browser()
     ## the rest for each row
     pars$atempROW <- 1:nrow(pars)
@@ -117,7 +137,7 @@ thalf.trans.1c <- function(pars,cl="CL",ka="KA1",vc="VC",debug=F){
 ### This one only works for one set of parameters. Has to be extended to handled
 ### several parameter sets and return a data frame with all the thalves for each
 ### line in pars.
-thalf.2a.2c <- function(pars,cl="CL",ka1="KA1",ka2="KA2",v2="V2",q="Q",v3="V3",debug=F){
+thalf_2a2c <- function(pars,cl="CL",ka1="KA1",ka2="KA2",v2="V2",q="Q",v3="V3",debug=F){
   warning("This function is experimental. Please check the code.")
   if(debug)browser()
   
@@ -142,7 +162,7 @@ thalf.2a.2c <- function(pars,cl="CL",ka1="KA1",ka2="KA2",v2="V2",q="Q",v3="V3",d
 
 ############ more derived parameters at once. 
 ###{
-derivePars.1a.1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
+derivePars_1a1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
     if(debug)browser()
     ## the rest for each row
     pars$atempROW <- 1:nrow(pars)

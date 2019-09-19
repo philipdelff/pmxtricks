@@ -1,11 +1,10 @@
 ##' Extract columns that do not vary within variables in a data.frame
 ##'
-##' Often the variables will be either empty or ID. But it can also be both say ID and DRUG or ID and GRP.
-##'
 ##' @param data data.frame in which to look for covariates
-##' @param cols.id covariates will be searched for in combinations of values in these columns
+##' @param cols.id covariates will be searched for in combinations of values in
+##'     these columns. Often cols.id will be either empty or ID. But it
+##'     can also be both say c("ID","DRUG") or c("ID","TRT").
 ##' @param cols.drop Discard these columns if present.
-##' @author philip@delff.dk
 ##' @export
 
 ##' @examples

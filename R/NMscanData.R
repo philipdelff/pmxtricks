@@ -1,7 +1,32 @@
 ##' automatically find Nonmem tables and organize data
 ##'
-##' @param file A nonmem control stream or output file from nonmem (.mod or .lst)
-##' @param col.grp If present, ID and OCC level info is grouped by col.grp. So should only be needed for cross-over.
+##' @param file A nonmem control stream or output file from nonmem (.mod or
+##'     .lst)
+##' @param col.id The name of the subject ID variable, default is "ID".
+##' @param col.row A column that is unique for each row. Such a column is needed
+##'     for this function to work well.
+##' @param col.grp If present, ID and OCC level info is grouped by col.grp. So
+##'     should only be needed for cross-over.
+##' @param col.occ The name of a non-mandatory occasion variable (say "OCC").
+##' @param structure Either "full" or something else. If full, all variables that can be represented will be included at all levels. If not, only row-level data will be included in $row, only occasion-level data in $occ, etc.
+##' @param use.input Merge with columns in input data? Using this, you don't
+##'     have to worry about remembering including all relevant variables in the
+##'     output tables.
+##' @param reconstructRows Include rows from input data files that do not exist
+##'     in output tables? A column called nmout will be TRUE when the row was
+##'     found in output tables, and FALSE when not.
+##' @param debug start by running browser()?
+##'
+##' @details This function makes it very easy to collect the data from a Nonmem
+##'     run. Only, you have to make sure to include a row counter in your input
+##'     data files and your output tables. It reorganises the data into four different levels
+##' \item run
+##' \item id
+##' \item occ
+##' \item row
+##'
+##' @export
+
 
 
 #### change log
@@ -355,43 +380,3 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
          list.str=list.str)
     
 }
-
-
-
-if(FALSE){
-    dat1 <- NMscan6("e:/Project/NN7170_N8-GPsc/NN7170-4213/current/Nonmem/cohort4/181",col.row="ROWID")
-    names(dat1)
-    lapply(dat1,dim)
-    lapply(dat1,head)
-
-
-### looks right. Model only run on DRUG==1
-    dat2 <- NMscan6("e:/Project/NN1406/4218/current/Nonmem/result_meeting/GIR_NNC0143-0406/GIR_NNC0143-0406_FINAL",col.occ="PROFID",col.grp="DRUG")
-    lapply(dat2,dim)
-    lapply(dat2,head)
-    as.numeric(object.size(dat2))/1024^2
-    dat2$id
-
-    c1 <- NMimport("e:/Project/NN1406/4218/current/Nonmem/result_meeting/GIR_NNC0143-0406/GIR_NNC0143-0406_FINAL/TABLE_OUTPUT.txt")
-    dim(c1)
-
-#### concizu
-    ## iov on bioavailability. It should be in the occ table
-    dat3 <- NMscan6("e:/Project/NN7415_anti-TFPI/NN7415-4159/current/Nonmem/result_meeting/PK/PK_final",col.occ="OCC")
-    lapply(dat3,dim)
-    lapply(dat3,head)
-
-    dat4 <- NMscan6("e:/Project/NN8640/NN8640-ph1PK/current/Nonmem/PK_popAll/runFinal",col.occ="OCC")
-
-###### OCC is not in output tables and input data doesnt exist. So occ-level cannot be reconstructed.
-    dat4 <- NMscan6("e:/Project/NN9924/Meta-analyses/ClinPharmModel/current/Nonmem/PK_final/005",col.occ="OCC",debug=F)
-
-    lapply(dat4,dim)
-    lapply(dat4,head)
-    
-    dat5 <- NMscan6("E:/Project/NN8640/NN8640-4042/current/Nonmem/IGFI/002",col.row = c("TRIAL", "ID","GRP","TIME","EVID"))
-    
-
-}
-
-

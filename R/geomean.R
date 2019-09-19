@@ -1,4 +1,4 @@
-##' calculate geometric  mean
+##' calculate geometric mean. 
 ##'
 ##' @param x vector to calculate the geometric mean of
 ##' @param z.rm removes zeros before calculation?
@@ -6,6 +6,9 @@
 ##' @param dist.ci The distribution to use for the confidence interval. Default and only supported is "t".
 ##' @param p.ci probability covered by confidence interval. Default is 0.95
 ##' @param colnames If ci, this defines the column names of the resulting data frame. Default is c("est","ll","ul").
+##' @importFrom stats sd qt
+## Don't export. Use means instead.
+
 
 geomean <- function(x,z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,colnames=c("est","ll","ul")) {
     warning("geomean is deprecated. Use means(x,type=\"geometric\").")
@@ -23,4 +26,3 @@ geomean <- function(x,z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,colnames=c("est",
     colnames(df) <- colnames
     df
 }
-
