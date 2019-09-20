@@ -9,10 +9,11 @@
 ##' alphabetical. This means that last="BW" will put body weight as last of
 ##' capital, but before lowercase columns.
 ##'
+##' @param data The dataset which columns to reorder.
 ##' @param first Columns that should come before alphabetic sorting. Default is c("ROW","ID","NTIM","TIME","EVID","CMT","AMT","RATE","DV","MDV","FLAG","OCC","ROUTE","GRP","TRIAL")
 ##' @param last Columns to sort after alphabetic ordering. Default is none.
 ##' @param debug Start by calling browser()?
-##' @author Philip Delff
+##' @family DataWrangling
 ##' @importFrom data.table is.data.table
 ##' @export
 

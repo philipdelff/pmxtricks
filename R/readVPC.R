@@ -1,3 +1,4 @@
+##' importFrom xpose4 read.npc.vpc.results
 ## This function is not ready yet, so not exported
 
 readVPC <- function(file,ifMissing=NULL,debug=F){
@@ -8,8 +9,9 @@ readVPC <- function(file,ifMissing=NULL,debug=F){
         return(ifMissing)
     }
     
-    library(xpose4)
-    vpc1 <- xpose4::read.npc.vpc.results(vpc.results=file)
+
+
+    vpc1 <- read.npc.vpc.results(vpc.results=file)
 
     stratified <- FALSE
 

@@ -7,6 +7,8 @@
 ##' @param arrange If true, the plots will be arranged with arrangeGrob. If not, they will be returned as individual plots in a list.
 ##' @param debug Start by runing bowser?
 ##' @details All parameters must be given as expressions (no quotes)
+##' @import rlang
+##' @import gridExtra
 
 ##### Don't export yet. Needs to be elaborated a bit.
 
@@ -14,10 +16,6 @@
 NMplotGOF <- function(data,res=CWRES,ipre=IPRED,time=TIME,arrange=T,debug=F){
     
     if(debug) browser()
-
-    library(dplyr)
-    library(gridExtra)
-
 
     ##    if(is.character(res)){
     ##        res=sym(res)

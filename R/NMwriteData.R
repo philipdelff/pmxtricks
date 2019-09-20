@@ -6,15 +6,15 @@
 ##' use in R. 
 ##'
 ##' @param data The dataset to write to Nonmem.
-##' @param file
-##' @param drop=NULL
-##' @param drop.lowercase=FALSE
-##' @param write.csv=TRUE
+##' @param file The file to write to.
+##' @param drop Specific columns to drop before writing the data to file.
+##' @param drop.lowercase Drop all columns which names containe lowercase letters
+##' @param write.csv Write to csv file?
 ##' @param write.RData In case you want to save to .RData object. Not recommended. Use write.rds instead.
-##' @param write.rds=write.csv
-##' @param force.row=FALSE
+##' @param write.rds write an rds file?
+##' @param force.row Ensure that data contains a ROW column counting the rows in the dataset, and add one if none exists. Defaults to FALSE (default is not editing the dataset at all).
 ##' @param script If provided, the object will be stamped with this script name before saved to rds.
-##' @param debug=FALSE
+##' @param debug Start by running browser()?
 ##'
 ##' @family Nonmem
 ##' @export

@@ -9,12 +9,13 @@ NMreadTab(file, silent = F, skip, sep = " ", debug = F)
 \arguments{
 \item{file}{path to NONMEM table file}
 
-\item{silent}{logical stating whether or not information is
-printed.}
+\item{silent}{logical stating whether or not information is printed.}
 
-\item{skip}{Amount of lines skipes in the start of the file. Some
-files have additional headers so if table looks wierd try
-adding 1 to skip.}
+\item{skip}{Number of lines skipes in the start of the file. Some files have
+additional headers so if table looks wierd try adding 1 to skip. Notice
+that the lines TABLE 1 etc from Nonmem will be handled automatically.}
+
+\item{sep}{The seperator to use in read.table. If " " is used, any number of blanks will work as one separator in the datafile. This should be OK for Nonmem output as the function is intended for but may be a problem for other tables.}
 }
 \value{
 Nonmem table as df.

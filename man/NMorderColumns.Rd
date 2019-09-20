@@ -7,6 +7,8 @@
 NMorderColumns(data, first, last, debug = F)
 }
 \arguments{
+\item{data}{The dataset which columns to reorder.}
+
 \item{first}{Columns that should come before alphabetic sorting. Default is c("ROW","ID","NTIM","TIME","EVID","CMT","AMT","RATE","DV","MDV","FLAG","OCC","ROUTE","GRP","TRIAL")}
 
 \item{last}{Columns to sort after alphabetic ordering. Default is none.}
@@ -23,6 +25,8 @@ alphabetically (after by case). In sohort, priority is 1: Case, first/last,
 alphabetical. This means that last="BW" will put body weight as last of
 capital, but before lowercase columns.
 }
-\author{
-Philip Delff
+\seealso{
+Other DataWrangling: \code{\link{NMaddColumns}},
+  \code{\link{NMscanData}}
 }
+\concept{DataWrangling}

@@ -1,6 +1,6 @@
 ##' Generate distribution plots of between-occasion variability terms from
 ##' Nonmem
-##' @param A dataset - will be converted to data.frame so data.table is OK.
+##' @param data A dataset - will be converted to data.frame so data.table is OK.
 ##' @param regex.eta A regular expression defining the naming of the ETA's of
 ##'     interest.
 ##' @param col.id The name of the id column in data. Default is ID like Nonmem.

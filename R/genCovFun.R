@@ -1,10 +1,19 @@
 ##' create R function that generates param values based on covariates
-##' 
+##' @description This function is really useful bu this and a few other may belong better in a simulation package.
+##' @param NMcode0
+##' @param pars0
+##' @param covs0
+##' @param theta0
+##' @param omega0
+##' @param name.fun
+##' @param debug
 ##' @details The function returns a function in plain text. If you want
 ##'     to store the code, paste this text to a file. If you want to
 ##'     use it right away, do
 ##' fun1text <- genCovFun()
 ##' newfun <- eval(parse(text=fun1text))
+
+## dont export from pmxtricks. Needs a little more testing. Maybe to be moved to pmxsim package?
 
 ## TODO 
 ## In case the resulting function doesn't take any covariates (covs <- NULL) the resulting code could be simplified. It seems overly complicated to have a loop over covs when covs is NULL. Should the df.covs argument even be included if none are used anyway?

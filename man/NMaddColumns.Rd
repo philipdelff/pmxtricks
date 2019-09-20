@@ -10,12 +10,22 @@ NMaddColumns(data, df, by, debug = F)
 \item{data}{A NM data object}
 
 \item{df}{a data.frame to merge onto elements of data object.}
+
+\item{by}{passed to merge}
+
+\item{debug}{Start by calling browser()?}
 }
 \description{
-Merge columns onto all elements in a NM data object
+This is useful for adding columns to a nonmem data object as
+    created by NMscanData because it does so to all elements in the object.
 }
 \examples{
 df.races <- data.frame(RACE=c(1,3.1),
                        race1=c("White","Japanese"),
                        stringsAsFactors=F)
 }
+\seealso{
+Other DataWrangling: \code{\link{NMorderColumns}},
+  \code{\link{NMscanData}}
+}
+\concept{DataWrangling}

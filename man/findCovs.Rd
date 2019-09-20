@@ -9,12 +9,14 @@ findCovs(data, cols.id = NULL, cols.drop = NULL, debug = F)
 \arguments{
 \item{data}{data.frame in which to look for covariates}
 
-\item{cols.id}{covariates will be searched for in combinations of values in these columns}
+\item{cols.id}{covariates will be searched for in combinations of values in
+these columns. Often cols.id will be either empty or ID. But it
+can also be both say c("ID","DRUG") or c("ID","TRT").}
 
 \item{cols.drop}{Discard these columns if present.}
 }
 \description{
-Often the variables will be either empty or ID. But it can also be both say ID and DRUG or ID and GRP.
+Extract columns that do not vary within variables in a data.frame
 }
 \examples{
 dat <- NMreadTab("TABLE_OUTPUT.txt")
@@ -23,7 +25,4 @@ findCovs(dat,cols.id="ID",cols.drop=c("IRES","TABLE"))
 ###  an ID column is not needed.
 findCovs(dat,cols.id=c(),cols.drop=c("IRES","TABLE"))
 ### need a new data.frame to test for length(cols.id)>1
-}
-\author{
-philip@delff.dk
 }

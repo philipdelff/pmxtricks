@@ -9,6 +9,10 @@
 ##'     automatically.
 ##'
 ##' @return the plot with a stamp
+##' @import ggplot2
+##' @import grid
+##' @import gridExtra
+##' @importFrom utils packageVersion
 ##' @examples
 ##' norms <- do.call(rbind,lapply(1:3,function(mu)data.frame(POP=mu,population=paste("Population",mu),parameter=rnorm(seq(mu-6,mu+6,.01),mean=mu,sd=sin(mu)*2))))
 ##' ## A very quick way to see densities is using ggplot
@@ -28,7 +32,7 @@
 
 ggstamp <- function(plot, stamp = "no stamp",time=Sys.time()) {
 ### Captions are only available in ggplot 2.2.1
-    library(ggplot2)
+
 ### Stamps
     plot.was.list <- T
     if(!( length(class(plot))==1 && class(plot)=="list" )) {
@@ -61,7 +65,7 @@ ggstamp <- function(plot, stamp = "no stamp",time=Sys.time()) {
         
         plot.stamped <- switch(otype,
                                ggplot={if(sum(unlist(packageVersion("ggplot2")[1,])*c(1000)^c(2:0))<2002001){
-                                           stop("You need to use ggplot 2.2.1 or newer to use stamps on ggplot objects")
+                                           stop("ggplot >= 2.2.1 needed to stamp ggplot objects.")
                                        }
                                            plot+ggplot2::labs(caption=caption)+theme(plot.caption=element_text(size=6, colour="grey"))},
                                gtable={

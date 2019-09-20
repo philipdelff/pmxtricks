@@ -4,7 +4,7 @@
 \alias{NMtransInput}
 \title{read input data and translate names according to the $INPUT section}
 \usage{
-NMtransInput(file)
+NMtransInput(file, debug = F)
 }
 \arguments{
 \item{file}{a .lst or a .mod. No matter which you provide, the .mod is required and is the only one to be read.}

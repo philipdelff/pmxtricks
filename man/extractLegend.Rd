@@ -25,4 +25,8 @@ p3 <- grid.arrange(arrangeGrob(p1 + theme(legend.position="none"),
                                nrow=1),
                                mylegend, nrow=2,heights=c(10, 1))
 }
+\seealso{
+Other plotting: \code{\link{NMplotFit}},
+  \code{\link{theme_pp_facet}}, \code{\link{theme_pp}}
+}
 \concept{plotting}

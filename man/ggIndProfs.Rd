@@ -8,7 +8,7 @@ ggIndProfs(data, run, x = "TIME", dv = "DV", pred = "PRED",
   ipred = c("IPRED", "IPRE"), grp, amt = "AMT", id = "ID",
   xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed",
   logy = F, NPerSheet = 12, LLOQ = NULL, use.evid2, facet = id,
-  par.prof = NULL, x.inc, grp.label = grp, debug = F)
+  par.prof = NULL, x.inc, grp.label = grp, debug = F, debug.sheet)
 }
 \arguments{
 \item{run}{The main title of the plot. Called run becaus you often
@@ -31,6 +31,12 @@ dose including 80 and 280) while grp.label is a character
 (including 80 mg and 280 mg). In order to sort correctly, you
 must use the numeric variable for grp. But in order to get
 nice labels, use the character variable for labels.}
+
+\item{debug}{Start by calling debug()?}
+
+\item{debug.sheet}{If something goes wrong when plotting, this may
+be the debug method to use. Pass an integer to call browser()
+when creating the corresponding sheet.}
 }
 \description{
 Plot individual profiles and doses based on NM style dataset

@@ -2,7 +2,7 @@
 % Please edit documentation in R/geomean.R
 \name{geomean}
 \alias{geomean}
-\title{calculate geometric  mean}
+\title{calculate geometric mean.}
 \usage{
 geomean(x, z.rm = FALSE, ci = FALSE, dist.ci = "t", p.ci = 0.95,
   colnames = c("est", "ll", "ul"))
@@ -21,5 +21,5 @@ geomean(x, z.rm = FALSE, ci = FALSE, dist.ci = "t", p.ci = 0.95,
 \item{colnames}{If ci, this defines the column names of the resulting data frame. Default is c("est","ll","ul").}
 }
 \description{
-calculate geometric  mean
+calculate geometric mean.
 }

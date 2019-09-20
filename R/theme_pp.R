@@ -1,6 +1,9 @@
 ##' A custom theme - aim is powerpoint
-##'
+##' @param theme0 The theme to modify
 ##' @param ... arguments passed to theme() as last thing.
+##' @import ggplot2
+##' @family plotting
+##' @export
 
 theme_pp <- function(theme0 = ggplot2::theme_bw,...){
     theme1 <- 
@@ -52,7 +55,12 @@ theme_pp <- function(theme0 = ggplot2::theme_bw,...){
 
 }
 
-theme_pp_facet <- function(theme0 = ggplot2::theme_bw,...){
+##' a version of theme_pp suited for facet'ed plots
+##' @param theme0 The theme to modify
+##' @import ggplot2
+##' @family plotting
+##' @export
+theme_pp_facet <- function(theme0 = theme_bw,...){
     theme1 <- 
         theme0()+
         theme(strip.text = element_text(size = 16,colour="black"),

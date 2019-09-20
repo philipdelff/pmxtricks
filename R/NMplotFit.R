@@ -1,7 +1,7 @@
 ##' Plot individual observations together with individual and/or population predictions
-##'
-##' @param data
-##' @param grp
+##' @description An summary plot of the observations and predictions
+##' @param data The dataset to plot
+##' @param grp 
 ##' @param par.time
 ##' @param par.ntim Used if plotting population means
 ##' @param log.y
@@ -15,7 +15,7 @@
 ##' @param debug
 ##' @import data.table
 ##' @import ggplot2
-##' @seealso NMplotGOF
+##' @family plotting
 
 ## not ready, don't export yet
 

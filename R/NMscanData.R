@@ -20,11 +20,14 @@
 ##' @details This function makes it very easy to collect the data from a Nonmem
 ##'     run. Only, you have to make sure to include a row counter in your input
 ##'     data files and your output tables. It reorganises the data into four different levels
-##' \item run
-##' \item id
-##' \item occ
-##' \item row
-##'
+##' \itemize{
+##'   \item run
+##'   \item id
+##'   \item occ
+##'   \item row
+##' }
+##' @family DataWrangling
+##' @import stats
 ##' @export
 
 
@@ -47,9 +50,6 @@
 
 NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC",structure="full",use.input=T,reconstructRows=F,debug=F){
     if(debug) browser()
-
-### at least plyr::arrange is used
-    ## library(plyr)
 
 
 ###{ process arguments 

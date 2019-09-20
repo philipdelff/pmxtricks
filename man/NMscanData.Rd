@@ -9,10 +9,47 @@ NMscanData(file, col.id = "ID", col.row = "ROW", col.grp = NULL,
   reconstructRows = F, debug = F)
 }
 \arguments{
-\item{file}{A nonmem control stream or output file from nonmem (.mod or .lst)}
+\item{file}{A nonmem control stream or output file from nonmem (.mod or
+.lst)}
 
-\item{col.grp}{If present, ID and OCC level info is grouped by col.grp. So should only be needed for cross-over.}
+\item{col.id}{The name of the subject ID variable, default is "ID".}
+
+\item{col.row}{A column that is unique for each row. Such a column is needed
+for this function to work well.}
+
+\item{col.grp}{If present, ID and OCC level info is grouped by col.grp. So
+should only be needed for cross-over.}
+
+\item{col.occ}{The name of a non-mandatory occasion variable (say "OCC").}
+
+\item{structure}{Either "full" or something else. If full, all variables that can be represented will be included at all levels. If not, only row-level data will be included in $row, only occasion-level data in $occ, etc.}
+
+\item{use.input}{Merge with columns in input data? Using this, you don't
+have to worry about remembering including all relevant variables in the
+output tables.}
+
+\item{reconstructRows}{Include rows from input data files that do not exist
+in output tables? A column called nmout will be TRUE when the row was
+found in output tables, and FALSE when not.}
+
+\item{debug}{start by running browser()?}
 }
 \description{
 automatically find Nonmem tables and organize data
 }
+\details{
+This function makes it very easy to collect the data from a Nonmem
+    run. Only, you have to make sure to include a row counter in your input
+    data files and your output tables. It reorganises the data into four different levels
+\itemize{
+  \item run
+  \item id
+  \item occ
+  \item row
+}
+}
+\seealso{
+Other DataWrangling: \code{\link{NMaddColumns}},
+  \code{\link{NMorderColumns}}
+}
+\concept{DataWrangling}

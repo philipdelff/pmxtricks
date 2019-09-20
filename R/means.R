@@ -8,6 +8,8 @@
 ##' @param p.ci probability covered by confidence interval. Default is 0.95
 ##' @param colnames If ci, this defines the column names of the resulting data frame. Default is c("est","ll","ul").
 ##' @param format The format of the result. Possible values are df and num.
+##' @import stats
+##' @export
 
 ### ChangeLog
 ## 2019-03-14 philipdelff: Added support for median

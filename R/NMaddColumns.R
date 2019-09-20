@@ -1,12 +1,17 @@
 ##' Merge columns onto all elements in a NM data object
 ##'
+##' @description This is useful for adding columns to a nonmem data object as
+##'     created by NMscanData because it does so to all elements in the object.
 ##' @param data A NM data object
 ##' @param df a data.frame to merge onto elements of data object.
+##' @param by passed to merge
+##' @param debug Start by calling browser()?
 ##' 
 ##' @examples
 ##' df.races <- data.frame(RACE=c(1,3.1),
 ##'                        race1=c("White","Japanese"),
 ##'                        stringsAsFactors=F)
+##' @family DataWrangling
 ##' @export
 
 NMaddColumns <- function(data,df,by,debug=F){

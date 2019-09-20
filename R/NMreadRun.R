@@ -1,5 +1,11 @@
 
-## run <- "\\\\samba-hpc.rd.astrazeneca.net\\QCP_MODELING\\ONC\\azd5363\\poppk_20180813_Ph1Ph2Pooled_final\\Models\\baseModel\\philipdelff\\run416t14_cn_01.lst"
+##' read model details
+##'
+##' This function is used to produce run logs or run records by NMrunLog. Much better alternatives can most likely be found elsewhere.
+##' @param run path to an lst file.
+##' @param debug Start by calling browser()?
+##' @import nonmem2R
+
 
 ## for inspiration, from Pirana design:
 ## "003" = list (
@@ -20,7 +26,7 @@
 
 NMreadRun <- function(run,debug=F){
     if(debug) browser()
-    library(nonmem2R)
+
     ## for now we can assume run is a lst file
     ## runbase <- sub("\\.lst","",run)
     dir <- dirname(run)
@@ -88,7 +94,7 @@ NMreadRun <- function(run,debug=F){
     ## }
     out$Npars <- NA
 
-    out2 <- pmxtricks::newNames(out,names=data.frame(old=c("totNoOfIndividuals" ,"totNoOfObservations"),new=c("Nsubjs","Nobs")),debug=F)
+    out2 <- newNames(out,names=data.frame(old=c("totNoOfIndividuals" ,"totNoOfObservations"),new=c("Nsubjs","Nobs")),debug=F)
 
     out2
 

@@ -30,6 +30,9 @@
 ##' ggwrite(p1)  ## view plot on screen
 ##' stamp <- "note"
 ##' ggwrite(p1,stamp=stamp,canvas="wide",save=exportFlag)
+##' @import grDevices
+##' @import grid
+
 
 ### TODO
 ## a "show" argument is missing. Like "save" this should determine if the plot
@@ -38,9 +41,6 @@
 #### end TODO
 
 ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,debug=F,paper="special",save=T){
-    require(grid)
-    ## labeling?
-    ## gridExtra?
     
     if(debug) browser()
 

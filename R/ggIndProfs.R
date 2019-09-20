@@ -22,6 +22,11 @@
 ##'     coord_cartesian. So if you want to adjust x limits on the
 ##'     output from this function, you must use coord_cartesian. xlim
 ##'     does not work.
+##' @import ggplot2
+##' @import scales
+##' @import data.table
+##' @importFrom stats reformulate
+
 ##' @export
 
 
@@ -68,12 +73,8 @@
 
 ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp, amt = "AMT", id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, par.prof=NULL, x.inc,grp.label = grp, debug = F, debug.sheet){
     if(debug) browser()
-    library(ggplot2)
-    library(scales)
-    library(data.table)
     
-    ##    browser()
-    
+   
 ##### check arguments
     stopifnot(is.data.frame(data))
     stopifnot(x%in%colnames(data))
@@ -406,8 +407,8 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
             ##                   sec.axis = sec_axis(~./s.dv.dos, name = ylab2))
             ## } else {
             if(plot.doses){
-                p <- p + scale_y_log10(breaks = logbreaks,label=comma,
-                                       sec.axis = sec_axis(~./s.dv.dos, name = ylab2,label=comma))
+                p <- p + scale_y_log10(breaks = logbreaks, label=comma,
+                                       sec.axis = sec_axis(~./s.dv.dos, name = ylab2,labels=comma))
                 
             } else {
                 p <- p + scale_y_log10(breaks = logbreaks,label=comma)

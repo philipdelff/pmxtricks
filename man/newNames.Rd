@@ -9,16 +9,19 @@ newNames(data, names, overwrite = F, skipMissing = TRUE, debug = F)
 \arguments{
 \item{data}{A list (which can be a data.frame)}
 
-\item{names}{A list that contains elements "old" and "new" of
-equal length.}
+\item{names}{A list that contains elements "old" and "new" of equal length.}
+
+\item{overwrite}{If names$new contains a name of an existing element in
+data, should it be overwritten?}
 
 \item{skipMissing}{Just skip if names refers to non-existing elements?}
 
 \item{debug}{Start by calling browser()?}
-
-\item{If}{names$new contains a name of an existing element in
-data, should it be overwritten?}
 }
 \description{
 rename list elements with standard evaluation
+}
+\details{
+This function is a pmxtricks internal. When using data.table, use
+    setnames instead which is based on the same idea as this.
 }

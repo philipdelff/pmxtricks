@@ -11,8 +11,6 @@
 factor2 <- function(x,by=x,debug=F){
     if(debug) browser()
 
-    library(data.table)
-
     DT1 <- data.table(x=x,by=by)
     DT1[,rank:=as.numeric(as.factor(frank(by,ties.method="min")))]
 

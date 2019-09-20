@@ -1,7 +1,7 @@
 Package: pmxtricks
 Type: Package
 Title: Author's tiny but golden every-day pmx helper functions
-Version: 0.0.3.902
+Version: 0.0.3.907
 Date: 
 Author: Philip Delff <philip@delff.dk>
 Maintainer: Philip Delff <philip@delff.dk>
@@ -9,6 +9,14 @@ Description: Tools mainly for pharmacometrics related tasks.
 License: GPL-3
 RoxygenNote: 6.1.1
 Depends: R (>= 3.2.4), data.table
-Imports: nonmem2R (>= 0.1.10)
-Suggests: testthat, ggplot2
-
+Imports: nonmem2R (>= 0.1.10),
+	 data.table,
+	 ggplot2, 
+	 grDevices,
+	 grid,
+	 scales,
+	 stats,
+	 GGally,
+	 tidyr,
+	 utils
+Suggests: testthat

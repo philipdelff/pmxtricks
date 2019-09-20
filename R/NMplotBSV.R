@@ -1,6 +1,6 @@
 ##' Generate distribution plots of between-occasion variability terms from
 ##' Nonmem
-##' @param A dataset - will be converted to data.frame so data.table is OK.
+##' @param data A dataset - will be converted to data.frame so data.table is OK.
 ##' @param regex.eta A regular expression defining the naming of the ETA's of
 ##'     interest.
 ##' @param col.id The name of the id column in data. Default is ID like Nonmem.
@@ -8,11 +8,6 @@
 ##'     the random effects against.
 ##' @param covs.char Names of columns containing categorical covariates to
 ##'     plot the random effects against.
-##' @param var.occ The name of the numerical occasion variable (if the model has
-##'     say OCC=1:10).
-##' @param var.occ.char The name of the character representation of occasions,
-##'     if one exists. This column could contain "Screening", "Visit 2",
-##'     "Visit 3" etc.
 ##' @param fun.file If saving plots, this function can be used to translate the
 ##'     file names. The inputs given to the function argument are
 ##'     "iov_pairs.png" and "iov_covs_n.png".

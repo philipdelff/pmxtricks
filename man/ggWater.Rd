@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggWater.R
 \name{ggWater}
 \alias{ggWater}
-\title{get watermarks in ggplots}
+\title{Add watermarks to ggplots}
 \usage{
 ggWater(text = "Not validated", scale = 1, rot = 0)
 }
@@ -14,7 +14,7 @@ ggWater(text = "Not validated", scale = 1, rot = 0)
 \item{rot}{rotation of the mark. Don't remember the unit.}
 }
 \description{
-get watermarks in ggplots
+Add watermarks to ggplots
 }
 \details{
 taken from https://www.r-bloggers.com/adding-watermarks-to-plots/
