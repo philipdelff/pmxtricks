@@ -1,6 +1,25 @@
-##' Plot individual profiles and doses based on NM style dataset
+##' Plot individual profiles and doses based on NM style dataset data,
+##' run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp,
+##' amt = "AMT", id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL,
+##' scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2,
+##' facet=id, par.prof=NULL, x.inc,grp.label = grp, debug = F,
+##' debug.sheet
+##' @param data The dataset to plot.
 ##' @param run The main title of the plot. Called run becaus you often
 ##'     want a Nonmem run name here.
+##' @param x The name of the column to be plotted on the x-axis
+##'     (string).
+##' @param dv The name of the column containing observations (string).
+##' @param pred The name of the population predictions in data
+##'     (string).
+##' @param ipred The name of the individual predictions in data
+##'     (string).
+##' @param grp A grouping variable. Subjects will be split into groups
+##'     of common values (string).
+##' @param amt The name of the column containing dose amounts. If this
+##'     argument is given, the doses will be included as vertical bars
+##'     in the plots, with a secondary axis representing the dose
+##'     amounts on the right.
 ##' @param id The name of the subject ID column
 ##' @param use.evid2 Should EVID 2 records be used for pred and ipred
 ##'     plotting? The default is to use EVID==2 records if data
@@ -8,6 +27,17 @@
 ##'     one value equalling 2.
 ##' @param facet splits plots in pages
 ##' @param par.prof Distinguish multiple profiles in dataset.
+##' @param xlab label for x-axis.
+##' @param ylab label for y-axis.
+##' @param ylab2 label for y-axis to the right representing dose
+##'     amounts.
+##' @param scales passed to facet_wrap.
+##' @param logy Show y-axis on logarithmic scale?
+##' @param NPerSheet Number of subjects per sheet
+##' @param LLOQ Lower limiit of quantification (will be shown as a
+##'     horizontal line in plots).
+##' @param x.inc Values that must be included in the span of the
+##'     x-axis. This can be multiple values, like c(5,1000).
 ##' @param grp.label Column to use for labeling the sheets (while
 ##'     sorting by grp). A typical example is that grp is numeric (say
 ##'     dose including 80 and 280) while grp.label is a character
@@ -22,10 +52,13 @@
 ##'     coord_cartesian. So if you want to adjust x limits on the
 ##'     output from this function, you must use coord_cartesian. xlim
 ##'     does not work.
+##'
+##' The resulting object can be saved with ggwrite.
 ##' @import ggplot2
 ##' @import scales
 ##' @import data.table
 ##' @importFrom stats reformulate
+##' @family Plotting
 
 ##' @export
 
@@ -208,7 +241,7 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
     DTdata[,sheetgrp := as.numeric(as.factor(sheet)),grp]
     DTdata[,Nsheetsgrp := max(sheetgrp),grp]
 
-    
+### Making sure that values of x.inc will be included on th x.axis.
     DTdata[,xmingrp :=  NA_real_]
     DTdata[,xmaxgrp :=  NA_real_]
     if(!missing(x.inc)) DTdata[,xmingrp := min(x.inc)] 

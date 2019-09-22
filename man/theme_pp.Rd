@@ -9,13 +9,15 @@ theme_pp(theme0 = ggplot2::theme_bw, ...)
 \arguments{
 \item{theme0}{The theme to modify}
 
-\item{...}{arguments passed to theme() as last thing.}
+\item{...}{Arguments passed to theme() after default values have
+been set. This means ... can be used to overwrite the
+defaults.}
 }
 \description{
 A custom theme - aim is powerpoint
 }
 \seealso{
-Other plotting: \code{\link{NMplotFit}},
-  \code{\link{extractLegend}}, \code{\link{theme_pp_facet}}
+Other Plotting: \code{\link{ggIndProfs}},
+  \code{\link{ggstamp}}
 }
-\concept{plotting}
+\concept{Plotting}

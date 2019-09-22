@@ -50,6 +50,6 @@ This function makes it very easy to collect the data from a Nonmem
 }
 \seealso{
 Other DataWrangling: \code{\link{NMaddColumns}},
-  \code{\link{NMorderColumns}}
+  \code{\link{NMorderColumns}}, \code{\link{findCovs}}
 }
 \concept{DataWrangling}

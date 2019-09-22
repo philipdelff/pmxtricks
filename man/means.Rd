@@ -24,7 +24,10 @@ means(x, type = "arithmetic", z.rm = FALSE, ci = FALSE,
 \item{colnames}{If ci, this defines the column names of the resulting data frame. Default is c("est","ll","ul").}
 
 \item{format}{The format of the result. Possible values are df and num.}
+
+\item{debug}{Start by calling debug()?}
 }
 \description{
 calculate arithmetic or geometric mean and confidence intervals
 }
+\concept{Calc}

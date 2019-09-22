@@ -2,7 +2,12 @@
 % Please edit documentation in R/ggIndProfs.R
 \name{ggIndProfs}
 \alias{ggIndProfs}
-\title{Plot individual profiles and doses based on NM style dataset}
+\title{Plot individual profiles and doses based on NM style dataset data,
+run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp,
+amt = "AMT", id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL,
+scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2,
+facet=id, par.prof=NULL, x.inc,grp.label = grp, debug = F,
+debug.sheet}
 \usage{
 ggIndProfs(data, run, x = "TIME", dv = "DV", pred = "PRED",
   ipred = c("IPRED", "IPRE"), grp, amt = "AMT", id = "ID",
@@ -11,10 +16,47 @@ ggIndProfs(data, run, x = "TIME", dv = "DV", pred = "PRED",
   par.prof = NULL, x.inc, grp.label = grp, debug = F, debug.sheet)
 }
 \arguments{
+\item{data}{The dataset to plot.}
+
 \item{run}{The main title of the plot. Called run becaus you often
 want a Nonmem run name here.}
 
+\item{x}{The name of the column to be plotted on the x-axis
+(string).}
+
+\item{dv}{The name of the column containing observations (string).}
+
+\item{pred}{The name of the population predictions in data
+(string).}
+
+\item{ipred}{The name of the individual predictions in data
+(string).}
+
+\item{grp}{A grouping variable. Subjects will be split into groups
+of common values (string).}
+
+\item{amt}{The name of the column containing dose amounts. If this
+argument is given, the doses will be included as vertical bars
+in the plots, with a secondary axis representing the dose
+amounts on the right.}
+
 \item{id}{The name of the subject ID column}
+
+\item{xlab}{label for x-axis.}
+
+\item{ylab}{label for y-axis.}
+
+\item{ylab2}{label for y-axis to the right representing dose
+amounts.}
+
+\item{scales}{passed to facet_wrap.}
+
+\item{logy}{Show y-axis on logarithmic scale?}
+
+\item{NPerSheet}{Number of subjects per sheet}
+
+\item{LLOQ}{Lower limiit of quantification (will be shown as a
+horizontal line in plots).}
 
 \item{use.evid2}{Should EVID 2 records be used for pred and ipred
 plotting? The default is to use EVID==2 records if data
@@ -24,6 +66,9 @@ one value equalling 2.}
 \item{facet}{splits plots in pages}
 
 \item{par.prof}{Distinguish multiple profiles in dataset.}
+
+\item{x.inc}{Values that must be included in the span of the
+x-axis. This can be multiple values, like c(5,1000).}
 
 \item{grp.label}{Column to use for labeling the sheets (while
 sorting by grp). A typical example is that grp is numeric (say
@@ -39,11 +84,23 @@ be the debug method to use. Pass an integer to call browser()
 when creating the corresponding sheet.}
 }
 \description{
-Plot individual profiles and doses based on NM style dataset
+Plot individual profiles and doses based on NM style dataset data,
+run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp,
+amt = "AMT", id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL,
+scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2,
+facet=id, par.prof=NULL, x.inc,grp.label = grp, debug = F,
+debug.sheet
 }
 \details{
 The resulting plot object has been limited on x axis by
     coord_cartesian. So if you want to adjust x limits on the
     output from this function, you must use coord_cartesian. xlim
     does not work.
+
+The resulting object can be saved with ggwrite.
 }
+\seealso{
+Other Plotting: \code{\link{ggstamp}},
+  \code{\link{theme_pp}}
+}
+\concept{Plotting}

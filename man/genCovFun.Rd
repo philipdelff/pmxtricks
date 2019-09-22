@@ -6,13 +6,54 @@
 \usage{
 genCovFun(NMcode0, pars0, covs0, theta0, omega0, name.fun, debug = F)
 }
+\arguments{
+\item{NMcode0}{Nonmem code that translates THETA and OMEGA into
+PK/PD parameters like CL, V2, EMAX etc.}
+
+\item{pars0}{The names of the final individual parameters that the
+generated function must return and which can be used for
+simulations.}
+
+\item{covs0}{Names of covariates which are arguments to the generated function.}
+
+\item{theta0}{default theta for resulting function.}
+
+\item{omega0}{default omega for resulting function.}
+
+\item{name.fun}{The name of the function to be generated.}
+
+\item{debug}{Start by calling browser()?}
+}
+\value{
+A character string which can be evaluated to create a function.
+}
 \description{
-create R function that generates param values based on covariates
+This function is really useful bu this and a few
+    other may belong better in a simulation package.
 }
 \details{
-The function returns a function in plain text. If you want
-    to store the code, paste this text to a file. If you want to
-    use it right away, do
-fun1text <- genCovFun()
-newfun <- eval(parse(text=fun1text))
+The function returns a function in plain text. If you
+    want to store the code, paste this text to a file. If you want
+    to use it right away, do fun1text <- genCovFun() newfun <-
+    eval(parse(text=fun1text))
+}
+\examples{
+text0 <- NMgetSection(file="run1.lst",name="PK",return="text",keepName=FALSE,cleanSpaces=FALSE)
+
+NMR0 <- NMcode2R(text0)
+## get rid of some text that has nothing to do with covariates
+NMR1 <- NMR0[-c(1:21)]
+NMR2 <- NMR1[1:25]
+
+pars <- extload(paste0(run,".ext"))
+
+fun1text <- genCovFun(NMcode0=NMR3
+                     ,pars0=c("KA","DCL","V2","V3","Q","D1","F1","CL0","KCL")
+                     ,theta0=pars$theta
+                     ,omega0=pars$omega
+                     ,name.fun="parsBase"
+                      ## ,debug=T
+                      )
+
+cat(fun1text)
 }

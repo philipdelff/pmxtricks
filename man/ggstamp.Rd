@@ -11,6 +11,8 @@ ggstamp(plot, stamp = "no stamp", time = Sys.time())
 
 \item{stamp}{the script name. Date and time will be added
 automatically.}
+
+\item{time}{The timestamp to be included.}
 }
 \value{
 the plot with a stamp
@@ -30,3 +32,8 @@ ggstamp(p1,stamp)
 ## Or use gsave which will call ggstamp automatically.
 gsave(p1,stamp=stamp,canvas="wide")
 }
+\seealso{
+Other Plotting: \code{\link{ggIndProfs}},
+  \code{\link{theme_pp}}
+}
+\concept{Plotting}

@@ -8,7 +8,7 @@ Maintainer: Philip Delff <philip@delff.dk>
 Description: Tools mainly for pharmacometrics related tasks. 
 License: GPL-3
 RoxygenNote: 6.1.1
-Depends: R (>= 3.2.4), data.table
+Depends: R (>= 3.2.4)
 Imports: nonmem2R (>= 0.1.10),
 	 data.table,
 	 ggplot2, 
@@ -18,5 +18,7 @@ Imports: nonmem2R (>= 0.1.10),
 	 stats,
 	 GGally,
 	 tidyr,
-	 utils
+	 utils,
+	 rlang,
+	 gridExtra
 Suggests: testthat

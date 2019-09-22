@@ -8,7 +8,7 @@
 ##' @param debug Start by runing bowser?
 ##' @details All parameters must be given as expressions (no quotes)
 ##' @import rlang
-##' @import gridExtra
+##' @importFrom gridExtra arrangeGrob
 
 ##### Don't export yet. Needs to be elaborated a bit.
 

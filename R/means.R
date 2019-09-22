@@ -8,7 +8,9 @@
 ##' @param p.ci probability covered by confidence interval. Default is 0.95
 ##' @param colnames If ci, this defines the column names of the resulting data frame. Default is c("est","ll","ul").
 ##' @param format The format of the result. Possible values are df and num.
+##' @param debug Start by calling debug()?
 ##' @import stats
+##' @family Calc
 ##' @export
 
 ### ChangeLog

@@ -27,6 +27,6 @@ p3 <- grid.arrange(arrangeGrob(p1 + theme(legend.position="none"),
 }
 \seealso{
 Other plotting: \code{\link{NMplotFit}},
-  \code{\link{theme_pp_facet}}, \code{\link{theme_pp}}
+  \code{\link{theme_pp_facet}}
 }
 \concept{plotting}

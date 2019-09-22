@@ -27,6 +27,6 @@ capital, but before lowercase columns.
 }
 \seealso{
 Other DataWrangling: \code{\link{NMaddColumns}},
-  \code{\link{NMscanData}}
+  \code{\link{NMscanData}}, \code{\link{findCovs}}
 }
 \concept{DataWrangling}

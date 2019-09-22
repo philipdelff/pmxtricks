@@ -5,6 +5,8 @@
 ##'     these columns. Often cols.id will be either empty or ID. But it
 ##'     can also be both say c("ID","DRUG") or c("ID","TRT").
 ##' @param cols.drop Discard these columns if present.
+##' @param debug start by running browser()?
+##' @family DataWrangling
 ##' @import data.table
 ##' @export
 

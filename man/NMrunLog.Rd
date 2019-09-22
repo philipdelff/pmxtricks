@@ -12,6 +12,8 @@ NMrunLog(dir, runs, runs.omit, debug = F)
 \item{runs}{Runs to include in case you only want a specific subset.}
 
 \item{runs.omit}{Runs to omit in case you want all but these.}
+
+\item{debug}{start by running browser()?}
 }
 \description{
 get an overview of your Nonmem runs

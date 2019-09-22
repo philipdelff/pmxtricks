@@ -1,8 +1,10 @@
 ##' A custom theme - aim is powerpoint
 ##' @param theme0 The theme to modify
-##' @param ... arguments passed to theme() as last thing.
+##' @param ... Arguments passed to theme() after default values have
+##'     been set. This means ... can be used to overwrite the
+##'     defaults.
 ##' @import ggplot2
-##' @family plotting
+##' @family Plotting
 ##' @export
 
 theme_pp <- function(theme0 = ggplot2::theme_bw,...){
@@ -57,6 +59,9 @@ theme_pp <- function(theme0 = ggplot2::theme_bw,...){
 
 ##' a version of theme_pp suited for facet'ed plots
 ##' @param theme0 The theme to modify
+##' @param ... Arguments passed to theme() after default values have
+##'     been set. This means ... can be used to overwrite the
+##'     defaults.
 ##' @import ggplot2
 ##' @family plotting
 ##' @export

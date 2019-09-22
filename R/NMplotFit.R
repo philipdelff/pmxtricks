@@ -1,18 +1,18 @@
 ##' Plot individual observations together with individual and/or population predictions
-##' @description An summary plot of the observations and predictions
-##' @param data The dataset to plot
-##' @param grp 
-##' @param par.time
-##' @param par.ntim Used if plotting population means
-##' @param log.y
-##' @param plot.obs
-##' @param plot.ipre
-##' @param plot.dvmean
-##' @param plot.dvrange
-##' @param plot.predmean
-##' @param facet
-##' @param type.mean
-##' @param debug
+##' @description An summary plot of the observations and predictions.
+##' @param data The dataset to plot.
+##' @param grp character vector of columns to group means by and to facet plots by.
+##' @param par.time name of column to plot observations against.
+##' @param par.ntim Used if plotting population means.
+##' @param log.y Use logarithmic scale for y-axis?
+##' @param plot.obs Plot observations?
+##' @param plot.ipre Plot individual predictions?
+##' @param plot.dvmean Include mean of observations?
+##' @param plot.dvrange Include range of observations?
+##' @param plot.predmean Include mean of population predictions?
+##' @param facet name of a column to facet by (facet_wrap used if this argument is given).
+##' @param type.mean Passed to means. When linear scale is used, arithmetic is used, when on log scale, geometric is default.
+##' @param debug Start by calling browser()?
 ##' @import data.table
 ##' @import ggplot2
 ##' @family plotting

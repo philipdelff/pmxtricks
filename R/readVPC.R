@@ -1,4 +1,10 @@
+##' read VPC results a little more flexibelly than with xpose4::read.npc.vpc.results
+##' @param file The file to read.
+##' @param ifMissing The value to return if file is missing.
+##' @param debug Start by calling debug()?
+##' @family Nonmem.
 ##' importFrom xpose4 read.npc.vpc.results
+
 ## This function is not ready yet, so not exported
 
 readVPC <- function(file,ifMissing=NULL,debug=F){

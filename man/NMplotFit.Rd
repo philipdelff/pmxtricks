@@ -10,17 +10,37 @@ NMplotFit(data, grp = "dose", par.time = "TIME",
   type.mean, debug = F)
 }
 \arguments{
-\item{data}{The dataset to plot}
+\item{data}{The dataset to plot.}
 
-\item{grp}{}
+\item{grp}{character vector of columns to group means by and to facet plots by.}
 
-\item{par.ntim}{Used if plotting population means}
+\item{par.time}{name of column to plot observations against.}
+
+\item{par.ntim}{Used if plotting population means.}
+
+\item{log.y}{Use logarithmic scale for y-axis?}
+
+\item{plot.obs}{Plot observations?}
+
+\item{plot.ipre}{Plot individual predictions?}
+
+\item{plot.dvmean}{Include mean of observations?}
+
+\item{plot.dvrange}{Include range of observations?}
+
+\item{plot.predmean}{Include mean of population predictions?}
+
+\item{facet}{name of a column to facet by (facet_wrap used if this argument is given).}
+
+\item{type.mean}{Passed to means. When linear scale is used, arithmetic is used, when on log scale, geometric is default.}
+
+\item{debug}{Start by calling browser()?}
 }
 \description{
-An summary plot of the observations and predictions
+An summary plot of the observations and predictions.
 }
 \seealso{
 Other plotting: \code{\link{extractLegend}},
-  \code{\link{theme_pp_facet}}, \code{\link{theme_pp}}
+  \code{\link{theme_pp_facet}}
 }
 \concept{plotting}

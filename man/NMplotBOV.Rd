@@ -10,6 +10,8 @@ NMplotBOV(data, regex.eta = "^ETABOV", col.id = "ID", covs.num.iov,
   fun.file = identity, save = F, stamp = NULL, debug = F)
 }
 \arguments{
+\item{data}{A dataset - will be converted to data.frame so data.table is OK.}
+
 \item{regex.eta}{A regular expression defining the naming of the ETA's of
 interest.}
 
@@ -37,8 +39,6 @@ file names. The inputs given to the function argument are
 \item{stamp}{If saving the plots, a stamp to add. See ggstamp.}
 
 \item{debug}{Start by running browser()?}
-
-\item{A}{dataset - will be converted to data.frame so data.table is OK.}
 }
 \description{
 Generate distribution plots of between-occasion variability terms from

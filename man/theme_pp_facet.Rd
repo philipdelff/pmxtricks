@@ -8,12 +8,16 @@ theme_pp_facet(theme0 = theme_bw, ...)
 }
 \arguments{
 \item{theme0}{The theme to modify}
+
+\item{...}{Arguments passed to theme() after default values have
+been set. This means ... can be used to overwrite the
+defaults.}
 }
 \description{
 a version of theme_pp suited for facet'ed plots
 }
 \seealso{
 Other plotting: \code{\link{NMplotFit}},
-  \code{\link{extractLegend}}, \code{\link{theme_pp}}
+  \code{\link{extractLegend}}
 }
 \concept{plotting}

@@ -2,6 +2,8 @@
 ##' 
 ##' @description Based on a nonmem run, this function finds the input data and reads it. But it reads it like the nonmem run by applying DROP arguments and alternative naming of columns in the nonmem run.
 ##' @param file a .lst or a .mod. No matter which you provide, the .mod is required and is the only one to be read.
+##' @param debug start by running browser()?
+##' @family Nonmem
 ##' @export
 
 NMtransInput <- function(file,debug=F){

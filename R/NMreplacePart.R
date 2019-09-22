@@ -14,6 +14,7 @@
 ##'     returned rather than written.
 ##' @param backup In case you are overwriting the old file, do you want to
 ##'     backup the file (to say, backup_input.txt)?
+##' @param blank.append Append a blank line to output?
 ##' @param test Want to see the resulting input.txt and not write it to disk?
 ##'     Default is FALSE.
 ##' @param debug start by running browser()?

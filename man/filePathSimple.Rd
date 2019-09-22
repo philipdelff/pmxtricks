@@ -8,6 +8,8 @@ filePathSimple(..., debug = F)
 }
 \arguments{
 \item{...}{additional arguments passed to file.path().}
+
+\item{debug}{start by running browser()?}
 }
 \description{
 Used to tidy up paths. Passes arguments to
@@ -15,6 +17,4 @@ Used to tidy up paths. Passes arguments to
     path format, i.e. paths that can be compared by simple string
     comparisson.
 }
-\author{
-Philip Delff
-}
+\concept{FileSystem}

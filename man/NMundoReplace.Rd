@@ -7,7 +7,17 @@ simply overwrite input.txt with contents of backup_input.txt}
 \usage{
 NMundoReplace(file, debug = F)
 }
+\arguments{
+\item{file}{The file to recover}
+
+\item{debug}{start by running browser()?}
+}
 \description{
 Undo NMreplacePart
 simply overwrite input.txt with contents of backup_input.txt
 }
+\seealso{
+Other Nonmem: \code{\link{NMaddColumns}},
+  \code{\link{NMtransInput}}, \code{\link{NMwriteData}}
+}
+\concept{Nonmem}

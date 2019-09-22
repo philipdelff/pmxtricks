@@ -4,7 +4,7 @@
 \alias{NMaddColumns}
 \title{Merge columns onto all elements in a NM data object}
 \usage{
-NMaddColumns(data, df, by, debug = F)
+NMaddColumns(data, df, by, debug = FALSE)
 }
 \arguments{
 \item{data}{A NM data object}
@@ -22,10 +22,14 @@ This is useful for adding columns to a nonmem data object as
 \examples{
 df.races <- data.frame(RACE=c(1,3.1),
                        race1=c("White","Japanese"),
-                       stringsAsFactors=F)
+                       stringsAsFactors=FALSE)
 }
 \seealso{
+Other Nonmem: \code{\link{NMtransInput}},
+  \code{\link{NMundoReplace}}, \code{\link{NMwriteData}}
+
 Other DataWrangling: \code{\link{NMorderColumns}},
-  \code{\link{NMscanData}}
+  \code{\link{NMscanData}}, \code{\link{findCovs}}
 }
 \concept{DataWrangling}
+\concept{Nonmem}

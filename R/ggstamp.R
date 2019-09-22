@@ -7,11 +7,12 @@
 ##' @param plot The plot to be stamped.
 ##' @param stamp the script name. Date and time will be added
 ##'     automatically.
+##' @param time The timestamp to be included.
 ##'
 ##' @return the plot with a stamp
 ##' @import ggplot2
 ##' @import grid
-##' @import gridExtra
+##' @importFrom gridExtra arrangeGrob
 ##' @importFrom utils packageVersion
 ##' @examples
 ##' norms <- do.call(rbind,lapply(1:3,function(mu)data.frame(POP=mu,population=paste("Population",mu),parameter=rnorm(seq(mu-6,mu+6,.01),mean=mu,sd=sin(mu)*2))))
@@ -22,6 +23,7 @@
 ##' ggstamp(p1,stamp)
 ##' ## Or use gsave which will call ggstamp automatically.
 ##' gsave(p1,stamp=stamp,canvas="wide")
+##' @family Plotting
 ##' @export
 
 

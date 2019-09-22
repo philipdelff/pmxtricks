@@ -14,6 +14,8 @@ these columns. Often cols.id will be either empty or ID. But it
 can also be both say c("ID","DRUG") or c("ID","TRT").}
 
 \item{cols.drop}{Discard these columns if present.}
+
+\item{debug}{start by running browser()?}
 }
 \description{
 Extract columns that do not vary within variables in a data.frame
@@ -26,3 +28,8 @@ findCovs(dat,cols.id="ID",cols.drop=c("IRES","TABLE"))
 findCovs(dat,cols.id=c(),cols.drop=c("IRES","TABLE"))
 ### need a new data.frame to test for length(cols.id)>1
 }
+\seealso{
+Other DataWrangling: \code{\link{NMaddColumns}},
+  \code{\link{NMorderColumns}}, \code{\link{NMscanData}}
+}
+\concept{DataWrangling}

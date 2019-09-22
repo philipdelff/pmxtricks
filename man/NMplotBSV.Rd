@@ -10,6 +10,8 @@ NMplotBSV(data, regex.eta = "^ETABSV", col.id = "ID", covs.num,
   debug = F)
 }
 \arguments{
+\item{data}{A dataset - will be converted to data.frame so data.table is OK.}
+
 \item{regex.eta}{A regular expression defining the naming of the ETA's of
 interest.}
 
@@ -30,15 +32,6 @@ file names. The inputs given to the function argument are
 \item{stamp}{If saving the plots, a stamp to add. See ggstamp.}
 
 \item{debug}{Start by running browser()?}
-
-\item{A}{dataset - will be converted to data.frame so data.table is OK.}
-
-\item{var.occ}{The name of the numerical occasion variable (if the model has
-say OCC=1:10).}
-
-\item{var.occ.char}{The name of the character representation of occasions,
-if one exists. This column could contain "Screening", "Visit 2",
-"Visit 3" etc.}
 }
 \description{
 Generate distribution plots of between-occasion variability terms from

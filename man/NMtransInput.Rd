@@ -8,7 +8,14 @@ NMtransInput(file, debug = F)
 }
 \arguments{
 \item{file}{a .lst or a .mod. No matter which you provide, the .mod is required and is the only one to be read.}
+
+\item{debug}{start by running browser()?}
 }
 \description{
 Based on a nonmem run, this function finds the input data and reads it. But it reads it like the nonmem run by applying DROP arguments and alternative naming of columns in the nonmem run.
 }
+\seealso{
+Other Nonmem: \code{\link{NMaddColumns}},
+  \code{\link{NMundoReplace}}, \code{\link{NMwriteData}}
+}
+\concept{Nonmem}

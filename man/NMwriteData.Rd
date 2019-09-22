@@ -35,4 +35,8 @@ wrapper. It does much more. It tells you what to write in $DATA and $INPUT
 in nonmem, and it exports a rds file as well which is highly preferable for
 use in R.
 }
+\seealso{
+Other Nonmem: \code{\link{NMaddColumns}},
+  \code{\link{NMtransInput}}, \code{\link{NMundoReplace}}
+}
 \concept{Nonmem}
