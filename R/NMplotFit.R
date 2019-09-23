@@ -1,47 +1,95 @@
-##' Plot individual observations together with individual and/or population predictions
+##' Plot individual observations together with individual and/or population
+##' predictions
 ##' @description An summary plot of the observations and predictions.
 ##' @param data The dataset to plot.
-##' @param grp character vector of columns to group means by and to facet plots by.
-##' @param par.time name of column to plot observations against.
-##' @param par.ntim Used if plotting population means.
+##' @param grp character vector of columns to group means by and to facet plots
+##'     by.
+##' @param col.time name of column to plot observations against.
+##' @param col.ntim Used if plotting population means.
+##' @param col.pred Name of column containing population predictions.
+##' @param col.ipred Name of column containing individual predictions. Default
+##'     is searching for IPRED, then IPRE.
 ##' @param log.y Use logarithmic scale for y-axis?
 ##' @param plot.obs Plot observations?
-##' @param plot.ipre Plot individual predictions?
+##' @param plot.ipred Plot individual predictions?
 ##' @param plot.dvmean Include mean of observations?
 ##' @param plot.dvrange Include range of observations?
 ##' @param plot.predmean Include mean of population predictions?
-##' @param facet name of a column to facet by (facet_wrap used if this argument is given).
-##' @param type.mean Passed to means. When linear scale is used, arithmetic is used, when on log scale, geometric is default.
+##' @param facet name of a column to facet by (facet_wrap used if this argument
+##'     is given).
+##' @param type.mean Passed to means. When linear scale is used, arithmetic is
+##'     used, when on log scale, geometric is default.
 ##' @param debug Start by calling browser()?
 ##' @import data.table
 ##' @import ggplot2
 ##' @family plotting
+##' @examples
+##' data(pksim1,package="pmxtricks")
+##' pmxtricks:::NMplotFit(pksim1)
+##' pmxtricks:::NMplotFit(pksim1,debug=FALSE,plot.dvmean=TRUE,plot.dvrange=TRUE,col.ntim="TIME",log.y=TRUE)
 
 ## not ready, don't export yet
 
-NMplotFit <- function(data,grp="dose",par.time="TIME",par.ntim="NOMTIME",log.y=F,plot.obs=T,plot.ipre=T,plot.dvmean=F,plot.dvrange=F,plot.predmean=F,facet=T,type.mean,debug=F){
+NMplotFit <- function(data,grp,col.time="TIME",col.ntim="NOMTIME",col.pred="PRED",col.ipred=c("IPRED","IPRE"),log.y=FALSE,plot.obs=TRUE,plot.ipred=TRUE,plot.dvmean=FALSE,plot.dvrange=FALSE,plot.predmean=FALSE,facet=TRUE,type.mean,debug=FALSE){
 
     if(debug) browser()
 
 #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
 
-EVID <- NULL
-IDwithin <- NULL
-ID <- NULL
-DV <- NULL
-PRED <- NULL
+    EVID <- NULL
+    IDwithin <- NULL
+    ID <- NULL
+    DV <- NULL
+    PRED <- NULL
 
 ### Section end: Dummy variables, only not to get NOTE's in pacakge checks
 
+    drow <- copy(as.data.table(data))
+    
+    if(missing(grp)){
+        grp <- tmpcol(drow,base="grp")
+        drow[,c(grp):="All"]
+    }
+    
 
+### look for ipred
+    if(!is.null(col.ipred)) {
+        if(length(col.ipred)==0) col.ipred <- NULL 
+        found.ipred <- col.ipred %in% colnames(data)
+        if(sum(found.ipred)==0) {
+            message("Individual predictions not found in data. Skipping.")
+            col.ipred <- NULL
+            if(plot.ipred) {
+                warning("plot.ipred is TRUE, but individual predictions not found in data. Skipping.")
+                plot.ipred <- FALSE
+            }
+        } else {
+            col.ipred <- col.ipred[found.ipred] [1]
+        }
+        
+    }
+
+### look for pred
+    if(!is.null(col.pred)) {
+        if(length(col.pred)==0) col.pred <- NULL 
+        found.pred <- col.pred %in% colnames(data)
+        if(sum(found.pred)==0) {
+            message("Individual predictions not found in data. Skipping.")
+            col.pred <- NULL
+            if(plot.predmean) {
+                warning("plot.predmean is TRUE, but population predictions not found in data. Skipping.")
+                plot.predmean <- FALSE
+            }
+        } else {
+            col.pred <- col.pred[found.pred] [1]
+        }
+    }
 
     
-    drow <- data.table(data)
-    drow <- drow[EVID==0]    
-    drow[,IDwithin:=as.numeric(as.factor(as.numeric(ID))),by=c(grp)]
-
-
-    drow[,IDwithin:=factor(IDwithin)]
+    drow <- drow[EVID==0]
+    name.idwithin <- tmpcol(drow,base="IDwithin")
+    drow[,(name.idwithin):=as.numeric(as.factor(as.numeric(ID))),by=c(grp)]
+    drow[,(name.idwithin):=as.factor(get(name.idwithin))]
 
     if(missing(type.mean)){
         if(log.y) {
@@ -54,23 +102,24 @@ PRED <- NULL
     
     p <- ggplot(drow)
     if(plot.obs){
-        p <- p + geom_point(aes_string(par.time,"DV",colour="IDwithin"))
+        p <- p + geom_point(aes_string(col.time,"DV",colour=name.idwithin))
     }
-    if(plot.ipre){
-        p <- p + geom_line(aes_string(par.time,"IPRED",colour="IDwithin"))
+    if(plot.ipred){
+        p <- p + geom_line(aes_string(col.time,col.ipred,colour=name.idwithin))
     }
 
-    if(par.ntim%in%names(data)){
-        drow[,c("DVmean","DVmean.l","DVmean.u"):=means(DV,ci=T,type=type.mean),by=c(grp,par.ntim)]
-        drow[,c("PREDmean","PREDmean.l","PREDmean.u"):=means(PRED,ci=T,type=type.mean),by=c(grp,par.ntim)]
+    if(col.ntim%in%names(data)){
+        drow[,c("DVmean","DVmean.l","DVmean.u"):=means(DV,ci=T,type=type.mean),by=c(grp,col.ntim)]
+
         if(plot.predmean){
-            p <- p + geom_line(aes_string(par.ntim,"PREDmean"),size=1.2,inherit.aes=F)
+            drow[,c("PREDmean","PREDmean.l","PREDmean.u"):=means(get(col.pred),ci=T,type=type.mean),by=c(grp,col.ntim)]
+            p <- p + geom_line(aes_string(col.ntim,"PREDmean"),size=1.2,inherit.aes=F)
         }
         if(plot.dvmean){
-            p <- p + geom_point(aes_string(x=par.ntim,"DVmean"),size=2,colour=2)
+            p <- p + geom_point(aes_string(x=col.ntim,"DVmean"),size=2,colour=2)
         }
         if(plot.dvrange){
-            p <- p + geom_errorbar(aes_string(x=par.ntim,ymin="DVmean.l",ymax="DVmean.u"),inherit.aes=F,colour=2)
+            p <- p + geom_errorbar(aes_string(x=col.ntim,ymin="DVmean.l",ymax="DVmean.u"),inherit.aes=F,colour=2)
         }
     }
     if(facet){

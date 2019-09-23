@@ -18,6 +18,9 @@
 **** TODO No. of parameters 
 extload sometimes fails to get FIX info creating problems for
 determining no of estimated parameters.
+*** signif2
+*** TODO signif2(0,2) should return 0.0 but does return 0.00
+*** TODO signif2(0,1) sould return 0 but returns 00
 ** Functions requests
 *** DONE Functions to read and write NM csv files
 *** DONE AUC function

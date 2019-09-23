@@ -64,7 +64,16 @@ means <- function(x,type="arithmetic",z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,c
     if(!dist.ci=="t") stop("Only t-dist supported.")
 
     nobs <- length(x)
+    if(nobs<2) {
+        type = "tooFewObs"
+    }
+
     out <- switch(type,
+                  tooFewObs = {
+                      warning("less than two observations. Skipping CI.")
+                      out <- c(est,NA,NA)
+                      out
+                  },
                   geometric = {
                       w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sd(log(x))/sqrt(nobs)
                       out <- c(est,exp(log(est)-w.ci),exp(log(est)+w.ci))
@@ -76,24 +85,19 @@ means <- function(x,type="arithmetic",z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,c
                       out
                   },
                   median = {
-                      if(nobs<2){
-                          out <- c(est,NA,NA)
-                      } else {
+                      q <- 0.5
+                      x <- sort(x)
+                      w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sqrt(nobs*q*(1-q))
+                      j <- nobs*q - w.ci
+                      k <- nobs*q + w.ci
+                      ## if(length(x[ceiling(j)])<1) browser()
 
-                          q <- 0.5
-                          x <- sort(x)
-                          w.ci <- qt(p=1-(1-p.ci)/2,df=nobs-1)*sqrt(nobs*q*(1-q))
-                          j <- nobs*q - w.ci
-                          k <- nobs*q + w.ci
-                          ## if(length(x[ceiling(j)])<1) browser()
-
-                          ilow <- ceiling(j)
-                          if(ilow < 1) ilow <- 1
-                          ihigh <- ceiling(k)
-                          if(ihigh > nobs) ihigh <- nobs
-                          
-                          out <- c(est,x[ilow],x[ihigh])
-                      }
+                      ilow <- ceiling(j)
+                      if(ilow < 1) ilow <- 1
+                      ihigh <- ceiling(k)
+                      if(ihigh > nobs) ihigh <- nobs
+                      
+                      out <- c(est,x[ilow],x[ihigh])
                       out
                   }
                   )

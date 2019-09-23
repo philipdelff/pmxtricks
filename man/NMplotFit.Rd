@@ -2,27 +2,35 @@
 % Please edit documentation in R/NMplotFit.R
 \name{NMplotFit}
 \alias{NMplotFit}
-\title{Plot individual observations together with individual and/or population predictions}
+\title{Plot individual observations together with individual and/or population
+predictions}
 \usage{
-NMplotFit(data, grp = "dose", par.time = "TIME",
-  par.ntim = "NOMTIME", log.y = F, plot.obs = T, plot.ipre = T,
-  plot.dvmean = F, plot.dvrange = F, plot.predmean = F, facet = T,
-  type.mean, debug = F)
+NMplotFit(data, grp, col.time = "TIME", col.ntim = "NOMTIME",
+  col.pred = "PRED", col.ipred = c("IPRED", "IPRE"), log.y = FALSE,
+  plot.obs = TRUE, plot.ipred = TRUE, plot.dvmean = FALSE,
+  plot.dvrange = FALSE, plot.predmean = FALSE, facet = TRUE,
+  type.mean, debug = FALSE)
 }
 \arguments{
 \item{data}{The dataset to plot.}
 
-\item{grp}{character vector of columns to group means by and to facet plots by.}
+\item{grp}{character vector of columns to group means by and to facet plots
+by.}
 
-\item{par.time}{name of column to plot observations against.}
+\item{col.time}{name of column to plot observations against.}
 
-\item{par.ntim}{Used if plotting population means.}
+\item{col.ntim}{Used if plotting population means.}
+
+\item{col.pred}{Name of column containing population predictions.}
+
+\item{col.ipred}{Name of column containing individual predictions. Default
+is searching for IPRED, then IPRE.}
 
 \item{log.y}{Use logarithmic scale for y-axis?}
 
 \item{plot.obs}{Plot observations?}
 
-\item{plot.ipre}{Plot individual predictions?}
+\item{plot.ipred}{Plot individual predictions?}
 
 \item{plot.dvmean}{Include mean of observations?}
 
@@ -30,14 +38,21 @@ NMplotFit(data, grp = "dose", par.time = "TIME",
 
 \item{plot.predmean}{Include mean of population predictions?}
 
-\item{facet}{name of a column to facet by (facet_wrap used if this argument is given).}
+\item{facet}{name of a column to facet by (facet_wrap used if this argument
+is given).}
 
-\item{type.mean}{Passed to means. When linear scale is used, arithmetic is used, when on log scale, geometric is default.}
+\item{type.mean}{Passed to means. When linear scale is used, arithmetic is
+used, when on log scale, geometric is default.}
 
 \item{debug}{Start by calling browser()?}
 }
 \description{
 An summary plot of the observations and predictions.
+}
+\examples{
+data(pksim1,package="pmxtricks")
+pmxtricks:::NMplotFit(pksim1)
+pmxtricks:::NMplotFit(pksim1,debug=FALSE,plot.dvmean=TRUE,plot.dvrange=TRUE,col.ntim="TIME",log.y=TRUE)
 }
 \seealso{
 Other plotting: \code{\link{extractLegend}}

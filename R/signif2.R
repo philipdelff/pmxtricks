@@ -15,15 +15,14 @@
 ##' signif2(c(.2,11.84),2)
 ##' @export
 
-
 signif2 <- function(x,digits=1,add=T,debug=FALSE) {
     if(debug) browser()
     
-    ## check that x is a numeric vector
-    stopifnot(is.vector(x)&&is.numeric(x))
+    ## check that x is numeric 
+    stopifnot(is.numeric(x))
     stopifnot(is.numeric(digits)&&length(digits)==1&&(digits%/%1)==digits)
     if(!add){stop("only add=TRUE supported.")}
-    
+
     rounded1 <- signif(x,digits)
     rounded2 <- sub("\\.0*$","",as.character(rounded1))
 
