@@ -3,10 +3,12 @@
 ##' @param scale the size
 ##' @param rot rotation of the mark. Don't remember the unit.
 ##' @details taken from https://www.r-bloggers.com/adding-watermarks-to-plots/
-
-##' @examples ff <- qplot(1:10, 11:20) + qcp_water()
 ##' @import grid
 ##' @import ggplot2
+##' @family Plotting
+##' @examples
+##' library(ggplot2)
+##' ff <- qplot(1:10, 11:20) + ggWater()
 ##' @export
 
 ggWater <- function(text="Not validated",scale=1,rot=0){

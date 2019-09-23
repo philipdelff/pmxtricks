@@ -19,11 +19,13 @@
 ##'     Default is FALSE.
 ##' @param debug start by running browser()?
 ##'
-##' @details The new file will be written with unix-style line endings. 
+##' @details The new file will be written with unix-style line endings.
+##' @family Nonmem
 ##' 
 ##' @examples
 ##' newlines <- "$EST POSTHOC INTERACTION METHOD=1 NOABORT PRINT=5 MAXEVAL=9999 SIG=3"
-##' nmReplacePart(path="run01.mod",dollar="EST", newlines=newlines)
+##' NMreplacePart(path=pmxtricks_filepath("examples/nonmem/run001.mod"),section="EST", newlines=newlines)
+##' @export
 
 
 NMreplacePart <- function(path,section,newlines,newpath,backup=T,blank.append=T,test=F,debug=F){

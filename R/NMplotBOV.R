@@ -22,7 +22,7 @@
 ##' @import ggplot2
 ##' @importFrom tidyr gather
 ##' @importFrom GGally ggpairs
-##' @seealso NMplotBSV
+##' @family Plotting
 ##' @export
 
 
@@ -38,12 +38,15 @@ NMplotBOV <- function(data,regex.eta="^ETABOV",col.id="ID",covs.num.iov,covs.cha
     if(missing(covs.char.iov)) covs.char.iov <- NULL
     ##    names.etas.iov.var <- names(which( sapply(pkiov[,names.etas.iov],function(x)length(unique(x)))  > 1  ))
     
-    
-    ## if(is.null(pkiov)){
-    ##     ##        browser()
-    ##     message("No inter-occasion variability table found")
-    ##     return(invisible(NULL))
-    ## }
+#### Section start: dummy variables, only not to get NOTE's in pacakge checks ####
+
+    param <- NULL
+    value <- NULL
+    val.cov <- NULL
+
+### Section end: dummy variables, only not to get NOTE's in pacakge checks
+
+
     
     names.etas.iov <- names(pkiov)[grep(regex.eta,names(pkiov))]
     ## if specified to be a covariate, drop the eta

@@ -27,3 +27,9 @@ thalf_1a2c(pars, cl = "CL", ka = "KA1", v2 = "V2", q = "Q",
 \description{
 Can take multiple parameter sets and return a data.frame of halftimes.
 }
+\seealso{
+Other Calc: \code{\link{CV}}, \code{\link{geomean}},
+  \code{\link{means}}, \code{\link{thalf_1a1c}},
+  \code{\link{thalf_trans_1c}}, \code{\link{trapez}}
+}
+\concept{Calc}

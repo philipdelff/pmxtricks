@@ -21,3 +21,9 @@ This function is intended to be used on data. For a log-normal
     CV=sqrt(exp(OMEGA[1,1])-1).
 importFrom stats var sd
 }
+\seealso{
+Other Calc: \code{\link{geomean}}, \code{\link{means}},
+  \code{\link{thalf_1a1c}}, \code{\link{thalf_1a2c}},
+  \code{\link{thalf_trans_1c}}, \code{\link{trapez}}
+}
+\concept{Calc}

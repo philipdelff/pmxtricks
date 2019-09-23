@@ -1,7 +1,13 @@
-
+##' trapezoidal AUC on linear scale
+##' @description This is a numerical integration of y with respect to x by the trapezoidal method on linear scale. 
+##' @param x The vector to integrate y with respect to (typically TIME to get AUC).
+##' @param y The variable to integrate.
+##' @param na.rm Remove indexes in x and y wherever x or y are NA.
+##' @family Calc
+##' @export 
 trapez <- function(x, y, na.rm = FALSE){
 
-	if((any(is.na(y)) | any(is.na(x))) & na.rm==F) 
+	if((any(is.na(y)) || any(is.na(x))) && !na.rm) 
 	{
             ## warning("y or x contains NA with na.rm=F - returning NA\n")
 		return(NA)	

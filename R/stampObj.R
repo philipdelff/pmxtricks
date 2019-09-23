@@ -9,6 +9,7 @@
 ##' @param ... other named metadata elements to add to the dataset. Example:
 ##'     Description="PK data for ph1 trials in project NNXXXX".
 ##' @seealso objInfo
+##' @family DataWrangling
 ##' @export
 
 stampObj <- function(data,script,...){

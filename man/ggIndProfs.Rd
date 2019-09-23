@@ -100,7 +100,10 @@ The resulting plot object has been limited on x axis by
 The resulting object can be saved with ggwrite.
 }
 \seealso{
-Other Plotting: \code{\link{ggstamp}},
+Other Plotting: \code{\link{NMplotBOV}},
+  \code{\link{NMplotBSV}}, \code{\link{NMplotGOF}},
+  \code{\link{ggWater}}, \code{\link{ggstamp}},
+  \code{\link{ggwrite}}, \code{\link{theme_pp_facet}},
   \code{\link{theme_pp}}
 }
 \concept{Plotting}

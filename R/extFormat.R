@@ -1,6 +1,10 @@
-## the use of . in regular expressions seems wrong. Not sure what trouble it gives.
+##' there seems to be a bug in nonmem2R::extFormat. This function tries to solve that.
+##' @description The code is copied from nonmem2R and only slightly modified.
+##' @param ext the result ofname of the lst file without the .lst extension.
+##' @param format.estimate format for estimated value, passed to sprintf
+##' @param format.rse format for rse, passed to sprintf
+##' @family Nonmem
 
-## there seems to be a bug in nonmem2R::extFormat. This function tries to solve that.
 
 ##        y[i, 1] <- sprintf("%3d", res.table[i, 1])
 ##         y[i, 1] <- sprintf("%3.0f", res.table[i, 1])

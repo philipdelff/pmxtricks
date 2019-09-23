@@ -4,8 +4,17 @@
 \alias{sumofork}
 \title{Platform independent sumo}
 \usage{
-sumofork(model, use.model.path = TRUE, tableType = 2,
-  format.estimate = "\% -#6.4g", format.rse = "\%#6.3g")
+sumofork(model, tableType = 2, format.estimate = "\% -#6.4g",
+  format.rse = "\%#6.3g")
+}
+\arguments{
+\item{model}{A .mod, .lst, .ext or .cov file.}
+
+\item{tableType}{Passed to extTransform}
+
+\item{format.estimate}{How to format the estimated parameter values.}
+
+\item{format.rse}{How to format the relative standard error estimates.}
 }
 \description{
 Platform independent sumo
@@ -14,3 +23,12 @@ Platform independent sumo
 This is a fork of nonmem2R::sumo with very little
     modification. Many thanks to Magnus for a great job!
 }
+\seealso{
+Other Nonmem: \code{\link{NMgetSection}},
+  \code{\link{NMreadCsv}}, \code{\link{NMreadRun}},
+  \code{\link{NMreadTab}}, \code{\link{NMreplacePart}},
+  \code{\link{NMrunLog}}, \code{\link{NMscanTables}},
+  \code{\link{NMtransInput}}, \code{\link{NMundoReplace}},
+  \code{\link{NMwriteData}}, \code{\link{extFormat}}
+}
+\concept{Nonmem}

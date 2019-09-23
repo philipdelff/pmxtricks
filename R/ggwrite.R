@@ -23,13 +23,14 @@
 ##' @export
 ##' @return Nothing.
 ##' @examples
-##' exportFlag <- T
-##' norms <- do.call(rbind,lapply(1:3,function(mu)data.frame(POP=mu,population=paste("Population",mu),parameter=rnorm(seq(mu-6,mu+6,.01),mean=mu,sd=sin(mu)*2))))
-##' ## A very quick way to see densities is using ggplot
-##' p1 <- ggplot(norms,aes(parameter,fill=population))+geom_density(alpha=.5)
+##' library(ggplot2)
+##' writeOutput <- FALSE
+##' data(pksim1,package="pmxtricks")
+##' p1 <- ggplot(pksim1,aes(TIME,DV,colour=ID))+geom_point()
 ##' ggwrite(p1)  ## view plot on screen
 ##' stamp <- "note"
-##' ggwrite(p1,stamp=stamp,canvas="wide",save=exportFlag)
+##' ggwrite(p1,stamp=stamp,canvas="wide",file="myplot1.png",save=writeOutput)
+##' @family Plotting
 ##' @import grDevices
 ##' @import grid
 

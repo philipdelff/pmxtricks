@@ -3,6 +3,7 @@
 ##' @param dir The directory in which to look for nonmem results
 ##' @param ... passed to NMcompRes which will pass them to NMscanData
 ##' @param debug start by calling browser()?
+##' @family DataWrangling
 ##' @export
 
 

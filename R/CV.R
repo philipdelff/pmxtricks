@@ -7,6 +7,7 @@
 ##'     THETA[1]*EXP(OMEGA[1]) Nonmem ## parameter, do
 ##'     CV=sqrt(exp(OMEGA[1,1])-1).
 ##' importFrom stats var sd
+##' @family Calc
 ##' @export
 
 

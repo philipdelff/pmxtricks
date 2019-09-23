@@ -63,7 +63,7 @@ theme_pp <- function(theme0 = ggplot2::theme_bw,...){
 ##'     been set. This means ... can be used to overwrite the
 ##'     defaults.
 ##' @import ggplot2
-##' @family plotting
+##' @family Plotting
 ##' @export
 theme_pp_facet <- function(theme0 = theme_bw,...){
     theme1 <- 

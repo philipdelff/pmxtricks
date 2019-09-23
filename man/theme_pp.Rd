@@ -17,7 +17,10 @@ defaults.}
 A custom theme - aim is powerpoint
 }
 \seealso{
-Other Plotting: \code{\link{ggIndProfs}},
-  \code{\link{ggstamp}}
+Other Plotting: \code{\link{NMplotBOV}},
+  \code{\link{NMplotBSV}}, \code{\link{NMplotGOF}},
+  \code{\link{ggIndProfs}}, \code{\link{ggWater}},
+  \code{\link{ggstamp}}, \code{\link{ggwrite}},
+  \code{\link{theme_pp_facet}}
 }
 \concept{Plotting}

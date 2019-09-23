@@ -51,7 +51,17 @@
 NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC",structure="full",use.input=T,reconstructRows=F,debug=F){
     if(debug) browser()
 
+#### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
 
+firstonly <- NULL
+has.col.ROW <- NULL
+type <- NULL
+
+### Section end: Dummy variables, only not to get NOTE's in pacakge checks
+
+
+
+    
 ###{ process arguments 
     file <- filePathSimple(file)
     if(!file.exists(file)) stop(paste0("Model file ",file," does not exist."),call. = F)

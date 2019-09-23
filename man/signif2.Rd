@@ -4,7 +4,7 @@
 \alias{signif2}
 \title{round to fixed number of significant digits}
 \usage{
-signif2(x, digits = 1, add = T, debug = F)
+signif2(x, digits = 1, add = T, debug = FALSE)
 }
 \arguments{
 \item{x}{a numeric vector.}
@@ -23,7 +23,19 @@ round to fixed number of significant digits
 x <- c(1.24e-4,1.1334e6,1.1,22.00000,10.00,1)
 signif(x,3)
 as.character(signif(x,3))
-signif.c(x,3)
-signif.c(x,3,add=T)
-signif.c(c(.2,11.84),2)
+signif2(x,3)
+signif2(x,3,add=TRUE)
+signif2(c(.2,11.84),2)
 }
+\seealso{
+Other DataWrangling: \code{\link{NMaddColumns}},
+  \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
+  \code{\link{NMscanData}}, \code{\link{compareNames}},
+  \code{\link{factor2}}, \code{\link{findCovs}},
+  \code{\link{mergeCheck}}, \code{\link{newNames}},
+  \code{\link{objInfo}}, \code{\link{rbindIntersect}},
+  \code{\link{rbindUnion}}, \code{\link{roundDF}},
+  \code{\link{roundResp0}}, \code{\link{selectVars}},
+  \code{\link{stampObj}}, \code{\link{tmpcol}}
+}
+\concept{DataWrangling}

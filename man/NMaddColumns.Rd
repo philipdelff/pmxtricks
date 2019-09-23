@@ -25,11 +25,14 @@ df.races <- data.frame(RACE=c(1,3.1),
                        stringsAsFactors=FALSE)
 }
 \seealso{
-Other Nonmem: \code{\link{NMtransInput}},
-  \code{\link{NMundoReplace}}, \code{\link{NMwriteData}}
-
-Other DataWrangling: \code{\link{NMorderColumns}},
-  \code{\link{NMscanData}}, \code{\link{findCovs}}
+Other DataWrangling: \code{\link{NMcompAllRes}},
+  \code{\link{NMorderColumns}}, \code{\link{NMscanData}},
+  \code{\link{compareNames}}, \code{\link{factor2}},
+  \code{\link{findCovs}}, \code{\link{mergeCheck}},
+  \code{\link{newNames}}, \code{\link{objInfo}},
+  \code{\link{rbindIntersect}}, \code{\link{rbindUnion}},
+  \code{\link{roundDF}}, \code{\link{roundResp0}},
+  \code{\link{selectVars}}, \code{\link{signif2}},
+  \code{\link{stampObj}}, \code{\link{tmpcol}}
 }
 \concept{DataWrangling}
-\concept{Nonmem}

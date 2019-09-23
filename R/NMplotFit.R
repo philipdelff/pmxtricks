@@ -22,6 +22,20 @@
 NMplotFit <- function(data,grp="dose",par.time="TIME",par.ntim="NOMTIME",log.y=F,plot.obs=T,plot.ipre=T,plot.dvmean=F,plot.dvrange=F,plot.predmean=F,facet=T,type.mean,debug=F){
 
     if(debug) browser()
+
+#### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
+
+EVID <- NULL
+IDwithin <- NULL
+ID <- NULL
+DV <- NULL
+PRED <- NULL
+
+### Section end: Dummy variables, only not to get NOTE's in pacakge checks
+
+
+
+    
     drow <- data.table(data)
     drow <- drow[EVID==0]    
     drow[,IDwithin:=as.numeric(as.factor(as.numeric(ID))),by=c(grp)]

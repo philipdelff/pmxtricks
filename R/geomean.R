@@ -6,6 +6,7 @@
 ##' @param dist.ci The distribution to use for the confidence interval. Default and only supported is "t".
 ##' @param p.ci probability covered by confidence interval. Default is 0.95
 ##' @param colnames If ci, this defines the column names of the resulting data frame. Default is c("est","ll","ul").
+##' @family Calc
 ##' @importFrom stats sd qt
 ## Don't export. Use means instead.
 

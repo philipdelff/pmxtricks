@@ -16,7 +16,9 @@
 ##'     want to store the code, paste this text to a file. If you want
 ##'     to use it right away, do fun1text <- genCovFun() newfun <-
 ##'     eval(parse(text=fun1text))
+##' @family Simulation
 ##' @examples
+##' \dontrun{
 ##' text0 <- NMgetSection(file="run1.lst",name="PK",return="text",keepName=FALSE,cleanSpaces=FALSE)
 ##' 
 ##' NMR0 <- NMcode2R(text0)
@@ -35,6 +37,7 @@
 ##'                       )
 ##' 
 ##' cat(fun1text)
+##' }
 
 
 ## dont export from pmxtricks. Needs a little more testing. Maybe to be moved to pmxsim package?

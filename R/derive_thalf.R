@@ -14,10 +14,18 @@
 ##' 
 ##' @param debug Start by calling browser()
 ## For thalf, I think this is the one to use. Would be good to generalise this to use for simpler systems.
+##' @family Calc
 
 thalf_1a2c <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=F,debug=F){
     if(debug)browser()
 
+#### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
+
+    atempROW <- NULL
+
+### Section end: Dummy variables, only not to get NOTE's in pacakge checks
+
+    
     varnames <- c(cl,ka,v2,q,v3)
     varsInPars <- varnames%in%names(pars)
     if(any(!varsInPars)){stop(paste("These variables are not in pars:",paste(varnames[!varsInPars],collaps=", ")))}
@@ -74,6 +82,7 @@ thalf_1a2c <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=F,d
 ##' @param ka The name of the column representing absorption rate.
 ##' @param v2 The name of the column with central volume (see cl as well).
 ##' @param debug Start by calling browser()?
+##' @family Calc
 thalf_1a1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
     if(debug)browser()
     ## the rest for each row
@@ -82,7 +91,7 @@ thalf_1a1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
     fun.thalfs <- function(x){
         Asys <- matrix(c(-x[[ka]],0,
                          x[[ka]],-x[[cl]]/x[[v2]]),nrow=2,byrow=TRUE)
-    ##    eigen(Asys)
+        ##    eigen(Asys)
         ## This is the true Half time - which equals the absorption half time
         thalf.fast <- log(2)/-min(eigen(Asys)$values)
         thalf.term <- log(2)/-max(eigen(Asys)$values)
@@ -92,9 +101,8 @@ thalf_1a1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
     }
 
     thalfs <- do.call(rbind,by(pars,pars$atempROW,fun.thalfs))
-    ## select(merge(pars,thalfs,by="atempROW"),-atempROW)
     thalfs[,!colnames(thalfs)%in%"atempROW"]
-   
+    
 }
 
 
@@ -104,6 +112,7 @@ thalf_1a1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
 ##' @param ka The name of the column representing absorption rate.
 ##' @param vc The name of the column with central volume (see cl as well).
 ##' @param debug Start by calling browser()?
+##' @family Calc
 thalf_trans_1c <- function(pars,cl="CL",ka="KA1",vc="VC",debug=F){
     if(debug)browser()
     ## the rest for each row
@@ -112,7 +121,7 @@ thalf_trans_1c <- function(pars,cl="CL",ka="KA1",vc="VC",debug=F){
     NC <- length(vc)
     Nstates <- Ntrans+NC
 
-        
+    
     fun.thalfs <- function(x){
         Asys <- diag(c(-x[ka],-x[[cl]]/x[[vc]]))
         for(I in 1:Ntrans) Asys[I+1,I] <- x[[ka[[I]]]]
@@ -126,8 +135,9 @@ thalf_trans_1c <- function(pars,cl="CL",ka="KA1",vc="VC",debug=F){
     }
 
     thalfs <- do.call(rbind,by(pars,pars$atempROW,fun.thalfs))
-    select(merge(pars,thalfs,by="atempROW"),-atempROW)
-   
+    thalfs <- merge(pars,thalfs,by="atempROW")
+    thalfs[,"atempROW"] <- NULL
+    
 }
 
 
@@ -137,40 +147,51 @@ thalf_trans_1c <- function(pars,cl="CL",ka="KA1",vc="VC",debug=F){
 ### This one only works for one set of parameters. Has to be extended to handled
 ### several parameter sets and return a data frame with all the thalves for each
 ### line in pars.
+##' @family Calc
 thalf_2a2c <- function(pars,cl="CL",ka1="KA1",ka2="KA2",v2="V2",q="Q",v3="V3",debug=F){
-  warning("This function is experimental. Please check the code.")
-  if(debug)browser()
-  
-  varnames <- c(cl,ka1,ka2,v2,q,v3)
-  varsInPars <- varnames%in%names(pars)
-  if(any(!varsInPars)){stop(paste("These variables are not in pars:",paste(varnames[!varsInPars],collaps=", ")))}
-  
-  pars.u <- unique(pars[,c(cl,ka1,ka2,v2,q,v3)])
-  ##    print(pars.u[,cl])
-  Asys <- matrix(unlist(c(
-    -pars.u[,ka1],0,0,0,
-    pars.u[,ka1],-(pars.u[,cl]+pars.u[,q])/pars.u[,v2],pars.u[,q]/pars.u[,v3],pars.u[,ka2],
-    0,pars.u[,q]/pars.u[,v2],-pars.u[,q]/pars.u[,v3],0,
-    ## The second absorption depot
-    0,0,0,-pars.u[,ka2])),
-    nrow=4,byrow=TRUE)
-  
-  thalves <- log(2)/-sort(eigen(Asys)$values)
-  
-  return(thalves)
+    warning("This function is experimental. Please check the code.")
+    if(debug)browser()
+    
+    varnames <- c(cl,ka1,ka2,v2,q,v3)
+    varsInPars <- varnames%in%names(pars)
+    if(any(!varsInPars)){stop(paste("These variables are not in pars:",paste(varnames[!varsInPars],collaps=", ")))}
+    
+    pars.u <- unique(pars[,c(cl,ka1,ka2,v2,q,v3)])
+    ##    print(pars.u[,cl])
+    Asys <- matrix(unlist(c(
+        -pars.u[,ka1],0,0,0,
+        pars.u[,ka1],-(pars.u[,cl]+pars.u[,q])/pars.u[,v2],pars.u[,q]/pars.u[,v3],pars.u[,ka2],
+        0,pars.u[,q]/pars.u[,v2],-pars.u[,q]/pars.u[,v3],0,
+        ## The second absorption depot
+        0,0,0,-pars.u[,ka2])),
+        nrow=4,byrow=TRUE)
+    
+    thalves <- log(2)/-sort(eigen(Asys)$values)
+    
+    return(thalves)
 }
 
 ############ more derived parameters at once. 
 ###{
+##' @family Calc
 derivePars_1a1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
     if(debug)browser()
+
+#### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
+
+    atempROW <- NULL
+
+### Section end: Dummy variables, only not to get NOTE's in pacakge checks
+
+
+    
     ## the rest for each row
     pars$atempROW <- 1:nrow(pars)
 
     fun.thalfs <- function(x){
         Asys <- matrix(c(-x[[ka]],0,
                          x[[ka]],-x[[cl]]/x[[v2]]),nrow=2,byrow=TRUE)
-    ##    eigen(Asys)
+        ##    eigen(Asys)
         ## This is the true Half time - which equals the absorption half time
         thalf.fast <- log(2)/-min(eigen(Asys)$values)
         thalf.term <- log(2)/-max(eigen(Asys)$values)

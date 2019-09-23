@@ -6,6 +6,7 @@
 ##'     be sorted by.
 ##' @param debug start by calling browser()?
 ##' @import data.table
+##' @family DataWrangling
 ## Don't export - use reorder instead
 
 factor2 <- function(x,by=x,debug=F){

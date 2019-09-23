@@ -2,6 +2,8 @@
 ##' @param file the nonmem file to read (normally .mod or .lst)
 ##' @param details If TRUE, metadata is added to output. In this case, you get a list. I'd say, enable if doing programming.
 ##' @return A list of all the tables as data.frames. If details=TRUE, this is in one element, called data, and meta is another element. If not, only the element corresponding to data is returned.
+##' @family Nonmem
+##' @export
 NMscanTables <- function(file,details=F){
         
     dir <- dirname(file)

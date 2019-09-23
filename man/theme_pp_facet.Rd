@@ -17,7 +17,10 @@ defaults.}
 a version of theme_pp suited for facet'ed plots
 }
 \seealso{
-Other plotting: \code{\link{NMplotFit}},
-  \code{\link{extractLegend}}
+Other Plotting: \code{\link{NMplotBOV}},
+  \code{\link{NMplotBSV}}, \code{\link{NMplotGOF}},
+  \code{\link{ggIndProfs}}, \code{\link{ggWater}},
+  \code{\link{ggstamp}}, \code{\link{ggwrite}},
+  \code{\link{theme_pp}}
 }
-\concept{plotting}
+\concept{Plotting}

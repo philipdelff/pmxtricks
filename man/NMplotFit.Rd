@@ -40,7 +40,6 @@ NMplotFit(data, grp = "dose", par.time = "TIME",
 An summary plot of the observations and predictions.
 }
 \seealso{
-Other plotting: \code{\link{extractLegend}},
-  \code{\link{theme_pp_facet}}
+Other plotting: \code{\link{extractLegend}}
 }
 \concept{plotting}

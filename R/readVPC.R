@@ -2,8 +2,8 @@
 ##' @param file The file to read.
 ##' @param ifMissing The value to return if file is missing.
 ##' @param debug Start by calling debug()?
+##' @importFrom xpose4 read.npc.vpc.results
 ##' @family Nonmem.
-##' importFrom xpose4 read.npc.vpc.results
 
 ## This function is not ready yet, so not exported
 
@@ -15,6 +15,22 @@ readVPC <- function(file,ifMissing=NULL,debug=F){
         return(ifMissing)
     }
     
+
+#### Section start: dummy variables, only not to get NOTE's in pacakge checks ####
+
+    patterns <- NULL
+    X95.CI.for.10.from <- NULL
+    X95.CI.for.10.to <- NULL
+    X95.CI.for.50.from <- NULL
+    X95.CI.for.50.to <- NULL
+    X95.CI.for.90.from <- NULL
+    X95.CI.for.90.to <- NULL
+    Xnobs <- NULL
+    X50 <- NULL
+    X90 <- NULL
+    X10 <- NULL
+
+### Section end: dummy variables, only not to get NOTE's in pacakge checks
 
 
     vpc1 <- read.npc.vpc.results(vpc.results=file)
@@ -55,10 +71,10 @@ readVPC <- function(file,ifMissing=NULL,debug=F){
 
     ## res.vpc
     dd1 <- data.table::melt(res.vpc,
-                ## id.vars=c("Xlower","Xupper","Xnobs","Xno.of.obs","Xmean.real","Xmean.sim","Xstrata"),
-                measure.vars = patterns("^X10","^X50","^X90"),
-                value.name = c("X10","X50","X90")
-                )
+                            ## id.vars=c("Xlower","Xupper","Xnobs","Xno.of.obs","Xmean.real","Xmean.sim","Xstrata"),
+                            measure.vars = patterns("^X10","^X50","^X90"),
+                            value.name = c("X10","X50","X90")
+                            )
 
     dd2 <- merge(dd1,
                  data.table(variable=1:2,

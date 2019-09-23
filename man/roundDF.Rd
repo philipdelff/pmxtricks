@@ -7,9 +7,11 @@
 roundDF(x, FUN = signif2, ...)
 }
 \arguments{
-\item{x}{a numeric vector or a data.frame with some of the columns numeric}
+\item{x}{a numeric vector or a data.frame with some of the columns numeric.}
 
-\item{n}{the number of digits to round to. Only a single scalar supported.}
+\item{FUN}{the rounding function to apply to numeric columns.}
+
+\item{...}{Arguments passed to FUN}
 }
 \description{
 sigdigs is a wrapper that rounds whatever numeric in a data.frame
@@ -18,7 +20,18 @@ non-numerics). You often want to run this function before creating
 a csv file as output.
 }
 \examples{
-
 df1 <- data.frame(obs=letters[1:3],x1=rnorm(3),x2=c(1.24/1e4,1.1334e6,1.1),x3=1:3)
 roundDF(df1,digits=3)
 }
+\seealso{
+Other DataWrangling: \code{\link{NMaddColumns}},
+  \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
+  \code{\link{NMscanData}}, \code{\link{compareNames}},
+  \code{\link{factor2}}, \code{\link{findCovs}},
+  \code{\link{mergeCheck}}, \code{\link{newNames}},
+  \code{\link{objInfo}}, \code{\link{rbindIntersect}},
+  \code{\link{rbindUnion}}, \code{\link{roundResp0}},
+  \code{\link{selectVars}}, \code{\link{signif2}},
+  \code{\link{stampObj}}, \code{\link{tmpcol}}
+}
+\concept{DataWrangling}

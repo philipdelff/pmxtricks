@@ -16,3 +16,7 @@ Translate NM $PK section or other Nonmem code to R code
 You probably want to run this on text obtained by using
     the NMgetSection function.
 }
+\seealso{
+Other Simulation: \code{\link{genCovFun}}
+}
+\concept{Simulation}

@@ -4,7 +4,7 @@
 \alias{extractLegend}
 \title{Extract the legend from a ggplot}
 \usage{
-extractLegend(p)
+extractLegend(plot)
 }
 \arguments{
 \item{plot}{A plot made with ggplot.}
@@ -18,15 +18,16 @@ The code was taken from https://stackoverflow.com/questions/13649473/add-a-commo
 https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
 }
 \examples{
-This example is not done yet. But it shows the idea
+## This example is not done yet. But it shows the idea
+\dontrun{
 mylegend <- extractLegend(p1)
 p3 <- grid.arrange(arrangeGrob(p1 + theme(legend.position="none"),
                                p2 + theme(legend.position="none"),
                                nrow=1),
                                mylegend, nrow=2,heights=c(10, 1))
 }
+}
 \seealso{
-Other plotting: \code{\link{NMplotFit}},
-  \code{\link{theme_pp_facet}}
+Other plotting: \code{\link{NMplotFit}}
 }
 \concept{plotting}

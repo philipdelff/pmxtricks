@@ -21,4 +21,15 @@ using the function dsInfo.
 }
 \seealso{
 objInfo
+
+Other DataWrangling: \code{\link{NMaddColumns}},
+  \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
+  \code{\link{NMscanData}}, \code{\link{compareNames}},
+  \code{\link{factor2}}, \code{\link{findCovs}},
+  \code{\link{mergeCheck}}, \code{\link{newNames}},
+  \code{\link{objInfo}}, \code{\link{rbindIntersect}},
+  \code{\link{rbindUnion}}, \code{\link{roundDF}},
+  \code{\link{roundResp0}}, \code{\link{selectVars}},
+  \code{\link{signif2}}, \code{\link{tmpcol}}
 }
+\concept{DataWrangling}

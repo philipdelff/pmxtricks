@@ -1,7 +1,7 @@
 Package: pmxtricks
 Type: Package
 Title: Author's tiny but golden every-day pmx helper functions
-Version: 0.0.3.907
+Version: 0.0.4.701
 Date: 
 Author: Philip Delff <philip@delff.dk>
 Maintainer: Philip Delff <philip@delff.dk>
@@ -20,5 +20,6 @@ Imports: nonmem2R (>= 0.1.10),
 	 tidyr,
 	 utils,
 	 rlang,
+	 xpose4,
 	 gridExtra
 Suggests: testthat

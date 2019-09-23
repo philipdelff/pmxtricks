@@ -25,3 +25,15 @@ rename list elements with standard evaluation
 This function is a pmxtricks internal. When using data.table, use
     setnames instead which is based on the same idea as this.
 }
+\seealso{
+Other DataWrangling: \code{\link{NMaddColumns}},
+  \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
+  \code{\link{NMscanData}}, \code{\link{compareNames}},
+  \code{\link{factor2}}, \code{\link{findCovs}},
+  \code{\link{mergeCheck}}, \code{\link{objInfo}},
+  \code{\link{rbindIntersect}}, \code{\link{rbindUnion}},
+  \code{\link{roundDF}}, \code{\link{roundResp0}},
+  \code{\link{selectVars}}, \code{\link{signif2}},
+  \code{\link{stampObj}}, \code{\link{tmpcol}}
+}
+\concept{DataWrangling}

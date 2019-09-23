@@ -6,13 +6,12 @@
 ##' @param df a data.frame to merge onto elements of data object.
 ##' @param by passed to merge
 ##' @param debug Start by calling browser()?
-##' @family Nonmem
+##' @family DataWrangling
 ##' 
 ##' @examples
 ##' df.races <- data.frame(RACE=c(1,3.1),
 ##'                        race1=c("White","Japanese"),
 ##'                        stringsAsFactors=FALSE)
-##' @family DataWrangling
 ##' @export
 
 NMaddColumns <- function(data,df,by,debug=FALSE){

@@ -38,6 +38,7 @@ The function returns a function in plain text. If you
     eval(parse(text=fun1text))
 }
 \examples{
+\dontrun{
 text0 <- NMgetSection(file="run1.lst",name="PK",return="text",keepName=FALSE,cleanSpaces=FALSE)
 
 NMR0 <- NMcode2R(text0)
@@ -57,3 +58,8 @@ fun1text <- genCovFun(NMcode0=NMR3
 
 cat(fun1text)
 }
+}
+\seealso{
+Other Simulation: \code{\link{NMcode2R}}
+}
+\concept{Simulation}

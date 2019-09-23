@@ -15,14 +15,15 @@
 ##' @importFrom gridExtra arrangeGrob
 ##' @importFrom utils packageVersion
 ##' @examples
+##' library(ggplot2)
 ##' norms <- do.call(rbind,lapply(1:3,function(mu)data.frame(POP=mu,population=paste("Population",mu),parameter=rnorm(seq(mu-6,mu+6,.01),mean=mu,sd=sin(mu)*2))))
 ##' ## A very quick way to see densities is using ggplot
 ##' p1 <- ggplot(norms,aes(parameter,fill=population))+geom_density(alpha=.5)
-##' gsave(p1)
+##' ggwrite(p1)
 ##' stamp <- "note"
 ##' ggstamp(p1,stamp)
-##' ## Or use gsave which will call ggstamp automatically.
-##' gsave(p1,stamp=stamp,canvas="wide")
+##' ## Or use ggwrite which will call ggstamp automatically.
+##' ggwrite(p1,stamp=stamp,canvas="wide")
 ##' @family Plotting
 ##' @export
 

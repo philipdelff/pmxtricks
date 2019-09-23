@@ -5,17 +5,18 @@
 ##' @param add pad with zeros where digits>nchar(x[i]). Only TRUE
 ##'     supported.
 ##' @param debug start by calling browser.
-##' 
+##' @family DataWrangling
 ##' @examples
 ##' x <- c(1.24e-4,1.1334e6,1.1,22.00000,10.00,1)
 ##' signif(x,3)
 ##' as.character(signif(x,3))
-##' signif.c(x,3)
-##' signif.c(x,3,add=T)
-##' signif.c(c(.2,11.84),2)
+##' signif2(x,3)
+##' signif2(x,3,add=TRUE)
+##' signif2(c(.2,11.84),2)
+##' @export
 
 
-signif2 <- function(x,digits=1,add=T,debug=F) {
+signif2 <- function(x,digits=1,add=T,debug=FALSE) {
     if(debug) browser()
     
     ## check that x is a numeric vector

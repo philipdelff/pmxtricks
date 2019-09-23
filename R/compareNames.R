@@ -10,6 +10,7 @@
 ##'     table. If not, generic x1, x2,... are used. The latter may be preferred
 ##'     for readability.
 ##' @param debug If TRUE, browser is called to begin with.
+##' @family DataWrangling
 ##' @export
 
 ### Todo

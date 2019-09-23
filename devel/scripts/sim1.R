@@ -186,6 +186,8 @@ p1+geom_point()+scale_y_log10(limits=c(5,5e4))
 ##     scale_y_log10(limits=c(10,5e4))+
 ##     geom_point(data=subset(sim1,as.numeric(ID)<=5&t%in%c(seq(0,by=24*7,to=8*7*24),seq(816,by=4,to=816+48),816+24*3)),colour="red")
 
+pksim1 <- subset(sim1,comp=="obs")
+ggplot(pksim1,aes(t,y,colour=ID))+geom_point()
 
 ## observation noise
 
@@ -197,7 +199,22 @@ p1+geom_point()+scale_y_log10(limits=c(5,5e4))
 
 
 ###{ Section start: merge and export data for Nonmem
+pkdt <- as.data.table(pksim1)
+setnames(pkdt,old=c("t","y"),new=c("TIME","DV"))
+pkdt[,EVID:=0]
+pkdt[,comp:=NULL]
 
+pkdt[,`:=`(
+    CMT=1,
+    MDV=0
+)]
+pkdt[,ROW:=1:.N]
 
+pkdt <- NMorderColumns(pkdt)
+
+##NMwriteData(pkdt,file="pmxtricks/extdata/pksim1.csv",write.csv=FALSE,write.rds=TRUE)
+pksim1 <- copy(pkdt)
+save(pksim1,file="pmxtricks/data/pksim1.rda")
+NMwriteData(pkdt,file="pmxtricks/inst/pksim1.csv",write.csv=TRUE,write.rds=FALSE)
 ###} Section end
 

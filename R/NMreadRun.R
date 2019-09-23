@@ -4,6 +4,7 @@
 ##' This function is used to produce run logs or run records by NMrunLog. Much better alternatives can most likely be found elsewhere.
 ##' @param run path to an lst file.
 ##' @param debug Start by calling browser()?
+##' @family Nonmem
 ##' @import nonmem2R
 
 

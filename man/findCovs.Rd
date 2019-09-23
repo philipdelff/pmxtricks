@@ -21,6 +21,7 @@ can also be both say c("ID","DRUG") or c("ID","TRT").}
 Extract columns that do not vary within variables in a data.frame
 }
 \examples{
+\dontrun{
 dat <- NMreadTab("TABLE_OUTPUT.txt")
 ### very common use
 findCovs(dat,cols.id="ID",cols.drop=c("IRES","TABLE"))
@@ -28,8 +29,16 @@ findCovs(dat,cols.id="ID",cols.drop=c("IRES","TABLE"))
 findCovs(dat,cols.id=c(),cols.drop=c("IRES","TABLE"))
 ### need a new data.frame to test for length(cols.id)>1
 }
+}
 \seealso{
 Other DataWrangling: \code{\link{NMaddColumns}},
-  \code{\link{NMorderColumns}}, \code{\link{NMscanData}}
+  \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
+  \code{\link{NMscanData}}, \code{\link{compareNames}},
+  \code{\link{factor2}}, \code{\link{mergeCheck}},
+  \code{\link{newNames}}, \code{\link{objInfo}},
+  \code{\link{rbindIntersect}}, \code{\link{rbindUnion}},
+  \code{\link{roundDF}}, \code{\link{roundResp0}},
+  \code{\link{selectVars}}, \code{\link{signif2}},
+  \code{\link{stampObj}}, \code{\link{tmpcol}}
 }
 \concept{DataWrangling}

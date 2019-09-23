@@ -23,3 +23,9 @@ geomean(x, z.rm = FALSE, ci = FALSE, dist.ci = "t", p.ci = 0.95,
 \description{
 calculate geometric mean.
 }
+\seealso{
+Other Calc: \code{\link{CV}}, \code{\link{means}},
+  \code{\link{thalf_1a1c}}, \code{\link{thalf_1a2c}},
+  \code{\link{thalf_trans_1c}}, \code{\link{trapez}}
+}
+\concept{Calc}

@@ -8,7 +8,7 @@
 ##' 
 ##' @param data data.frame or data.table to select columns from.
 ##' @param vars columns to select. A vector of characters.
-##' @author Philip Delff
+##' @family DataWrangling
 ##' @export
 
 selectVars <- function(data,vars){

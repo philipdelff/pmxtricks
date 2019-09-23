@@ -8,6 +8,8 @@
 ##' @param debug Start by calling browser()?
 ##' @details This function is a pmxtricks internal. When using data.table, use
 ##'     setnames instead which is based on the same idea as this.
+##' @family DataWrangling
+##' @export
 
 newNames <- function(data,names,overwrite=F,skipMissing=TRUE,debug=F){
     if(debug) browser()

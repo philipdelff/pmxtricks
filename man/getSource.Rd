@@ -31,6 +31,7 @@ None. Sources the specified file into the global environment.
 \description{
 Get file from remote library and inport it into project if it does not exist. Then source it.
 }
-\author{
-philip@delff.dk
+\seealso{
+Other FileSystem: \code{\link{filePathSimple}}
 }
+\concept{FileSystem}

@@ -16,5 +16,4 @@ readVPC(file, ifMissing = NULL, debug = F)
 \description{
 read VPC results a little more flexibelly than with xpose4::read.npc.vpc.results
 }
-\concept{Nonmem.
-importFrom xpose4 read.npc.vpc.results}
+\concept{Nonmem.}

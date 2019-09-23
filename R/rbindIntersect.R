@@ -2,8 +2,8 @@
 ##'
 ##' @param ... data frames to stack. Must be of class data.frame.
 ##' @return a data.frame containing all data
-##' @author ppda
-##' @export 
+##' @family DataWrangling
+##' @export  
 ##' @examples
 ##' x <- data.frame(a=1:3)
 ##' y <- data.frame(b=1:3,c="h")

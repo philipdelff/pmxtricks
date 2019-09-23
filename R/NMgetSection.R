@@ -20,6 +20,11 @@
 ##'     interactive analysis. For programming, you probably want FALSE.
 ##' @param cleanSpaces If TRUE, leading and trailing are removed, and multiplied
 ##'     succeeding white spaces are reduced to single white spaces.
+##' @family Nonmem
+##' @examples
+##' NMgetSection(pmxtricks_filepath("examples/nonmem/run001.lst"),section="DATA")
+##'
+##' @export
 
 
 NMgetSection <- function(file, lines, section, return="text", keepEmpty=FALSE, keepName=TRUE, keepComments=TRUE, asOne=TRUE, simplify=TRUE, cleanSpaces=FALSE){

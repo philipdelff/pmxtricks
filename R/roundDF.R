@@ -5,13 +5,15 @@
 ##' non-numerics). You often want to run this function before creating
 ##' a csv file as output.
 ##'
-##' @param x a numeric vector or a data.frame with some of the columns numeric
-##' @param n the number of digits to round to. Only a single scalar supported.
+##' @param x a numeric vector or a data.frame with some of the columns numeric.
+##' @param FUN the rounding function to apply to numeric columns.
+##' @param ... Arguments passed to FUN
+##' @family DataWrangling
 ##'
 ##' @examples
-##' 
 ##' df1 <- data.frame(obs=letters[1:3],x1=rnorm(3),x2=c(1.24/1e4,1.1334e6,1.1),x3=1:3)
 ##' roundDF(df1,digits=3)
+##' @export
 
 roundDF <- function(x,FUN=signif2,...){
 

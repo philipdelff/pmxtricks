@@ -20,5 +20,14 @@ Add watermarks to ggplots
 taken from https://www.r-bloggers.com/adding-watermarks-to-plots/
 }
 \examples{
-ff <- qplot(1:10, 11:20) + qcp_water()
+library(ggplot2)
+ff <- qplot(1:10, 11:20) + ggWater()
 }
+\seealso{
+Other Plotting: \code{\link{NMplotBOV}},
+  \code{\link{NMplotBSV}}, \code{\link{NMplotGOF}},
+  \code{\link{ggIndProfs}}, \code{\link{ggstamp}},
+  \code{\link{ggwrite}}, \code{\link{theme_pp_facet}},
+  \code{\link{theme_pp}}
+}
+\concept{Plotting}

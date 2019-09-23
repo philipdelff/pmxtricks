@@ -1,10 +1,15 @@
 ##' Platform independent sumo
 ##'
+##' @param model A .mod, .lst, .ext or .cov file.
+##' @param tableType Passed to extTransform
+##' @param format.estimate How to format the estimated parameter values.
+##' @param format.rse How to format the relative standard error estimates.
 ##' @details This is a fork of nonmem2R::sumo with very little
 ##'     modification. Many thanks to Magnus for a great job!
+##' @family Nonmem
 ##' @import nonmem2R
 
-sumofork <- function (model, use.model.path = TRUE, tableType = 2, format.estimate = "% -#6.4g", 
+sumofork <- function (model, tableType = 2, format.estimate = "% -#6.4g", 
                       format.rse = "%#6.3g") 
 {
     file.path <- ""

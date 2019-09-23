@@ -106,8 +106,33 @@
 
 ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp, amt = "AMT", id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, par.prof=NULL, x.inc,grp.label = grp, debug = F, debug.sheet){
     if(debug) browser()
+
+
+#### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
+
+    EVID <- NULL
+    reset <- NULL
+    ..par.prof <- NULL
+    .amt <- NULL
+    s.dv.dos <- NULL
+    amt2 <- NULL
+    IDnew <- NULL
+    IDcut <- NULL
+    grp.char <- NULL
+    sheet <- NULL
+    sheetgrp <- NULL
+    Nsheetsgrp <- NULL
+    xmingrp <- NULL
+    xmaxgrp <- NULL
+    skipgrp <- NULL
+    ymingrp <- NULL
+    ymaxgrp <- NULL
+    val <- NULL
+
+### Section end: Dummy variables, only not to get NOTE's in pacakge checks
+
+
     
-   
 ##### check arguments
     stopifnot(is.data.frame(data))
     stopifnot(x%in%colnames(data))
@@ -256,9 +281,9 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
     ## DTdata[,xmingrp := min(c(get(x)[eval(parse(text = subset.xrange))],xmingrp),na.rm=T),get(grp)]
     ## DTdata[,xmaxgrp := max(c(get(x)[eval(parse(text = subset.xrange))],xmaxgrp),na.rm=T),get(grp)]
 
-##    browser()
-  ### by=get(grp) was changed to by=eval(grp) because the former didnt work with only one patient.
-##     DTdata[,skipgrp := any(!is.finite(xmingrp)|!is.finite(xmaxgrp)),get(grp)]
+    ##    browser()
+### by=get(grp) was changed to by=eval(grp) because the former didnt work with only one patient.
+    ##     DTdata[,skipgrp := any(!is.finite(xmingrp)|!is.finite(xmaxgrp)),get(grp)]
     DTdata[,skipgrp := any(!is.finite(xmingrp)|!is.finite(xmaxgrp)),by=eval(grp)]
 
     if(nrow(DTdata[isTRUE(skipgrp)])>0){
@@ -314,7 +339,7 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
     if(missing(debug.sheet)) debug.sheet <- NULL
     outlist <- by(data,data$sheet,ds=debug.sheet,FUN=function(tmp,ds){##        tmp <- data[data[,grp]==lvls[G],]
         if(!is.null(ds) && debug.sheet==unique(tmp$sheet)) browser()
-##        tmp$IDnew <- as.numeric(as.factor(tmp[,id]))
+        ##        tmp$IDnew <- as.numeric(as.factor(tmp[,id]))
         ##        tmp$IDcut <- ((tmp$IDnew)-1) %/% NPerSheet + 1 
         
         

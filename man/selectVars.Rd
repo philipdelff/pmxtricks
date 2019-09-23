@@ -18,6 +18,15 @@ data. And if not it is reported in an error to the user. This saves you the
 manual investigation every time data[,vars] gives you the annoyingly
 non-informative error "undefined columns selected".
 }
-\author{
-Philip Delff
+\seealso{
+Other DataWrangling: \code{\link{NMaddColumns}},
+  \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
+  \code{\link{NMscanData}}, \code{\link{compareNames}},
+  \code{\link{factor2}}, \code{\link{findCovs}},
+  \code{\link{mergeCheck}}, \code{\link{newNames}},
+  \code{\link{objInfo}}, \code{\link{rbindIntersect}},
+  \code{\link{rbindUnion}}, \code{\link{roundDF}},
+  \code{\link{roundResp0}}, \code{\link{signif2}},
+  \code{\link{stampObj}}, \code{\link{tmpcol}}
 }
+\concept{DataWrangling}

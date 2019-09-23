@@ -6,6 +6,23 @@
 \usage{
 roundResp0(x, digits)
 }
+\arguments{
+\item{x}{A vector to round.}
+
+\item{digits}{Number of digits to}
+}
 \description{
 round to a given number of digits - and respect zeros.
 }
+\seealso{
+Other DataWrangling: \code{\link{NMaddColumns}},
+  \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
+  \code{\link{NMscanData}}, \code{\link{compareNames}},
+  \code{\link{factor2}}, \code{\link{findCovs}},
+  \code{\link{mergeCheck}}, \code{\link{newNames}},
+  \code{\link{objInfo}}, \code{\link{rbindIntersect}},
+  \code{\link{rbindUnion}}, \code{\link{roundDF}},
+  \code{\link{selectVars}}, \code{\link{signif2}},
+  \code{\link{stampObj}}, \code{\link{tmpcol}}
+}
+\concept{DataWrangling}

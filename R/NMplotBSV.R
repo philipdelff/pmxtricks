@@ -19,7 +19,7 @@
 ##' @import stats
 ##' @importFrom tidyr gather_
 ##' @importFrom GGally ggpairs
-##' @seealso NMplotBOV
+##' @family Plotting
 ##' @export
 
 NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fun.file=identity,save=FALSE,stamp=NULL,debug=F){if(debug) {browser()}
@@ -29,6 +29,18 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
     if(missing(covs.num)) covs.num <- NULL
     if(missing(covs.char)) covs.char <- NULL
 
+#### Section start: dummy variables, only not to get NOTE's in pacakge checks ####
+
+value  <- NULL
+..density..  <- NULL
+predicted <- NULL
+val.cov <- NULL
+
+### Section end: dummy variables, only not to get NOTE's in pacakge checks
+
+
+
+    
     all.output <- list()
     
     names.etas <-
@@ -94,7 +106,7 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
 
         DT.dat <- as.data.table(dat)
         normaldens <-
-            DT.dat[,.(
+            DT.dat[,list(
             predicted=grid,
             density=dnorm(grid, mean(value), sd(value))
         ),

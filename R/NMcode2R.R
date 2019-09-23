@@ -3,6 +3,7 @@
 ##' @param text the Nonmem code.
 ##' @details You probably want to run this on text obtained by using
 ##'     the NMgetSection function.
+##' @family Simulation
 ##' @export
 
 

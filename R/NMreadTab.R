@@ -9,6 +9,7 @@
 #' @param debug Start by calling browser()?
 #' @return Nonmem table as df.
 #' @importFrom utils read.table
+#' @family Nonmem
 #' @export
 
 

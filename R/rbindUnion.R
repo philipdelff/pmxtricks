@@ -7,6 +7,8 @@
 ##' 
 ##' @param ... data frames to stack. Must be of class data.frame.
 ##' @return a data.frame containing all data
+##' @details Consider using data.table::rbindlist(...,fill=TRUE) instead.
+##' @family DataWrangling
 ##' @examples
 ##' x <- data.frame(a=1:3)
 ##' y <- data.frame(b=1:3,c="h")

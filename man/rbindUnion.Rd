@@ -18,12 +18,27 @@ plyr. The intention of writing this function is to avoid being dependent on
 plyr. There is no advantage of using this function instead of
 plyr::rbind.fill or dplyr::bind_rows.
 }
+\details{
+Consider using data.table::rbindlist(...,fill=TRUE) instead.
+}
 \examples{
 x <- data.frame(a=1:3)
 y <- data.frame(b=1:3,c="h")
 z <- data.frame(a=4:5,b=letters[4:5],d=c(NA,5))
 rbindUnion(x,y,z)
 }
+\seealso{
+Other DataWrangling: \code{\link{NMaddColumns}},
+  \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
+  \code{\link{NMscanData}}, \code{\link{compareNames}},
+  \code{\link{factor2}}, \code{\link{findCovs}},
+  \code{\link{mergeCheck}}, \code{\link{newNames}},
+  \code{\link{objInfo}}, \code{\link{rbindIntersect}},
+  \code{\link{roundDF}}, \code{\link{roundResp0}},
+  \code{\link{selectVars}}, \code{\link{signif2}},
+  \code{\link{stampObj}}, \code{\link{tmpcol}}
+}
 \author{
 philip@delff.dk
 }
+\concept{DataWrangling}

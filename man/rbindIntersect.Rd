@@ -21,6 +21,15 @@ y <- data.frame(b=1:3,c="h")
 z <- data.frame(a=4:5,b=letters[4:5],d=c(NA,5))
 rbindIntersect(x,y,z)
 }
-\author{
-ppda
+\seealso{
+Other DataWrangling: \code{\link{NMaddColumns}},
+  \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
+  \code{\link{NMscanData}}, \code{\link{compareNames}},
+  \code{\link{factor2}}, \code{\link{findCovs}},
+  \code{\link{mergeCheck}}, \code{\link{newNames}},
+  \code{\link{objInfo}}, \code{\link{rbindUnion}},
+  \code{\link{roundDF}}, \code{\link{roundResp0}},
+  \code{\link{selectVars}}, \code{\link{signif2}},
+  \code{\link{stampObj}}, \code{\link{tmpcol}}
 }
+\concept{DataWrangling}

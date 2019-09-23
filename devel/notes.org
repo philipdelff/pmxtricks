@@ -6,3 +6,5 @@ So far, the following keywords should cover. If not, the function probably doesn
 **** DataWrangling
 **** Nonmem
 **** FileSystem
+**** Simulation
+These functions should make up a new package called pmxsim.

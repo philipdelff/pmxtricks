@@ -11,12 +11,14 @@
 ##' @export
 
 ##' @examples
+##' \dontrun{
 ##' dat <- NMreadTab("TABLE_OUTPUT.txt")
 ##' ### very common use
 ##' findCovs(dat,cols.id="ID",cols.drop=c("IRES","TABLE"))
 ##' ###  an ID column is not needed.
 ##' findCovs(dat,cols.id=c(),cols.drop=c("IRES","TABLE"))
 ##' ### need a new data.frame to test for length(cols.id)>1
+##' }
 
 
 ## this should be faster with data.table. This can be used (but does not work with cols.id):
