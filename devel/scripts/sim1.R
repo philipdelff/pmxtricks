@@ -215,6 +215,6 @@ pkdt <- NMorderColumns(pkdt)
 ##NMwriteData(pkdt,file="pmxtricks/extdata/pksim1.csv",write.csv=FALSE,write.rds=TRUE)
 pksim1 <- copy(pkdt)
 save(pksim1,file="pmxtricks/data/pksim1.rda")
-NMwriteData(pkdt,file="pmxtricks/inst/pksim1.csv",write.csv=TRUE,write.rds=FALSE)
+NMwriteData(pkdt,file="pmxtricks/inst/examples/data/pksim1.csv",write.csv=TRUE,write.rds=FALSE)
 ###} Section end
 
