@@ -76,7 +76,8 @@ theme_pp_facet <- function(theme0 = theme_bw,...){
               panel.grid.major = element_blank(),
               plot.caption=element_text(size=6,
                                         colour="grey"),
-              axis.title= element_text(size = 16,colour="black"))
+              axis.title= element_text(size = 16,colour="black"),
+              legend.position="bottom")
     
     theme1+theme(...)
 
