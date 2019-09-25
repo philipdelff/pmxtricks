@@ -1,8 +1,8 @@
 Package: pmxtricks
 Type: Package
-Title: Author's tiny but golden every-day pmx helper functions
-Version: 0.0.4.714
-Date: 
+Title: Author's Every-day pharmacometrics helper functions - tiny but golden
+Version: 0.0.4.800
+Date: 2019-09-25
 Author: Philip Delff <philip@delff.dk>
 Maintainer: Philip Delff <philip@delff.dk>
 Description: Tools mainly for pharmacometrics related tasks. 

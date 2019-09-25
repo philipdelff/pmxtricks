@@ -2,59 +2,85 @@
 % Please edit documentation in R/NMplotFit.R
 \name{NMplotFit}
 \alias{NMplotFit}
-\title{Plot individual observations together with individual and/or population
-predictions}
+\title{Get one plot of observations, predictions, and means vs time}
 \usage{
-NMplotFit(data, grp, col.time = "TIME", col.ntim = "NOMTIME",
-  col.pred = "PRED", col.ipred = c("IPRED", "IPRE"), log.y = FALSE,
-  plot.obs = TRUE, plot.ipred = TRUE, plot.dvmean = FALSE,
-  plot.dvrange = FALSE, plot.predmean = FALSE, facet = TRUE,
-  type.mean, debug = FALSE)
+NMplotFit(data, geom.dv = "p", geom.pred = "", geom.ipred = "",
+  geom.dvmean = "pc", geom.predmean = "l", geom.ipredmean = "",
+  col.grp, type.mean = "arithmetic", col.id = "ID",
+  col.time = "TIME", col.ntim = "NOMTIME", col.dv = "DV",
+  col.ipred = c("IPRED", "IPRE"), col.pred = "PRED", log.y = F,
+  debug = F)
 }
 \arguments{
 \item{data}{The dataset to plot.}
 
-\item{grp}{character vector of columns to group means by and to facet plots
-by.}
+\item{geom.dv}{How to plot observations. A string containing any subset of
+\itemize{ \item p: points \item l: lines \item c: confidence interval of
+mean at each value of col.ntim.  }}
+
+\item{geom.pred}{How to plot population predictions. See geom.dv.}
+
+\item{geom.ipred}{How to plot individual predictions. See geom.dv.}
+
+\item{geom.dvmean}{How to plot means (at each value of col.ntim) of
+observations.}
+
+\item{geom.predmean}{How to plot means (at each value of col.ntim) of
+population predictions.}
+
+\item{geom.ipredmean}{How to plot means (at each value of col.ntim) of
+individual predictions.}
+
+\item{col.grp}{A grouping variable. Means will be grouped by this (and
+col.ntim), and plot will be facetted by grp too.}
+
+\item{type.mean}{Passed to pmxtricks::means().}
+
+\item{col.id}{The name of the column containing subject ID's..}
 
 \item{col.time}{name of column to plot observations against.}
 
-\item{col.ntim}{Used if plotting population means.}
+\item{col.ntim}{name of column of nominal time used for calculation and
+plotting of means.}
+
+\item{col.dv}{name of column containing observations.}
+
+\item{col.ipred}{Name of column containing individual predictions. Default is searching for IPRED, then IPRE.}
 
 \item{col.pred}{Name of column containing population predictions.}
 
-\item{col.ipred}{Name of column containing individual predictions. Default
-is searching for IPRED, then IPRE.}
-
 \item{log.y}{Use logarithmic scale for y-axis?}
 
-\item{plot.obs}{Plot observations?}
-
-\item{plot.ipred}{Plot individual predictions?}
-
-\item{plot.dvmean}{Include mean of observations?}
-
-\item{plot.dvrange}{Include range of observations?}
-
-\item{plot.predmean}{Include mean of population predictions?}
-
-\item{facet}{name of a column to facet by (facet_wrap used if this argument
-is given).}
-
-\item{type.mean}{Passed to means. When linear scale is used, arithmetic is
-used, when on log scale, geometric is default.}
-
-\item{debug}{Start by calling browser()?}
+\item{debug}{debug Start by calling browser()?}
 }
 \description{
-An summary plot of the observations and predictions.
+A summary plot of the observations and predictions. These
+    important diagnostics plots during model development and as to
+    understand the dynamics of data and model. The function is very flexible
+    in terms of what combinations of observations, population predictions,
+    and individual predictions to plot, and how to represent them.
 }
 \examples{
+library(pmxtricks)
+library(data.table)
 data(pksim1,package="pmxtricks")
-pmxtricks:::NMplotFit(pksim1)
-pmxtricks:::NMplotFit(pksim1,debug=FALSE,plot.dvmean=TRUE,plot.dvrange=TRUE,col.ntim="TIME",log.y=TRUE)
+pksim2 <- copy(pksim1)
+pksim2[,PRED:=DV+rnorm(.N)*10]
+pksim2[,NOMTIME:=TIME]
+pksim2[,TIME:=round(TIME+rnorm(.N),2)]
+
+
+pmxtricks:::NMplotFit(pksim2,
+           geom.dv = "p",
+           geom.pred = "l",
+           geom.dvmean = "lc",
+           geom.predmean = "p",
+           col.ntim = "NOMTIME",
+           col.dv = "DV",
+           col.ipred = NULL,
+           col.pred = "PRED",
+           type.mean = "arithmetic",
+           debug=FALSE)+
+    theme_pp()
+
 }
-\seealso{
-Other plotting: \code{\link{extractLegend}}
-}
-\concept{plotting}

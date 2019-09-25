@@ -21,12 +21,11 @@
 
 mergeCheck <- function(df1,df2,debug=F,...){
     if(debug) browser()
+    
     name.df1 <- deparse(substitute(df1))
     name.df2 <- deparse(substitute(df2))
     name.df3 <- "merged.df"
-
     if("all"%in%names(list(...))) stop("option all not supported")
-
     rowcol <- tmpcol(df1)
 
     if(nrow(df1)) {
@@ -39,7 +38,10 @@ mergeCheck <- function(df1,df2,debug=F,...){
     } else {
         reorder <- F
     }
-
+    
+    ## if(is.data.table(df1)) df1 <- as.data.frame(df1)
+    ## if(is.data.table(df2)) df2 <- as.data.frame(df2)
+    
     df3 <- merge(df1,df2,...)
     if(nrow(df3)!=nrow(df1)){
         cat(paste0("nrow(",name.df1,"):"),nrow(df1),"\n")
@@ -47,9 +49,16 @@ mergeCheck <- function(df1,df2,debug=F,...){
         cat(paste0("nrow(",name.df3,"):"),nrow(df3),"\n")
         stop("merge changed dimensions")        
     }
+
     if(reorder){
-        df3 <- df3[order(df3$rowcol),]
-        df3 <- subset(df3,select=-rowcol)
+        if(is.data.table(df3)){
+            df3 <- df3[order(get(rowcol))]
+            df3 <- df3[,!(rowcol),with=F]
+        } else {
+            df3 <- df3[order(df3[,rowcol]),]
+            df3 <- df3[,setdiff(colnames(df3),rowcol)]
+        }
+        
     }
     
     df3

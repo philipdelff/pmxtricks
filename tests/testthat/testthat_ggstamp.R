@@ -1,14 +1,15 @@
-context("ggWater")
+context("ggstamp")
 
 test_that("general use",{
 
-    fileRef <- "testReference/ggWater1.rds"
+    fileRef <- "testReference/ggstamp1.rds"
 
     data(pksim1,package="pmxtricks")
     p1 <- ggIndProfs(pksim1,amt=NULL)[[1]]
-    p1 <- p1+ggWater()
+    stamp <- "testthat_ggstamp.R"
+    p1 <- ggstamp(p1,stamp)
 
     expect_equal_to_reference(p1,fileRef)
     
-}
+})
 

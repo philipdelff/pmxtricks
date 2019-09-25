@@ -18,7 +18,7 @@ NMaddColumns <- function(data,df,by,debug=FALSE){
     if(debug) browser()
     data.new <- lapply(data,function(d){
         if(!is.data.frame(d)||!all(by%in%names(d))) return(d)
-        d2 <- try( mergeCheck(d,df,by=by,all.x=T))
+        d2 <- try(mergeCheck(d,df,by=by,all.x=T,debug=F))
         if("try-error"%in%class(d2)) d2 <- d
         d2
     })
