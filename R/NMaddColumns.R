@@ -1,7 +1,8 @@
 ##' Merge columns onto all elements in a NM data object
 ##'
 ##' @description This is useful for adding columns to a nonmem data object as
-##'     created by NMscanData because it does so to all elements in the object.
+##'     created by NMscanData because it does so to all elements containing the
+##'     by column in the object. The merge call is run by mergeCheck with all.x=TRUE.
 ##' @param data A NM data object
 ##' @param df a data.frame to merge onto elements of data object.
 ##' @param by passed to merge

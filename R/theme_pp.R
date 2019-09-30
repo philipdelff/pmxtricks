@@ -7,7 +7,7 @@
 ##' @family Plotting
 ##' @export
 
-theme_pp <- function(theme0 = ggplot2::theme_bw,...){
+theme_pp <- function(theme0 = theme_bw,...){
     theme1 <- 
         theme0()+
 

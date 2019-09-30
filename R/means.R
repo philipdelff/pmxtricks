@@ -21,7 +21,7 @@
 
 ### TODO end
 
-means <- function(x,type="arithmetic",z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,colnames=c("est","ll","ul"),format = "df",debug=F) {
+means <- function(x,type="arithmetic",na.rm=FALSE,z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,colnames=c("est","ll","ul"),format = "df",debug=F) {
 
     
     type <- gsub("(^ +| +$)","",type)
@@ -38,6 +38,10 @@ means <- function(x,type="arithmetic",z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,c
     }
 
     stopifnot(format%in%c("df","num"))
+
+    if(na.rm){
+        x <- x[!is.na(x)]
+    }
     
     if( type!="geometric" ) {
         if(z.rm) stop("z.rm can only be TRUE when type==geometric")
