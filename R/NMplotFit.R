@@ -87,9 +87,8 @@ NMplotFit <- function(data,
                       col.pred = "PRED",
                       log.y=F,
                       debug=F){
-    
-    if(debug) browser()
 
+    if(debug) browser()
     pklong0 <- copy(as.data.table(data))
 
 #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
@@ -146,10 +145,6 @@ NMplotFit <- function(data,
         pklong0[,c(col.grp):="All"]
     }
 
-    col.idwithin <- tmpcol(pklong0,base="IDwithin")
-    pklong0[,(col.idwithin):=as.numeric(as.factor(as.numeric(get(col.id)))),by=c(col.grp)]
-    pklong0[,(col.idwithin):=as.factor(get(col.idwithin))]
-    
 
     if(missing(type.mean)){
         if(log.y) {
@@ -163,7 +158,7 @@ NMplotFit <- function(data,
     
     ## mvars <- c("DV","PRED","IPRED")[c("DV","PRED","IPRED")%in%colnames(pksim2)]
     mvars <- c(col.dv,col.pred,col.ipred)
-    pklong1 <- melt(pklong0,id.vars=c(col.id,col.idwithin,"ROW",col.time,col.ntim,col.grp),measure.vars=mvars)
+    pklong1 <- melt(pklong0,id.vars=c(col.id,"ROW",col.time,col.ntim,col.grp),measure.vars=mvars)
 
 ### adding means
 
@@ -171,12 +166,24 @@ NMplotFit <- function(data,
     
     pklong3[,c("mean.grp","mean.grp.l","mean.grp.u"):=means(value,ci=T,type=type.mean),by=c(col.grp,col.ntim,"variable")]
     
-    pklong4 <- melt(pklong3,id.vars=c(col.id,col.grp,"ROW",col.idwithin,col.time,col.ntim,"variable","mean.grp.l","mean.grp.u"),measure.vars=c("value","mean.grp"),variable.name="type")
+    pklong4 <- melt(pklong3,id.vars=c(col.id,col.grp,"ROW",col.time,col.ntim,"variable","mean.grp.l","mean.grp.u"),measure.vars=c("value","mean.grp"),variable.name="type")
 
+
+    
+    col.id.orig <- paste0(col.id,"orig")
+    pklong4[,(col.id.orig):=get(col.id)]
+    pklong4[,(col.id):=NULL]
+    pklong4[,(col.id):=as.character(get(col.id.orig))]
     pklong4[type%in%c("mean.grp"),(col.id):="mean"]
+    pklong4[type%in%c("mean.grp"),(col.id.orig):=NA]
 ### This needs double check
     pklong4 <- unique(pklong4,by=c(col.id,col.ntim,col.grp,"variable","value"))
 
+    col.idwithin <- tmpcol(pklong4,base="IDwithin")
+    pklong4[,(col.idwithin):=as.numeric(as.factor(get(col.id))),by=c(col.grp)]
+    pklong4[,(col.idwithin):=as.factor(as.character(get(col.idwithin)))]
+
+    
     
     prepare.geoms <- function(geom,var234,type234){
 
@@ -214,7 +221,7 @@ NMplotFit <- function(data,
         ## the ones to include in the scale
         ## pklong4[!is.na(get(col.val)),unique(get(col(var)))]
         ## the factor orders of these values
-        Nval.fac.type <- as.numeric(pklong4[!is.na(get(col.val)),unique(get(col.var))])
+        Nval.fac.type <- as.numeric(as.factor(pklong4[!is.na(get(col.val)),unique(get(col.var))]))
         ## the names of these values
         names.levels.type <- as.character(pklong4[!is.na(get(col.val)),unique(get(col.var))])
         ## the number of factor levels

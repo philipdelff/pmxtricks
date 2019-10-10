@@ -1,3 +1,3 @@
 # NEWS
-## 0.0.5 
+## Post 0.4.800
 ### means: Introduced na.rm argument. 

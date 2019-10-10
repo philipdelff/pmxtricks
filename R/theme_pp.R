@@ -68,13 +68,14 @@ theme_pp <- function(theme0 = theme_bw,...){
 theme_pp_facet <- function(theme0 = theme_bw,...){
     theme1 <- 
         theme0()+
-        theme(strip.text = element_text(size = 16,colour="black"),
-              axis.text  = element_text(size = 15,colour="black"),
-              legend.text= element_text(size=16,colour="black"),
-              strip.background=element_rect(fill="white",colour="black" ),
+        theme(strip.text       = element_text(size = 16,colour="black"),
+              axis.text        = element_text(size = 15,colour="black"),
+              legend.title     = element_blank(),
+              legend.text      = element_text(size = 16,colour="black"),
+              strip.background = element_rect(fill="white",colour="black" ),
               panel.grid.minor = element_blank(),
               panel.grid.major = element_blank(),
-              plot.caption=element_text(size=6,
+              plot.caption     = element_text(size=6,
                                         colour="grey"),
               axis.title= element_text(size = 16,colour="black"),
               legend.position="bottom")

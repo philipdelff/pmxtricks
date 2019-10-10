@@ -1,21 +1,23 @@
 ##' create R function that generates param values based on covariates
-##' @description This function is really useful bu this and a few
-##'     other may belong better in a simulation package.
-##' @param NMcode0 Nonmem code that translates THETA and OMEGA into
-##'     PK/PD parameters like CL, V2, EMAX etc.
-##' @param pars0 The names of the final individual parameters that the
-##'     generated function must return and which can be used for
-##'     simulations.
-##' @param covs0 Names of covariates which are arguments to the generated function.
-##' @param theta0 default theta for resulting function.
-##' @param omega0 default omega for resulting function.
+##' @description This function is really useful bu this and a few other may
+##'     belong better in a simulation package.
+##' @param NMcode0 Nonmem code that translates THETA and OMEGA into PK/PD
+##'     parameters like CL, V2, EMAX etc.
+##' @param pars0 The names of the final individual parameters that the generated
+##'     function must return and which can be used for simulations.
+##' @param covs0 Names of covariates which are arguments to the generated
+##'     function.
+##' @param theta0 default theta for resulting function. See details.
+##' @param omega0 default omega for resulting function. See details.
 ##' @param name.fun The name of the function to be generated.
 ##' @param debug Start by calling browser()?
-##' @return A character string which can be evaluated to create a function. 
-##' @details The function returns a function in plain text. If you
-##'     want to store the code, paste this text to a file. If you want
-##'     to use it right away, do fun1text <- genCovFun() newfun <-
-##'     eval(parse(text=fun1text))
+##' @return A character string which can be evaluated to create a function.
+##' @details The function returns a function in plain text. If you want to store
+##'     the code, paste this text to a file. If you want to use it right away,
+##'     do fun1text <- genCovFun() newfun <- eval(parse(text=fun1text))
+##'
+##' The resulting function takes arguments theta and omega. 
+##' 
 ##' @family Simulation
 ##' @examples
 ##' \dontrun{
@@ -41,6 +43,14 @@
 
 
 ## dont export from pmxtricks. Needs a little more testing. Maybe to be moved to pmxsim package?
+
+
+##### changelog
+## 2019-10-08 philipdelff: changed cbind of covs and pars to mergeCheck by
+## col.id. This needs to be tested. ##
+
+##### end changelog
+
 
 ## TODO 
 ## In case the resulting function doesn't take any covariates (covs <- NULL) the resulting code could be simplified. It seems overly complicated to have a loop over covs when covs is NULL. Should the df.covs argument even be included if none are used anyway?
@@ -70,7 +80,7 @@ names(covs) <- c(\"",paste0(names(covs0),collapse="\",\""),"\")
 NMcode <- \"",paste(NMcode0,collapse="\n"),"\"
 
     if(missing(df.cov)) {
-        message(\"df.cov not supplied. One subject will be generated.\")
+        message(\"df.cov not supplied. Typical subject used.\")
         df.cov <- data.frame(id=1)
         colnames(df.cov) <- col.id
     }
@@ -129,7 +139,7 @@ paste(c(omega0),collapse=","),"),nrow=",sqrt(length(omega0)),")
 
          m1 <- gregexpr(\"[^A-Za-z]ETA\\\\[[[:digit:]]+\\\\]\",NMcode)
          etas.char <- sub(\".ETA\",\"ETA\",do.call(c,regmatches(NMcode,m1)))
-         etas.n <- as.numeric(sub(\"ETA\\\\[([[:digit:]])\\\\]\",\"\\\\1\",etas.char))
+         etas.n <- as.numeric(sub(\"ETA\\\\[([[:digit:]]+)\\\\]\",\"\\\\1\",etas.char))
          ## ETA <- rep(0,max(etas.n))
          ##browser()
          NETAS <- max(etas.n)
@@ -160,7 +170,7 @@ paste(c(omega0),collapse=","),"),nrow=",sqrt(length(omega0)),")
 
         df.par <- do.call(rbind,rows.pars.l)
         names(df.par) <- c(col.id,names.pars)
-        df.all <- cbind(df.cov,df.par)
+        df.all <- mergeCheck(df.cov,df.par,by=col.id)
         return(list(pars=df.par,covs=df.cov,all=df.all))
 }
 ")
