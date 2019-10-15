@@ -21,9 +21,15 @@
 ##' }
 
 
-## this should be faster with data.table. This can be used (but does not work with cols.id):
+### this should be faster with data.table. This can be used (but does not work with cols.id):
 ## DT = as.data.table(data)
 ## unique(DT[,sapply(DT,function(x)length(unique(x))==1),with=F])
+### This works if variables are either varying or not. It does not
+### work if some subjects change bodyweight and others dont (which
+### will always be the case. Almost there.
+## dt1[, unique(.SD[, lapply(.SD, uniqueN)==1, with=FALSE]), by=.(id)]
+## dt1[, unique(.SD[, lapply(.SD, uniqueN)>1, with=FALSE]), by=.(id)]
+
 
 findCovs <- function(data,cols.id=NULL,cols.drop=NULL,debug=F){
     if(debug) browser()

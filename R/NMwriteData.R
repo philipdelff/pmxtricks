@@ -14,6 +14,7 @@
 ##' @param write.rds write an rds file?
 ##' @param force.row Ensure that data contains a ROW column counting the rows in the dataset, and add one if none exists. Defaults to FALSE (default is not editing the dataset at all).
 ##' @param script If provided, the object will be stamped with this script name before saved to rds.
+##' @param args.stamp A list of arguments to be passed to stamp.
 ##' @param debug Start by running browser()?
 ##'
 ##' @family Nonmem
@@ -32,10 +33,22 @@
 ### end todo
 
 
-NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,write.RData=F,write.rds=write.csv,force.row=FALSE,script,debug=FALSE){
+NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,write.RData=F,write.rds=write.csv,force.row=FALSE,script,args.stamp,debug=FALSE){
     if(debug) browser()
     stopifnot(is.data.frame(data))
     data.out <- as.data.frame(data)
+    doStamp <- TRUE
+    if(missing(args.stamp)) {
+        args.stamp <- list()
+        doStamp <- FALSE
+    }
+    if(missing(script)){
+        doStamp <- FALSE
+    } else {
+        args.stamp$script <- script
+        doStamp <- TRUE
+    }
+    
     if(!is.null(drop)) data.out <- data.out[,-which(names(data.out)%in%drop),drop=FALSE]
 
     if(drop.lowercase) data.out <- data.out[,which(toupper(names(data.out))==names(data.out))]
@@ -80,8 +93,7 @@ NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,
         name.data <- deparse(substitute(data))
         if(!grepl("\\..+$",file)) stop("filename could not be translated to .RData. Choose a .csv file name.")
         file.RData <- transFileName(file,"RData")
-        if(!missing(script)) stampObj(data.out,script=script,writtenTo=file.RData)
-        ## browser()
+        if(doStamp) data.out <- do.call(stampObj,append(list(data=data.out,writtenTo=file.RData),args.stamp))
         assign(name.data,data.out)
         save(list=name.data,file=file.RData)
         written <- TRUE
@@ -90,10 +102,11 @@ NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,
         ## A dot and then something is needed in the name for us to be able to
         ## translate
         if(!grepl("\\..+$",file)) stop("filename could not be translated to .rds. Choose a .csv file name.")
-
         file.rds <- transFileName(file,"rds")
-        ## browser()
-        if(!missing(script)) stampObj(data.out,script=script,writtenTo=file.rds)
+        
+        if(doStamp) data.out <- do.call(stampObj,append(list(data=data.out,writtenTo=file.rds),args.stamp))
+
+
         saveRDS(data.out,file=file.rds)
         written <- TRUE
     }
