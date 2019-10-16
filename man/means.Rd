@@ -4,9 +4,9 @@
 \alias{means}
 \title{calculate arithmetic or geometric mean and confidence intervals}
 \usage{
-means(x, type = "arithmetic", z.rm = FALSE, ci = FALSE,
-  dist.ci = "t", p.ci = 0.95, colnames = c("est", "ll", "ul"),
-  format = "df", debug = F)
+means(x, type = "arithmetic", na.rm = FALSE, z.rm = FALSE,
+  ci = FALSE, dist.ci = "t", p.ci = 0.95, colnames = c("est", "ll",
+  "ul"), format = "df", debug = F)
 }
 \arguments{
 \item{x}{vector to calculate the geometric mean of}

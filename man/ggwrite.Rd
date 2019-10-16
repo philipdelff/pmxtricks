@@ -5,7 +5,8 @@
 \title{Export plots created with ggplot (and more) to files (png or pdf) - or show them on screen.}
 \usage{
 ggwrite(plot, file, stamp, canvas = "standard", onefile = F,
-  res = 200, debug = F, paper = "special", save = T)
+  res = 200, paper = "special", save = T, show = !save,
+  debug = F)
 }
 \arguments{
 \item{plot}{A plot object or a list of plots. Normally generated with ggplot
@@ -19,9 +20,8 @@ list, see onefile. If missing, plot is shown on screen.}
 \item{stamp}{This should normally be the path to your script. Requires
 ggplot >=2.2.1.}
 
-\item{canvas}{Can either be a character with one of the values "standard",
-"wide", "A4", "xeqy","wide-screen" or it can be a list with elements
-width and height with single values (unit is inches).}
+\item{canvas}{Either a list of height and width or a shortname of predefined
+canvas size. See ?canvasSize.}
 
 \item{onefile}{Only applicable if plot is a list. If plot is a list and
 onefile=T, all plots will be put in a pdf (file must end in pdf) with
@@ -30,12 +30,16 @@ be created - one per list element.}
 
 \item{res}{Resolution. Passed to png.}
 
-\item{debug}{If TRUE, browser is called to begin with.}
-
 \item{paper}{Only used with pdf device. See ?pdf.}
 
 \item{save}{Save the plot to the given file or just show? Defaults to
 TRUE. Hint, if you use an "exportFlag", use save=exportFlag.}
+
+\item{show}{Print the plot to the screen? Defaults to the opposite of
+save. Hint, combining save and show in knitr can give you both a high
+quality plot in your pdf and a png optimized for powerpoint.}
+
+\item{debug}{If TRUE, browser is called to begin with.}
 }
 \value{
 Nothing.
