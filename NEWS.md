@@ -5,3 +5,4 @@
 ### ggwrite: Added a show argument. write and show are independent of each other.
 ### NMwriteOutput: support for args.stamp, a list of args passed to stampObj.
 ### means: Introduced na.rm argument. 
+### signif2: bugfixes related to zero values.

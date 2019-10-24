@@ -123,16 +123,16 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,paper="s
     
     writeObj <- function(plot,file,size,type){
 
-    ## get filname extension to determine device
-    type <- NULL
-    fnroot <- NULL
-    if(!is.null(file)){
-        ## type <- sub(".+\\.(.+)$","\\1",file)
-        
-        type <- sub(".*\\.([^\\.]+)$","\\1",file)
-        if(!type%in%c("pdf","png")) stop("Only extensions .png and .pdf are supported")
-        fnroot <- sub("^(.+)\\..+$","\\1",file)
-    }
+        ## get filname extension to determine device
+        type <- NULL
+        fnroot <- NULL
+        if(!is.null(file)){
+            ## type <- sub(".+\\.(.+)$","\\1",file)
+            
+            type <- sub(".*\\.([^\\.]+)$","\\1",file)
+            if(!type%in%c("pdf","png")) stop("Only extensions .png and .pdf are supported")
+            fnroot <- sub("^(.+)\\..+$","\\1",file)
+        }
         
         if(is.list(plot)&&!any(c("gg","gtable")%in%class(plot))) {
             if(onefile){
@@ -144,13 +144,17 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,paper="s
             } else {
                 
                 Nplots <- length(plot)
+                ## debug
+                cat("Number of plots: ",Nplots)
                 Nplots.log10 <- round(log10(Nplots))
                 fname.num <- function(fnroot,type,I) paste(fnroot,"_",sprintf(fmt=paste("%0",Nplots.log10+1,"d",sep=""),I),".",type,sep="")
                 if (type=="x11"){
                     write1(plot[[1]],type="x11")
                     if(Nplots>2){
                         lapply(2:Nplots,function(I){
-                            x11()
+                            ## debug
+                            ## cat("opening x11 device")
+                            ## x11()
                             write1(plot=plot[[I]],type=type,size=size)
                         })
                     }
@@ -162,6 +166,8 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,paper="s
             write1(plot=plot,fn=file,type=type,size=size)
         }
     }
+
+    
     if(save){
         writeObj(plot,file=file,size=size)
     }

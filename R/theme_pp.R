@@ -29,10 +29,10 @@ theme_pp <- function(theme0 = theme_bw,...){
     theme1 <- theme1 +
         theme(legend.title=element_blank())+
         ## increment font size in legend
-        theme(legend.text=element_text(size=16,colour="black"))+
+        theme(legend.text=element_text(size=12,colour="black"))+
 ### axis
         theme(axis.title= element_text(size = 16,colour="black"),
-              axis.title.x = element_text(margin = unit(c(8, 0, 8, 0), "mm")),
+              axis.title.x = element_text(margin = unit(c(6, 0, 6, 0), "mm")),
               axis.title.y = element_text(margin = unit(c(0, 6, 0, 0), "mm"))
               )+
         ## ### text size in facet labels

@@ -4,7 +4,6 @@
 ##' @param cols.id covariates will be searched for in combinations of values in
 ##'     these columns. Often cols.id will be either empty or ID. But it
 ##'     can also be both say c("ID","DRUG") or c("ID","TRT").
-##' @param cols.drop Discard these columns if present.
 ##' @param debug start by running browser()?
 ##' @family DataWrangling
 ##' @import data.table
@@ -24,7 +23,11 @@
 
 findCovs <- function(data,cols.id=NULL,debug=F){
     if(debug) browser()
-
+    ## check arguments
+    if(!is.data.frame(data)){
+        stop("data must be a data.frame (or data.table)")
+    }
+    
     was.data.table <- T
     if(!is.data.table(data)){
         was.data.table <- F
@@ -33,11 +36,11 @@ findCovs <- function(data,cols.id=NULL,debug=F){
 
     
     dt2 <- data[, .SD[, lapply(.SD, function(x)uniqueN(x)==1)], by=cols.id]
-    ifkeep <- dt2[,sapply(.SD,all),.SDcols=!(cols.id)]
+    ifkeep <- dt2[,sapply(.SD,all),.SDcols=setdiff(colnames(dt2),cols.id)]
     keep <- c(cols.id,setdiff(colnames(dt2),cols.id)[ifkeep])
-    reduced <- unique(dt1[,keep,with=F])
+    reduced <- unique(data[,keep,with=F])
 
-    if(!was.data.table) reduced <- as.data.fram(reduced)
+    if(!was.data.table) reduced <- as.data.frame(reduced)
     reduced
 
 }
