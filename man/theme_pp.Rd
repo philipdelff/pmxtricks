@@ -4,7 +4,7 @@
 \alias{theme_pp}
 \title{A custom theme - aim is powerpoint}
 \usage{
-theme_pp(theme0 = ggplot2::theme_bw, ...)
+theme_pp(theme0 = theme_bw, ...)
 }
 \arguments{
 \item{theme0}{The theme to modify}
