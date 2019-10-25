@@ -7,18 +7,18 @@
 genCovFun(NMcode0, pars0, covs0, theta0, omega0, name.fun, debug = F)
 }
 \arguments{
-\item{NMcode0}{Nonmem code that translates THETA and OMEGA into
-PK/PD parameters like CL, V2, EMAX etc.}
+\item{NMcode0}{Nonmem code that translates THETA and OMEGA into PK/PD
+parameters like CL, V2, EMAX etc.}
 
-\item{pars0}{The names of the final individual parameters that the
-generated function must return and which can be used for
-simulations.}
+\item{pars0}{The names of the final individual parameters that the generated
+function must return and which can be used for simulations.}
 
-\item{covs0}{Names of covariates which are arguments to the generated function.}
+\item{covs0}{Names of covariates which are arguments to the generated
+function.}
 
-\item{theta0}{default theta for resulting function.}
+\item{theta0}{default theta for resulting function. See details.}
 
-\item{omega0}{default omega for resulting function.}
+\item{omega0}{default omega for resulting function. See details.}
 
 \item{name.fun}{The name of the function to be generated.}
 
@@ -28,14 +28,15 @@ simulations.}
 A character string which can be evaluated to create a function.
 }
 \description{
-This function is really useful bu this and a few
-    other may belong better in a simulation package.
+This function is really useful bu this and a few other may
+    belong better in a simulation package.
 }
 \details{
-The function returns a function in plain text. If you
-    want to store the code, paste this text to a file. If you want
-    to use it right away, do fun1text <- genCovFun() newfun <-
-    eval(parse(text=fun1text))
+The function returns a function in plain text. If you want to store
+    the code, paste this text to a file. If you want to use it right away,
+    do fun1text <- genCovFun() newfun <- eval(parse(text=fun1text))
+
+The resulting function takes arguments theta and omega.
 }
 \examples{
 \dontrun{

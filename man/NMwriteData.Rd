@@ -6,7 +6,7 @@
 \usage{
 NMwriteData(data, file, drop = NULL, drop.lowercase = FALSE,
   write.csv = TRUE, write.RData = F, write.rds = write.csv,
-  force.row = FALSE, script, debug = FALSE)
+  force.row = FALSE, script, args.stamp, debug = FALSE)
 }
 \arguments{
 \item{data}{The dataset to write to Nonmem.}
@@ -26,6 +26,8 @@ NMwriteData(data, file, drop = NULL, drop.lowercase = FALSE,
 \item{force.row}{Ensure that data contains a ROW column counting the rows in the dataset, and add one if none exists. Defaults to FALSE (default is not editing the dataset at all).}
 
 \item{script}{If provided, the object will be stamped with this script name before saved to rds.}
+
+\item{args.stamp}{A list of arguments to be passed to stamp.}
 
 \item{debug}{Start by running browser()?}
 }

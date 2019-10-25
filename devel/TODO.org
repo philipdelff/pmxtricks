@@ -19,8 +19,10 @@
 extload sometimes fails to get FIX info creating problems for
 determining no of estimated parameters.
 *** signif2
-*** TODO signif2(0,2) should return 0.0 but does return 0.00
-*** TODO signif2(0,1) sould return 0 but returns 00
+*** DONE signif2(0,2) should return 0.0 but does return 0.00
+    CLOSED: [2019-10-24 Thu 15:35]
+*** DONE signif2(0,1) sould return 0 but returns 00
+    CLOSED: [2019-10-24 Thu 15:35]
 ** Functions requests
 *** DONE Functions to read and write NM csv files
 *** DONE AUC function
@@ -32,7 +34,7 @@ determining no of estimated parameters.
 name: ggwrite
 *** DONE function for rounding data.frames
 *** TODO function for creating new runs based on old ones
-*** DONE Function to run NMscanData and save and rds. 
+*** DONE Function to run NMscanData and save and rds
     CLOSED: [2019-01-24 Thu 19:40]
 Must be suitable for batch mode.
 NMcompAllRes
@@ -81,12 +83,26 @@ The user doesn't have to supply which ones to include.
      CLOSED: [2019-01-15 Tue 17:35]
 **** TODO Add smalles p-value of test mu=0
 *** pkpdSimMany
-**** TODO Doses should not be multiplied by a factor
-**** TODO Clean up id/ID
-**** TODO Individualise doses or introduce a NMdoses
+This function is dead. If at all relevant, this will be developed in a separate package.
+**** CANCELED Doses should not be multiplied by a factor
+     CLOSED: [2019-10-24 Thu 15:39]
+**** CANCELED Clean up id/ID
+     CLOSED: [2019-10-24 Thu 15:39]
+**** CANCELED Individualise doses or introduce a NMdoses
+     CLOSED: [2019-10-24 Thu 15:39]
 *** NMscanData
+**** TODO check if .mod file exists
+Right now it is assumed. But check for it. And if a new argument "dir.data" is
+given, it is not needed.
 **** TODO Clean up messages
 Messages seem a bit random. Maybe introduce a quiet option?
+*** trapez
+**** DONE strategy for cumulative auc
+     CLOSED: [2019-10-24 Thu 14:18]
+One shorter than x and y. 
+**** DONE Why not just pass the na.rm to sum/cumsum?
+     CLOSED: [2019-10-24 Thu 14:19]
+No, cumsum does not support na.rm
 *** NMcompRes
 If an rds exists but was called with other options, it is still
 used. That is risky. Maybe save all options to function call in

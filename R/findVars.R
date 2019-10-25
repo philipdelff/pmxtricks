@@ -1,4 +1,4 @@
-##' Extract columns that do not vary within variables in a data.frame
+##' Extract columns that vary within values of other columns in a data.frame
 ##'
 ##' @param data data.frame in which to look for covariates
 ##' @param cols.id covariates will be searched for in combinations of values in
@@ -20,8 +20,7 @@
 ##' }
 
 
-
-findCovs <- function(data,cols.id=NULL,debug=F){
+findVars <- function(data,cols.id=NULL,debug=F){
     if(debug) browser()
     ## check arguments
     if(!is.data.frame(data)){
@@ -34,9 +33,10 @@ findCovs <- function(data,cols.id=NULL,debug=F){
         data <- as.data.table(data)
     }
 
-    
-    dt2 <- data[, .SD[, lapply(.SD, function(x)uniqueN(x)==1)], by=cols.id]
-    ifkeep <- dt2[,sapply(.SD,all),.SDcols=setdiff(colnames(dt2),cols.id)]
+    ## uniqueN > 1
+    dt2 <- data[, .SD[, lapply(.SD, function(x)uniqueN(x)>1)], by=cols.id]
+    ## use any
+    ifkeep <- dt2[,sapply(.SD,any),.SDcols=!(cols.id)]
     keep <- c(cols.id,setdiff(colnames(dt2),cols.id)[ifkeep])
     reduced <- unique(data[,keep,with=F])
 

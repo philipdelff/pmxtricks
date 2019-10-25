@@ -17,7 +17,8 @@ NMaddColumns(data, df, by, debug = FALSE)
 }
 \description{
 This is useful for adding columns to a nonmem data object as
-    created by NMscanData because it does so to all elements in the object.
+    created by NMscanData because it does so to all elements containing the
+    by column in the object. The merge call is run by mergeCheck with all.x=TRUE.
 }
 \examples{
 df.races <- data.frame(RACE=c(1,3.1),
@@ -28,7 +29,8 @@ df.races <- data.frame(RACE=c(1,3.1),
 Other DataWrangling: \code{\link{NMcompAllRes}},
   \code{\link{NMorderColumns}}, \code{\link{NMscanData}},
   \code{\link{compareNames}}, \code{\link{factor2}},
-  \code{\link{findCovs}}, \code{\link{mergeCheck}},
+  \code{\link{findCovs_df}}, \code{\link{findCovs}},
+  \code{\link{findVars}}, \code{\link{mergeCheck}},
   \code{\link{newNames}}, \code{\link{objInfo}},
   \code{\link{rbindIntersect}}, \code{\link{rbindUnion}},
   \code{\link{roundDF}}, \code{\link{roundResp0}},

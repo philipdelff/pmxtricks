@@ -1,7 +1,8 @@
 ##' round to fixed number of significant digits
 ##'
 ##' @param x a numeric vector.
-##' @param digits number of significant digits to round to.
+##' @param digits number of significant digits to round to. Must be an
+##'     integer larger than 0.
 ##' @param add pad with zeros where digits>nchar(x[i]). Only TRUE
 ##'     supported.
 ##' @param debug start by calling browser.
@@ -11,34 +12,48 @@
 ##' signif(x,3)
 ##' as.character(signif(x,3))
 ##' signif2(x,3)
-##' signif2(x,3,add=TRUE)
+##' signif2(x,3,add=FALSE)
 ##' signif2(c(.2,11.84),2)
+##' signif2(3205,-1)
+##' signif2(0,1)
+##' signif2(0,3)
 ##' @export
+
 
 signif2 <- function(x,digits=1,add=T,debug=FALSE) {
     if(debug) browser()
-    
+
+### check arguments
     ## check that x is numeric 
     stopifnot(is.numeric(x))
-    stopifnot(is.numeric(digits)&&length(digits)==1&&(digits%/%1)==digits)
-    if(!add){stop("only add=TRUE supported.")}
+    if(!(is.numeric(digits)&&length(digits)==1&&as.integer(digits)==digits&&digits>0)){
+        stop("digits must be an integer>0")
+    }
+    if(!add){
+        warning("add=FALSE. This is experimental. Please check output carefully.")
+    }
+### check arguments done
 
     rounded1 <- signif(x,digits)
     rounded2 <- sub("\\.0*$","",as.character(rounded1))
 
     rounded3 <- rounded2
+
+    
     if(add){
-
-
 ### pad with zeros where digits>nchar(x[i]) 
         padfun <- function(y){
-            paste0(y,
-                   ## if not containing a '.', add one before padding
-                   ifelse(grepl("\\.",y)||nchar(y)>=digits,"","."),
-                   paste(rep(0,max(0,digits-nchar(sub("^0","",sub("\\.","",y))))),collapse="")
-                   )
-        }
+            digits1 <- nchar(sub("\\.","",y))
+            if(digits1>=digits) return(y)
+            ## browser()
 
+            if(!grepl("\\.",y)&&digits1<digits) y <- paste0(y,".")
+            ## nchar(sub("^0*(.*)","\\1",sub("\\.","",y)))
+            y <- paste0(y,
+                        paste(rep(0,max(0,digits-digits1)),collapse="")
+                        )
+            y
+        }
         rounded3 <- unlist(lapply(rounded3,padfun))
     }
     

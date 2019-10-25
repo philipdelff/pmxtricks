@@ -12,7 +12,7 @@ stampObj(data, script, ...)
 \item{script}{path to the script where the dataset was generated.}
 
 \item{...}{other named metadata elements to add to the dataset. Example:
-Description="PK data for ph1 trials in project NNXXXX".}
+Description="PK data for ph1 trials in project".}
 }
 \description{
 Dataset metadata makes it possible to trace an archived dataset back to the
@@ -25,7 +25,8 @@ objInfo
 Other DataWrangling: \code{\link{NMaddColumns}},
   \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
   \code{\link{NMscanData}}, \code{\link{compareNames}},
-  \code{\link{factor2}}, \code{\link{findCovs}},
+  \code{\link{factor2}}, \code{\link{findCovs_df}},
+  \code{\link{findCovs}}, \code{\link{findVars}},
   \code{\link{mergeCheck}}, \code{\link{newNames}},
   \code{\link{objInfo}}, \code{\link{rbindIntersect}},
   \code{\link{rbindUnion}}, \code{\link{roundDF}},
