@@ -57,7 +57,6 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,debug=F,
         }
     }
 
-   
     ## make function to use for one plot. Then we will call tht on plot or loop
     ## it over the elements of plot in case plot is a list.
     write1 <- function(plot,fn=NULL,type,onefile=F){  
