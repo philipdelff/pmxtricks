@@ -1,5 +1,5 @@
 # NEWS
-## Post 0.4.800
+## Post 0.0.4.800
 ### findVars: New function that finds columns that vary within other columns (say subjects).
 ### findCovs: Implemented in data.table. Should be much faster.
 ### ggwrite: Added a show argument. write and show are independent of each other.
