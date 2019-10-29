@@ -56,7 +56,9 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,paper="s
             cat("using grid::grid.draw\n")
             grid::grid.draw(plot)
         } else {
-            print(plot)
+            if(!is.null(plot)){
+                print(plot)
+            }
         }
     }
 
@@ -83,7 +85,7 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,paper="s
                    })
             print1(plot)
             dev.off()
-        }  else {
+        } else {
             print1(plot)
         }
     }
@@ -144,7 +146,7 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,paper="s
                 
                 Nplots <- length(plot)
                 ## debug
-                cat("Number of plots: ",Nplots)
+                ## cat("Number of plots: ",Nplots)
                 Nplots.log10 <- round(log10(Nplots))
                 fname.num <- function(fnroot,type,I) paste(fnroot,"_",sprintf(fmt=paste("%0",Nplots.log10+1,"d",sep=""),I),".",type,sep="")
                 if (type=="x11"){
