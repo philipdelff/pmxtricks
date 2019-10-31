@@ -1,11 +1,13 @@
 ##' read all output data tables in nonmem run
 ##' @param file the nonmem file to read (normally .mod or .lst)
 ##' @param details If TRUE, metadata is added to output. In this case, you get a list. I'd say, enable if doing programming.
+##' @param dt return data.tables? Tables will not be keyed.
 ##' @return A list of all the tables as data.frames. If details=TRUE, this is in one element, called data, and meta is another element. If not, only the element corresponding to data is returned.
 ##' @family Nonmem
+##' @ import data.table
 ##' @export
-NMscanTables <- function(file,details=F){
-        
+NMscanTables <- function(file,details=F,dt=FALSE){
+    
     dir <- dirname(file)
     extract.info <- function(x,NAME,default){
         r1 <- regexpr(paste0(NAME," *= *[^ ]*"),x)
@@ -23,6 +25,7 @@ NMscanTables <- function(file,details=F){
 ### TODO include firstonly
     tab.files <- lapply(lines.table,function(x) {
         tab <- data.frame(file=filePathSimple(dir,extract.info(x,"FILE"))
+                         ,name=extract.info(x,"FILE")
                          ,firstonly=any(grepl("FIRSTONLY|FIRSTRECORDONLY|FIRSTRECONLY",x))
                          ,format=extract.info(x,"FORMAT",default=" ")
                          ,stringsAsFactors=F)
@@ -30,7 +33,7 @@ NMscanTables <- function(file,details=F){
         tab
     })
 
-## if(!all(tab.files$sep=",")) stop("Not all tables are comma separated. Only comma separated tables are supported right now.")
+    ## if(!all(tab.files$sep=",")) stop("Not all tables are comma separated. Only comma separated tables are supported right now.")
     
     meta <- do.call(rbind,tab.files)
     meta$nrow <- NA_real_
@@ -45,8 +48,11 @@ NMscanTables <- function(file,details=F){
     }
     
     
-    names(tables) <- meta$file
-    
+    names(tables) <- meta$name
+    if(dt) {
+        tables <- lapply(tables,as.data.table)
+        meta <- as.data.table(meta)
+    }
     
     if(details){
         out <- list(data=tables,meta=meta)

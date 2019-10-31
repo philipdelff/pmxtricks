@@ -9,7 +9,8 @@ signif2(x, digits = 1, add = T, debug = FALSE)
 \arguments{
 \item{x}{a numeric vector.}
 
-\item{digits}{number of significant digits to round to.}
+\item{digits}{number of significant digits to round to. Must be an
+integer larger than 0.}
 
 \item{add}{pad with zeros where digits>nchar(x[i]). Only TRUE
 supported.}
@@ -24,8 +25,11 @@ x <- c(1.24e-4,1.1334e6,1.1,22.00000,10.00,1)
 signif(x,3)
 as.character(signif(x,3))
 signif2(x,3)
-signif2(x,3,add=TRUE)
+signif2(x,3,add=FALSE)
 signif2(c(.2,11.84),2)
+signif2(3205,-1)
+signif2(0,1)
+signif2(0,3)
 }
 \seealso{
 Other DataWrangling: \code{\link{NMaddColumns}},

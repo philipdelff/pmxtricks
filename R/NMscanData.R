@@ -158,7 +158,7 @@ type <- NULL
     }
     )
     
-    coltypes <- do.call(rbind,coltypes)
+coltypes <- do.call(rbind,coltypes)
 ###}
 
 ###{ reduce to the three data.frames we want    
