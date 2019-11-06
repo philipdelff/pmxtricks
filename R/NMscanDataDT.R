@@ -38,7 +38,7 @@
 
 
 ### todo
-## check if variables are consistent within ROW: ID (others?) This is fatal and will happen when using long ID's and non-matching format when writing tables from Nonmem.
+## No longer sure this is an issue with the new data combination method: check if variables are consistent within ROW: ID (others?) This is fatal and will happen when using long ID's and non-matching format when writing tables from Nonmem.
 
 ## bug: skip input data if not found.
 
@@ -46,7 +46,15 @@
 
 ## use default values for col.grp and col.occ. Use if present.
 
+## TODO: check overview.tables. Either they must be firstonly, or they must be full.length.
+
+## TODO: col.row can only be used if found in both input and at least one output table.
+
+## TODO: There are certain variables that can only be row specifc: WRES, CWRES, etc.
+
 ### end todo 
+
+
 
 NMscanDataDT <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC",structure="full",use.input=T,reconstructRows=F,debug=F){
 
@@ -76,6 +84,7 @@ NMscanDataDT <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OC
     overview.tables <- tables$meta
 
 #### TODO: check overview.tables. Either they must be firstonly, or they must be full.length.
+### TODO: col.row can only be used if found in both input and at least one output table.
     
     
 #### add has.grp, has.occ, has.id?
@@ -100,10 +109,9 @@ NMscanDataDT <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OC
     tab.row <- NULL
     ##    if(sum(overview.tables$full.length&overview.tables$has.row)){
     if(any(overview.tables[,full.length&has.row])){
-        
-        tab.row <- data.table(col.row=
-                                  data[[overview.tables[has.row==TRUE&full.length==TRUE,name[1]]]][,get(col.row)]
-                              )
+        ## take row column from the first table in which it appears.
+        first.table.with.row <- data[[overview.tables[has.row==TRUE&full.length==TRUE,name[1]]]]
+        tab.row <- data.table(col.row=first.table.with.row[,get(col.row)])
     } else {
         tab.row <- data.table(col.row=1:NrowFull)
     }
@@ -167,9 +175,9 @@ NMscanDataDT <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OC
             all.row <- NULL
             tab.occ <- NULL
         } else {
-            t2 <- Sys.time()
-            cat("t2", t2-t0,"\n")
-            t0 <- t2
+            ## t2 <- Sys.time()
+            ## cat("t2", t2-t0,"\n")
+            ## t0 <- t2
             
             all.row <- tab.row
             if(!is.null(tab.firstonly)){
@@ -177,9 +185,9 @@ NMscanDataDT <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OC
                                  tab.firstonly[,c(col.id,setdiff(names(tab.firstonly),names(all.row))),with=FALSE],
                                  by=col.id)
 
-                t3 <- Sys.time()
-                cat("t3: ", t3-t0,"\n")
-                t0 <- t3
+                ## t3 <- Sys.time()
+                ## cat("t3: ", t3-t0,"\n")
+                ## t0 <- t3
                 
             }
             ## tab.occ
@@ -189,15 +197,15 @@ NMscanDataDT <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OC
                 ## t1 <- Sys.time()
                 ## tab.occ <- findCovs2(all.row,cols.id=c(col.id,col.occ),debug=F)
                 ## t2 <- Sys.time()
-                 tab.occ <- findCovs(all.row,cols.id=c(col.id,col.occ),debug=F)
+                tab.occ <- findCovs(all.row,cols.id=c(col.id,col.occ),debug=F)
                 ## t3 <- Sys.time()
                 ## t3b <- Sys.time()
                 ## tab.occ <- findCovs_df(all.row,cols.id=c(col.id,col.occ),debug=F)
                 ## t4 <- Sys.time()
                 
-                 t4 <- Sys.time()
-                cat("t4: ", t4-t0,"\n")
-                 t0 <- t4
+                ##  t4 <- Sys.time()
+                ## cat("t4: ", t4-t0,"\n")
+                ##  t0 <- t4
                 
             } else {
                 tab.occ <- NULL
@@ -207,15 +215,15 @@ NMscanDataDT <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OC
         ## tab.id
         
         tab.id <- findCovs(all.row,cols.id=c(col.id))
-        t5 <- Sys.time()
-        cat("t5: ", t5-t0,"\n")
-        t0 <- t5
+        ## t5 <- Sys.time()
+        ## cat("t5: ", t5-t0,"\n")
+        ## t0 <- t5
 
-      
+        
         tab.run <- findCovs(all.row)
-        t6 <- Sys.time()
-        cat("t6: ", t6-t0,"\n")
-        t0 <- t6
+        ## t6 <- Sys.time()
+        ## cat("t6: ", t6-t0,"\n")
+        ## t0 <- t6
         
         
     } else {

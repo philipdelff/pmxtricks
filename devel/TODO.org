@@ -43,6 +43,16 @@ NMcompAllRes
     NMcompRes.     
 *** TODO Function to add columns to all elements in a scanned data obj
 *** TODO Individual profile plots
+*** TODO Check nonmem data set
+**** Checks/analyses to include
+**** NA TIME
+**** actual time since first dose vs Nominal time since first dose
+**** actual time since last dose vs Nominal time since nominal dose
+**** all subjects have doses?
+**** All subjects have observations?
+**** Negative actual time (since first or previous dose) when corresponding nominal time is neg
+**** negative doses
+**** Nomminal dose vs actual dose
 ** Documentation
 *** TODO Tests
 ** Improvements
@@ -55,8 +65,11 @@ matches, and that the resulting number of rows happen to be the same as for df1.
 In stead, add a row counter to df1. Look in df3 whether all values of the row
 counter are there, and that no of rows is retained.
 *** NMreadTab
-**** TODO option to use colnames for all subtables?
+**** TODO Option to use colnames for all subtables?
+With the current implementation, this would make processing extremely much slower.
 **** TODO Check if correct seperator chosen
+**** TODO Use fread rather than readLines
+Enourmous performance gain for large tables. Especially for VPC's this is necessary. 
 *** NMrunLog
 **** TODO Add convergence info
 **** TODO Add Covariance step info
