@@ -41,7 +41,7 @@ NMscanTables <- function(file,details=F,dt=FALSE){
     tables <- list()
     for(I in 1:nrow(meta)){
         if(!file.exists(meta[I,"file"])) stop(paste("NMscanTables: File not found:",meta[I,"file"]))
-        tables[[I]] <- NMreadTab(meta[I,"file"],sep=meta[I,"sep"])
+        tables[[I]] <- NMreadTab(meta[I,"file"],sep=meta[I,"sep"],silent=T,showProgress=FALSE)
         dim.tmp <- dim(tables[[I]])
         meta[I,"nrow"] <- dim.tmp[1]
         meta[I,"ncol"] <- dim.tmp[2]
