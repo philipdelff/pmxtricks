@@ -1,12 +1,12 @@
 ##' read all output data tables in nonmem run
 ##' @param file the nonmem file to read (normally .mod or .lst)
 ##' @param details If TRUE, metadata is added to output. In this case, you get a list. I'd say, enable if doing programming.
-##' @param dt return data.tables? Tables will not be keyed.
+##' @param as.dt return data.tables? Tables will not be keyed.
 ##' @return A list of all the tables as data.frames. If details=TRUE, this is in one element, called data, and meta is another element. If not, only the element corresponding to data is returned.
 ##' @family Nonmem
 ##' @import data.table
 ##' @export
-NMscanTables <- function(file,details=F,dt=FALSE){
+NMscanTables <- function(file,details=F,as.dt=TRUE){
     
     dir <- dirname(file)
     extract.info <- function(x,NAME,default){
@@ -49,9 +49,9 @@ NMscanTables <- function(file,details=F,dt=FALSE){
     
     
     names(tables) <- meta$name
-    if(dt) {
-        tables <- lapply(tables,as.data.table)
-        meta <- as.data.table(meta)
+    if(!as.dt) {
+        tables <- lapply(tables,as.data.frame)
+        meta <- as.data.frame(meta)
     }
     
     if(details){

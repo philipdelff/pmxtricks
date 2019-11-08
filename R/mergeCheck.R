@@ -27,68 +27,57 @@ mergeCheck <- function(df1,df2,debug=F,...){
     if("all"%in%names(list(...))) stop("option all not supported. mergeCheck is for merges that are intended to result in column additions to df1, that's all.")
 
     ## if data is not data.tables, convert to data.tables
-    ## stopifnot(is.data.frame(df1))
-    ## stopifnot(is.data.frame(df2))
-    ## was.df.df1 <- FALSE
-    ## if(!is.data.table(df1)){
-    ##     df1 <- as.data.table(df1)
-    ##     was.df.df1 <- TRUE
-    ## }
-    ## was.df.df2 <- FALSE
-    ## if(!is.data.table(df2)){
-    ##     df2 <- as.data.table(df2)
-    ##     was.df.df2 <- TRUE
-    ## }
+    stopifnot(is.data.frame(df1))
+    stopifnot(is.data.frame(df2))
+    was.df.df1 <- FALSE
+    if(is.data.table(df1)){
+        df1 <- copy(df1)
+    } else {
+        df1 <- as.data.table(df1)
+        was.df.df1 <- TRUE
+    }
+    was.df.df2 <- FALSE
+    if(is.data.table(df2)){
+        df2 <- copy(df2)
+    } else {
+        df2 <- as.data.table(df2)
+        was.df.df2 <- TRUE
+    }
 
     rowcol <- tmpcol(names=c(colnames(df1),colnames(df2)))
 
     if(nrow(df1)) {
         ## df1 is not NULL
         reorder <- T
-        if(is.data.table(df1)){
-            df1[,(rowcol):=1:nrow(df1)]
-        } else {
-            df1[,rowcol] <- 1:nrow(df1)
-        }
+        df1[,(rowcol):=1:nrow(df1)]
     } else {
         reorder <- F
     }
     
-    ## if(is.data.table(df1)) df1 <- as.data.frame(df1)
-    ## if(is.data.table(df2)) df2 <- as.data.frame(df2)
-    
     df3 <- merge(df1,df2,...)
     if(reorder){
-        if(is.data.table(df3)){
-            if(!(all(df1[,rowcol,with=F]%in%df3[,rowcol,with=F]) && nrow(df1)==nrow(df3))){
-                stop("merge changed dimensions.")
-            }
-        } else {
-            if(nrow(df3)!=nrow(df1)){
-                cat(paste0("nrow(",name.df1,"):"),nrow(df1),"\n")
-                cat(paste0("nrow(",name.df2,"):"),nrow(df2),"\n")
-                cat(paste0("nrow(",name.df3,"):"),nrow(df3),"\n")
-                stop("merge changed dimensions")        
-            }
+        if(!(all(df1[,rowcol,with=F]%in%df3[,rowcol,with=F]) && nrow(df1)==nrow(df3))){
+            stop("merge changed dimensions.")
         }
+        ## if(nrow(df3)!=nrow(df1)){
+        ##  cat(paste0("nrow(",name.df1,"):"),nrow(df1),"\n")
+        ##  cat(paste0("nrow(",name.df2,"):"),nrow(df2),"\n")
+        ##  cat(paste0("nrow(",name.df3,"):"),nrow(df3),"\n")
+        ##  stop("merge changed dimensions")        
+        ## }
+        df3 <- df3[order(get(rowcol))]
+        
+        df3[,(rowcol):=NULL]
     }
-
-    if(is.data.table(df3)){
-        if(reorder){
-            df3 <- df3[order(get(rowcol))]
-        }
-        ## df3 <- df3[,!(rowcol),with=F]
-        df3[,rowcol:=NULL,with=FALSE]
-    } else {
-        if(reorder){
-            df3 <- df3[order(df3[,rowcol]),]
-        }
-        df3 <- df3[,setdiff(colnames(df3),rowcol)]
-    }
+    
 
 ###### check if new column names have been created
     if(!all(colnames(df3) %in% c(colnames(df1),colnames(df2)))){
         warning("Merge created new column names. Not merging by all common columns?")
+    }
+
+    if(was.df.df1){
+        df3 <- as.data.frame(df3)
     }
 
     df3

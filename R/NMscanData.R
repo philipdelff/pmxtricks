@@ -71,7 +71,7 @@ type <- NULL
 
 
 ###{ read all output tables and merge to max one firstonly and max one row
-    tables <- NMscanTables(file,details=T)
+    tables <- NMscanTables(file,details=T,as.dt=FALSE)
     data <- tables$data
     overview.tables <- tables$meta
     
