@@ -14,4 +14,4 @@ test_that("Several tests",{
     expect_equal(signif2(0,1),"0")
     expect_equal(signif2(0,3),"0.00")
 
-}
+})

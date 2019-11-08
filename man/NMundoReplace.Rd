@@ -19,9 +19,10 @@ simply overwrite input.txt with contents of backup_input.txt
 \seealso{
 Other Nonmem: \code{\link{NMgetSection}},
   \code{\link{NMreadCsv}}, \code{\link{NMreadRun}},
-  \code{\link{NMreadTab}}, \code{\link{NMreplacePart}},
-  \code{\link{NMrunLog}}, \code{\link{NMscanTables}},
-  \code{\link{NMtransInput}}, \code{\link{NMwriteData}},
-  \code{\link{extFormat}}, \code{\link{sumofork}}
+  \code{\link{NMreadTabDF}}, \code{\link{NMreadTab}},
+  \code{\link{NMreplacePart}}, \code{\link{NMrunLog}},
+  \code{\link{NMscanTables}}, \code{\link{NMtransInput}},
+  \code{\link{NMwriteData}}, \code{\link{extFormat}},
+  \code{\link{sumofork}}
 }
 \concept{Nonmem}

@@ -38,11 +38,9 @@ test_that("a dt and a df",{
     df2 <- data.frame(y=letters[1:11],
                       x2 = 1:11)
 
+    ### notice, this is a left join
     res3 <- merge(dt1,df2)
     
     expect_equal_to_reference(res3,fileRef)
         
 })
-
-
-

@@ -14,9 +14,11 @@
 ##' signif2(x,3)
 ##' signif2(x,3,add=FALSE)
 ##' signif2(c(.2,11.84),2)
-##' signif2(3205,-1)
 ##' signif2(0,1)
 ##' signif2(0,3)
+##' \dontrun{
+##' signif2(3205,-1)
+##' }
 ##' @export
 
 

@@ -13,6 +13,8 @@ means(x, type = "arithmetic", na.rm = FALSE, z.rm = FALSE,
 
 \item{type}{type of mean. Default is arithmetic, geometric is available as well. Only first letters needed, so say "geo" or even "g" is enough.}
 
+\item{na.rm}{Remove NA's before doing calculations?}
+
 \item{z.rm}{removes zeros before calculation? Default is FALSE. Can only be TRUE if type="geometric".}
 
 \item{ci}{if TRUE, a data.frame including point estimate and confidence interval returned. If FALSE, a numeric representing the mean value returned.}

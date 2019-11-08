@@ -4,18 +4,14 @@
 \alias{NMreadTab}
 \title{Read a table file from NONMEM}
 \usage{
-NMreadTab(file, silent = F, skip, sep = " ", debug = F)
+NMreadTab(file, silent = F, ..., debug = F)
 }
 \arguments{
 \item{file}{path to NONMEM table file}
 
 \item{silent}{logical stating whether or not information is printed.}
 
-\item{skip}{Number of lines skipes in the start of the file. Some files have
-additional headers so if table looks wierd try adding 1 to skip. Notice
-that the lines TABLE 1 etc from Nonmem will be handled automatically.}
-
-\item{sep}{The seperator to use in read.table. If " " is used, any number of blanks will work as one separator in the datafile. This should be OK for Nonmem output as the function is intended for but may be a problem for other tables.}
+\item{...}{Arguments passed to fread.}
 
 \item{debug}{Start by calling browser()?}
 }
@@ -28,9 +24,10 @@ Read a table file from NONMEM
 \seealso{
 Other Nonmem: \code{\link{NMgetSection}},
   \code{\link{NMreadCsv}}, \code{\link{NMreadRun}},
-  \code{\link{NMreplacePart}}, \code{\link{NMrunLog}},
-  \code{\link{NMscanTables}}, \code{\link{NMtransInput}},
-  \code{\link{NMundoReplace}}, \code{\link{NMwriteData}},
-  \code{\link{extFormat}}, \code{\link{sumofork}}
+  \code{\link{NMreadTabDF}}, \code{\link{NMreplacePart}},
+  \code{\link{NMrunLog}}, \code{\link{NMscanTables}},
+  \code{\link{NMtransInput}}, \code{\link{NMundoReplace}},
+  \code{\link{NMwriteData}}, \code{\link{extFormat}},
+  \code{\link{sumofork}}
 }
 \concept{Nonmem}

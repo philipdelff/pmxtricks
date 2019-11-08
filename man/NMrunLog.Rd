@@ -21,9 +21,10 @@ get an overview of your Nonmem runs
 \seealso{
 Other Nonmem: \code{\link{NMgetSection}},
   \code{\link{NMreadCsv}}, \code{\link{NMreadRun}},
-  \code{\link{NMreadTab}}, \code{\link{NMreplacePart}},
-  \code{\link{NMscanTables}}, \code{\link{NMtransInput}},
-  \code{\link{NMundoReplace}}, \code{\link{NMwriteData}},
-  \code{\link{extFormat}}, \code{\link{sumofork}}
+  \code{\link{NMreadTabDF}}, \code{\link{NMreadTab}},
+  \code{\link{NMreplacePart}}, \code{\link{NMscanTables}},
+  \code{\link{NMtransInput}}, \code{\link{NMundoReplace}},
+  \code{\link{NMwriteData}}, \code{\link{extFormat}},
+  \code{\link{sumofork}}
 }
 \concept{Nonmem}

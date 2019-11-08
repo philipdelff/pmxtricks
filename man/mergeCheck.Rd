@@ -21,24 +21,24 @@ error will be returned.}
 a data.frame resulting from merging df1 and df2
 }
 \description{
-So far, this one can only check that we get the same no of rows as
-the first df supplied. It is likely that much faster, better and
-prettier functions are available out there. But for 95% of the
-author's merges, this does exactly the checks and ordering, he
-wants. And it only uses base R for data.frames. It also supports
-data.tables for compatibility but if you use data.table, there are
-faster ways to do this within that framework.
+So far, this one can only check that we get the same no of rows as the first
+df supplied. It is likely that much faster, better and prettier functions
+are available out there. But for 95% of the author's merges, this does
+exactly the checks and ordering, he wants. And it only uses base R for
+data.frames. It also supports data.tables for compatibility but if you use
+data.table, there may be faster ways to do this within that framework.
 }
 \seealso{
 Other DataWrangling: \code{\link{NMaddColumns}},
   \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
-  \code{\link{NMscanData}}, \code{\link{compareNames}},
-  \code{\link{factor2}}, \code{\link{findCovs_df}},
-  \code{\link{findCovs}}, \code{\link{findVars}},
-  \code{\link{newNames}}, \code{\link{objInfo}},
-  \code{\link{rbindIntersect}}, \code{\link{rbindUnion}},
-  \code{\link{roundDF}}, \code{\link{roundResp0}},
-  \code{\link{selectVars}}, \code{\link{signif2}},
-  \code{\link{stampObj}}, \code{\link{tmpcol}}
+  \code{\link{NMscanDataDT}}, \code{\link{NMscanData}},
+  \code{\link{compareNames}}, \code{\link{factor2}},
+  \code{\link{findCovs_df}}, \code{\link{findCovs}},
+  \code{\link{findVars}}, \code{\link{newNames}},
+  \code{\link{objInfo}}, \code{\link{rbindIntersect}},
+  \code{\link{rbindUnion}}, \code{\link{roundDF}},
+  \code{\link{roundResp0}}, \code{\link{selectVars}},
+  \code{\link{signif2}}, \code{\link{stampObj}},
+  \code{\link{tmpcol}}
 }
 \concept{DataWrangling}

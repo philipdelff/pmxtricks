@@ -36,14 +36,21 @@ NMreadTab <- function(file,silent=F,...,debug=F) {
     }
     dt1 <- dt1[grep("^ *[[:alpha:]]",as.character(get(cnames[1])),invert=T,perl=T)]
 
+    cols.dup <- duplicated(colnames(dt1))
+    if(any(cols.dup)){
+        warning(paste0("Duplicated column names found: ",paste(colnames(dt1)[cols.dup],collapse=","),". Cleaning."),immediate.=TRUE)
+        dt1 <- dt1[,unique(cnames),with=FALSE]
+    }
+
     if(!silent){
         message("Making sure everything is numeric")
     }
-    dt1 <- dt1[,lapply(.SD,as.numeric)]
-    if(any(duplicated(colnames(dt1)))){
-        warning("Duplicated column names found. Cleaning.")
-        dt1 <- dt1[,unique(cnames),with=FALSE]
+
+    cnames <- colnames(dt1)
+    for (col in cnames) {
+        set(dt1, j=col, value=as.numeric(dt1[[col]]))
     }
+    
     
     return(dt1)
 }

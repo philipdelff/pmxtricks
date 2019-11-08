@@ -57,13 +57,18 @@ NMcompAllRes
 *** TODO Tests
 ** Improvements
 *** mergeCheck
-**** TODO base check on actual rows
+**** TODO Convert to data.tables first
+And then - if needed - convert back to data.frames.
+**** WAITING base check on actual rows
 mergeCheck counts number of rows in df1 and df3. This is not entirely safe in
 case all.x=F. It can happen that rows have no match, and others have multiple
 matches, and that the resulting number of rows happen to be the same as for df1.
 
 In stead, add a row counter to df1. Look in df3 whether all values of the row
 counter are there, and that no of rows is retained.
+**** DONE Check uniqueness of column names
+     CLOSED: [2019-11-08 Fri 10:03]
+     Give a warning if merge results in new column names col.x and col.y.
 *** NMreadTab
 **** TODO Option to use colnames for all subtables?
 With the current implementation, this would make processing extremely much slower.

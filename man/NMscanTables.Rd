@@ -4,12 +4,14 @@
 \alias{NMscanTables}
 \title{read all output data tables in nonmem run}
 \usage{
-NMscanTables(file, details = F)
+NMscanTables(file, details = F, dt = FALSE)
 }
 \arguments{
 \item{file}{the nonmem file to read (normally .mod or .lst)}
 
 \item{details}{If TRUE, metadata is added to output. In this case, you get a list. I'd say, enable if doing programming.}
+
+\item{dt}{return data.tables? Tables will not be keyed.}
 }
 \value{
 A list of all the tables as data.frames. If details=TRUE, this is in one element, called data, and meta is another element. If not, only the element corresponding to data is returned.
@@ -20,9 +22,10 @@ read all output data tables in nonmem run
 \seealso{
 Other Nonmem: \code{\link{NMgetSection}},
   \code{\link{NMreadCsv}}, \code{\link{NMreadRun}},
-  \code{\link{NMreadTab}}, \code{\link{NMreplacePart}},
-  \code{\link{NMrunLog}}, \code{\link{NMtransInput}},
-  \code{\link{NMundoReplace}}, \code{\link{NMwriteData}},
-  \code{\link{extFormat}}, \code{\link{sumofork}}
+  \code{\link{NMreadTabDF}}, \code{\link{NMreadTab}},
+  \code{\link{NMreplacePart}}, \code{\link{NMrunLog}},
+  \code{\link{NMtransInput}}, \code{\link{NMundoReplace}},
+  \code{\link{NMwriteData}}, \code{\link{extFormat}},
+  \code{\link{sumofork}}
 }
 \concept{Nonmem}

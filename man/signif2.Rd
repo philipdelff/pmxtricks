@@ -27,20 +27,23 @@ as.character(signif(x,3))
 signif2(x,3)
 signif2(x,3,add=FALSE)
 signif2(c(.2,11.84),2)
-signif2(3205,-1)
 signif2(0,1)
 signif2(0,3)
+\dontrun{
+signif2(3205,-1)
+}
 }
 \seealso{
 Other DataWrangling: \code{\link{NMaddColumns}},
   \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
-  \code{\link{NMscanData}}, \code{\link{compareNames}},
-  \code{\link{factor2}}, \code{\link{findCovs_df}},
-  \code{\link{findCovs}}, \code{\link{findVars}},
-  \code{\link{mergeCheck}}, \code{\link{newNames}},
-  \code{\link{objInfo}}, \code{\link{rbindIntersect}},
-  \code{\link{rbindUnion}}, \code{\link{roundDF}},
-  \code{\link{roundResp0}}, \code{\link{selectVars}},
-  \code{\link{stampObj}}, \code{\link{tmpcol}}
+  \code{\link{NMscanDataDT}}, \code{\link{NMscanData}},
+  \code{\link{compareNames}}, \code{\link{factor2}},
+  \code{\link{findCovs_df}}, \code{\link{findCovs}},
+  \code{\link{findVars}}, \code{\link{mergeCheck}},
+  \code{\link{newNames}}, \code{\link{objInfo}},
+  \code{\link{rbindIntersect}}, \code{\link{rbindUnion}},
+  \code{\link{roundDF}}, \code{\link{roundResp0}},
+  \code{\link{selectVars}}, \code{\link{stampObj}},
+  \code{\link{tmpcol}}
 }
 \concept{DataWrangling}
