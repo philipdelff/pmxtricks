@@ -7,8 +7,6 @@
 ##'
 ##' @param data The dataset to write to Nonmem.
 ##' @param file The file to write to.
-##' @param drop Specific columns to drop before writing the data to file.
-##' @param drop.lowercase Drop all columns which names containe lowercase letters
 ##' @param write.csv Write to csv file?
 ##' @param write.RData In case you want to save to .RData object. Not recommended. Use write.rds instead.
 ##' @param write.rds write an rds file?
@@ -33,10 +31,10 @@
 ### end todo
 
 
-NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,write.RData=F,write.rds=write.csv,force.row=FALSE,script,args.stamp,debug=FALSE){
+NMwriteData <- function(data,file,write.csv=TRUE,write.RData=F,write.rds=write.csv,force.row=FALSE,script,args.stamp,debug=FALSE){
     if(debug) browser()
     stopifnot(is.data.frame(data))
-    data.out <- as.data.frame(data)
+    ## data.out <- as.data.frame(data)
     doStamp <- TRUE
     if(missing(args.stamp)) {
         args.stamp <- list()
@@ -48,21 +46,24 @@ NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,
         args.stamp$script <- script
         doStamp <- TRUE
     }
+
+### these features have been dropped. Usually NMwriteData saves an rds as well
+### which will contain all data to carry forward. Hence, dropping columns belong
+### before calling NMwriteDate. NMwriteData writes data, that's all.
     
-    if(!is.null(drop)) data.out <- data.out[,-which(names(data.out)%in%drop),drop=FALSE]
+    ## if(!is.null(drop)) data <- data[,-which(names(data)%in%drop),drop=FALSE]
+    ## if(drop.lowercase) data <- data[,which(toupper(names(data))==names(data))]
 
-    if(drop.lowercase) data.out <- data.out[,which(toupper(names(data.out))==names(data.out))]
-
-    ## I guess we should always quote. Strings could contain commas.
-    ## quote <- TRUE
-    ## no, we must not quote. ID is often a character. If quoted, nonmem will not be able to read. So avoid commas in strings. Maybe look for commas and report error if found?
+    ## we must not quote. ID is often a character. If quoted, nonmem will not be
+    ## able to read. So avoid commas in strings. Maybe look for commas and
+    ## report error if found?
     quote <- FALSE
 
     ## only report numerics to user. But this is not good enough. Only report
     ## until first character. Moreover, it's not this easy. Variables may be
     ## character but still be interpretable as numeric. Often ID is like this.
     
-    ## col.is.num <- sapply(data.out,is.numeric)
+    ## col.is.num <- sapply(data,is.numeric)
     ## stopifnot(any(col.is.num))
 
 ### this function is used to replace .csv or whatever ending is used to .rds, .RData etc. file is path, ext is extension without ., e.g. "rds".
@@ -74,18 +75,19 @@ NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,
     
     cat("Nonmem data file:",file,"\n")
     cat("For NonMem:\n")
-    cat("$INPUT",paste(colnames(data.out),collapse=" "),"\n")
+    cat("$INPUT",paste(colnames(data),collapse=" "),"\n")
     ##    cat("$DATA", sub(pattern="^E:/",replacement="/project/",file,ignore.case=TRUE))
     cat("$DATA", file)
     ## if(!quote) cat(" IGN=@")
     cat(" IGN=@")
-    if("FLAG"%in%colnames(data.out)) cat(" IGNORE=(FLAG.NE.0)")
+    if("FLAG"%in%colnames(data)) cat(" IGNORE=(FLAG.NE.0)")
     cat("\n")
 
     written <- FALSE
     if(write.csv){
         opt.orig <- options(scipen=15)
-        write.csv(data.out,na=".",quote=quote,row.names=FALSE,file=file)
+        file.csv <- transFileName(file,"csv")
+        write.csv(data,na=".",quote=quote,row.names=FALSE,file=file.csv)
         options(opt.orig)
         written <- TRUE
     }
@@ -93,8 +95,8 @@ NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,
         name.data <- deparse(substitute(data))
         if(!grepl("\\..+$",file)) stop("filename could not be translated to .RData. Choose a .csv file name.")
         file.RData <- transFileName(file,"RData")
-        if(doStamp) data.out <- do.call(stampObj,append(list(data=data.out,writtenTo=file.RData),args.stamp))
-        assign(name.data,data.out)
+        if(doStamp) data <- do.call(stampObj,append(list(data=data,writtenTo=file.RData),args.stamp))
+        assign(name.data,data)
         save(list=name.data,file=file.RData)
         written <- TRUE
     }
@@ -104,10 +106,10 @@ NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,
         if(!grepl("\\..+$",file)) stop("filename could not be translated to .rds. Choose a .csv file name.")
         file.rds <- transFileName(file,"rds")
         
-        if(doStamp) data.out <- do.call(stampObj,append(list(data=data.out,writtenTo=file.rds),args.stamp))
+        if(doStamp) data <- do.call(stampObj,append(list(data=data,writtenTo=file.rds),args.stamp))
 
 
-        saveRDS(data.out,file=file.rds)
+        saveRDS(data,file=file.rds)
         written <- TRUE
     }
     if(written){
@@ -115,6 +117,6 @@ NMwriteData <- function(data,file,drop=NULL,drop.lowercase=FALSE,write.csv=TRUE,
     } else {
         cat("Data returned but not written to file(s).\n")
     }
-    invisible(data.out)
+    invisible(data)
 }
 

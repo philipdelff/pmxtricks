@@ -56,7 +56,8 @@ mergeCheck <- function(df1,df2,debug=F,...){
     
     df3 <- merge(df1,df2,...)
     if(reorder){
-        if(!(all(df1[,rowcol,with=F]%in%df3[,rowcol,with=F]) && nrow(df1)==nrow(df3))){
+        if(!(all(df1[,get(rowcol)]%in%df3[,get(rowcol)]) && nrow(df1)==nrow(df3))){
+            
             stop("merge changed dimensions.")
         }
         ## if(nrow(df3)!=nrow(df1)){

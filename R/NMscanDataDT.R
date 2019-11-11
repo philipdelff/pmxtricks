@@ -79,7 +79,7 @@ NMscanDataDT <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OC
 
 
 ###{ read all output tables and merge to max one firstonly and max one row
-    tables <- NMscanTables(file,details=T,dt=T)
+    tables <- NMscanTables(file,details=T,as.dt=T)
     data <- tables$data
     overview.tables <- tables$meta
 

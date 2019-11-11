@@ -52,6 +52,8 @@ NMscanTables <- function(file,details=F,as.dt=TRUE){
     if(!as.dt) {
         tables <- lapply(tables,as.data.frame)
         meta <- as.data.frame(meta)
+    } else {
+        meta <- as.data.table(meta)
     }
     
     if(details){
