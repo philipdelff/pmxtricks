@@ -5,7 +5,7 @@
 ##' @importFrom xpose4 read.npc.vpc.results
 ##' @family Nonmem.
 
-## This function is not ready yet, so not exported
+## This function is not ready, so not exported. Not sure it ever should be. There is a better option in the vpc package, I think.
 
 readVPC <- function(file,ifMissing=NULL,debug=F){
     if(debug) browser()
