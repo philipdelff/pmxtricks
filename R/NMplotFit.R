@@ -264,7 +264,7 @@ NMplotFit <- function(data,
     scalevals.colour <-
         genScaleLevels(cols.levels,col.id,values=colours)
 
-    
+    pklong4[,grp.line.1:=paste(get(col.id),variable,type)]
     p1 <- ggplot(pklong4)
     if("val.line"%in%colnames(pklong4)){
 
@@ -273,7 +273,7 @@ NMplotFit <- function(data,
         ##     geom_line(aes_string(col.time,y="val.line",colour=col.idwithin,linetype="variable",size="type"))+
         ##     scale_linetype_manual(breaks=scalevals.linetype$names.levels,values=scalevals.linetype$values.fac,name=NULL)
         p1 <- p1+
-            geom_line(aes_string(col.time,y="val.line",linetype="variable",size="type"),data=function(x)subset(x,ID!="mean"))+
+            geom_line(aes_string(col.time,y="val.line",linetype="variable",size="type",group="grp.line.1"),data=function(x) x[get(col.id)!="mean"])+
             geom_line(aes_string(col.ntim,y="val.line",linetype="variable",size="type"),data=function(x)subset(x,ID=="mean"))+
             scale_linetype_manual(breaks=scalevals.linetype$names.levels,values=scalevals.linetype$values.fac,name=NULL)
     }
