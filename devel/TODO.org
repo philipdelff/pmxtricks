@@ -52,14 +52,29 @@ NMcompAllRes
 **** All subjects have observations?
 **** Negative actual time (since first or previous dose) when corresponding nominal time is neg
 **** negative doses
+**** negative dose times
+**** negative concentrations
 **** Nomminal dose vs actual dose
+**** positive AMT for !EVID%in%c(1,4)
+**** NA EVID, EVID in 1:4
+**** negative time (for nonmem)
 ** Documentation
 *** TODO Tests
 ** Improvements
 *** mergeCheck
-**** TODO Convert to data.tables first
+**** TODO Add support for data.frame merge.
+The would mean that input is converted to df's and then merged. The
+problem is that merge.data.table works slightly differently,
+especially without by. Maybe it would be sufficient to support adding
+of dummy columns to merge by and get a cartesian product.
+
+Here is an alternative way to get the cartesian product
+https://stackoverflow.com/questions/19440769/cartesian-join-in-data-table/20645902
+**** DONE Convert to data.tables first
+     CLOSED: [2019-11-19 Tue 10:41]
 And then - if needed - convert back to data.frames.
-**** WAITING base check on actual rows
+**** DONE base check on actual rows
+     CLOSED: [2019-11-19 Tue 10:41]
 mergeCheck counts number of rows in df1 and df3. This is not entirely safe in
 case all.x=F. It can happen that rows have no match, and others have multiple
 matches, and that the resulting number of rows happen to be the same as for df1.

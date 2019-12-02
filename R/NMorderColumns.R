@@ -18,10 +18,19 @@
 ##' @export
 
 
-NMorderColumns <- function(data,first,last,debug=F){
+NMorderColumns <- function(data,first,last,last.lower=T,last.chars=T,nomtime="NOMTIME",row="ROW",debug=F){
     if(debug) browser()
-    if(missing(first)){
-        first <- c("ROW","ID","NTIM","TIME","EVID","CMT","AMT","RATE","DV","MDV","FLAG","OCC","ROUTE","GRP","TRIAL")
+    first1 <- c(row,"ID",nomtime,"TIME","EVID","CMT","AMT","RATE","DV","MDV")
+    if(!missing(first)){
+        first1 <- c(first1,first)
+        ## first2
+        nms <- names(data)
+        missing <- setdiff(setdiff(first1,"RATE"),nms)
+        if(length(missing)) warning(paste0("These standard nonmem columns were not found in data:\n",paste(missing,collapse="\n")))
+        first2 <- c("FLAG","OCC","ROUTE","GRP","TRIAL","DRUG","STUDY")
+        first <- c(first1,first2)
+    } else {
+        first <- first1
     }
     ## others in alphebetically sorted 
     ## last is if some should be after the alphebetically ordered
@@ -31,23 +40,61 @@ NMorderColumns <- function(data,first,last,debug=F){
     ## Then follows whatever variables contain a lowercase letter
     nms <- names(data)
 ### checks of existense of standard columns
-    missing <- setdiff(setdiff(first,"RATE"),nms)
-    if(length(missing)) warning(paste0("These standard nonmem columns were not found in data:\n",paste(missing,collapse="\n")))
 
     firstpts <- match(nms,c(first))
     lastpts <- match(nms,c(last))
     lowerpts <- rep(NA,length(lastpts))
-    lowerpts[grep("[a-z]",names(data))] <- 1
-    lowerpts[grep("[\\.]",names(data))] <- 1
+    if(last.lower){
+        lowerpts[grep("[a-z]",names(data))] <- 1
+        lowerpts[grep("[\\.]",names(data))] <- 1
+    }
     notmatched <- rowSums(cbind(firstpts,lastpts),na.rm=TRUE)==0
     middlepts <- numeric(length(firstpts))
     middlepts[which(notmatched)[order(nms[notmatched])]] <- 1:sum(notmatched)
 
     ord <- order(rowSums(cbind(firstpts,middlepts*1E3,lastpts*1E5,lowerpts*1e7),na.rm=TRUE))
     if(is.data.table(data)){
-        data.out <- data[,nms[ord],with=F]
+        ##  data.out <- data[,nms[ord],with=F]
+        setcolorder(data,nms[ord])
+        data.out <- data
+        was.data.frame <- FALSE
     } else {
         data.out <- data[,nms[ord]]
+        was.data.frame <- TRUE
     }
+
+### there is no is.POSIXct function available in base R. There is one in lubridate, but not to depend on that, we do a simple one here
+    is.timestamp <- function(x){
+        inherits(x, "POSIXct") ||
+            inherits(x, "POSIXlt") ||
+            inherits(x, "POSIXt")  ||
+            inherits(x, "Date")
+        }
+    
+##### last.chars: If columns cannot be converted to numerics, they are very last.
+    if(last.chars){
+        if(was.data.frame) data.out <- as.data.table(data.out)
+        
+        
+        cnames <- colnames(data.out)
+        types <- sapply(data.out,class)
+        ## types
+        ## logicals have to go last, so no testing
+        cols.char <- cnames[!types%in%c("numeric","integer","logical")]
+        ## cols.char
+        suppressWarnings({
+            if.penal <- data.out[,lapply(.SD,function(x)any(is.na(as.numeric(as.character(x[!is.na(x)]))))||is.timestamp(x)),.SDcols=cols.char]
+        })
+        to.penal <- names(if.penal)[unlist(if.penal)]
+        to.penal <- c(to.penal,cnames[types=="logical"])
+        if(length(to.penal)){        
+            no.penal <- setdiff(cnames,to.penal)
+            message("The following columns will be last because they could not be converted to numeric:\n",paste(to.penal,collapse=", "))
+            setcolorder(data.out,c(no.penal,to.penal))
+        }
+        if(was.data.frame) {data.out <- as.data.frame(data.out)}
+        
+    }
+    
     data.out
 }

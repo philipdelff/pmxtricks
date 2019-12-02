@@ -58,6 +58,8 @@
 
 ####### todo
 
+## when plotting ipred (not mean.ipred), they must be grouped by ID and col.grp. Can we colour by grp in general?
+
 ### check validity of geom.dv etc
 
 ### I dont think IDwithin is working
@@ -221,9 +223,11 @@ NMplotFit <- function(data,
         ## the ones to include in the scale
         ## pklong4[!is.na(get(col.val)),unique(get(col(var)))]
         ## the factor orders of these values
-        Nval.fac.type <- as.numeric(as.factor(pklong4[!is.na(get(col.val)),unique(get(col.var))]))
+        ## this little detour with rows because col.val can be of length>1
+        rows <- rowSums(!is.na(pklong4[,col.val,with=F]))>0
+        Nval.fac.type <- as.numeric(as.factor(pklong4[rows,unique(get(col.var))]))
         ## the names of these values
-        names.levels.type <- as.character(pklong4[!is.na(get(col.val)),unique(get(col.var))])
+        names.levels.type <- as.character(pklong4[rows,unique(get(col.var))])
         ## the number of factor levels
         n.levels.type <- length(levels(pklong4[,unique(get(col.var))]))
         values.fac.type <- rep(NA_integer_,n.levels.type)
@@ -248,8 +252,8 @@ NMplotFit <- function(data,
     if("mean"%in%pklong4[,get(col.idwithin)]) {
         l.ID <- levels(pklong4[,get(col.idwithin)])
         pklong4[,(col.idwithin):=factor(as.character(get(col.idwithin)),
-                            levels=c("mean",l.ID[l.ID!="mean"])
-                            )]
+                                        levels=c("mean",l.ID[l.ID!="mean"])
+                                        )]
         colours <- c("#000000",gg_color_hue(length(unique(pklong4[,get(col.idwithin)]))))
     } else {
         colours <- gg_color_hue(length(unique(pklong4[,get(col.idwithin)])))
@@ -263,27 +267,40 @@ NMplotFit <- function(data,
     
     p1 <- ggplot(pklong4)
     if("val.line"%in%colnames(pklong4)){
+
+        ## with colour - you easily get too many, so it's not good
+        ## p1 <- p1+
+        ##     geom_line(aes_string(col.time,y="val.line",colour=col.idwithin,linetype="variable",size="type"))+
+        ##     scale_linetype_manual(breaks=scalevals.linetype$names.levels,values=scalevals.linetype$values.fac,name=NULL)
         p1 <- p1+
-            geom_line(aes_string(col.time,y="val.line",colour=col.idwithin,linetype="variable",size="type"))+
+            geom_line(aes_string(col.time,y="val.line",linetype="variable",size="type"),data=function(x)subset(x,ID!="mean"))+
+            geom_line(aes_string(col.ntim,y="val.line",linetype="variable",size="type"),data=function(x)subset(x,ID=="mean"))+
             scale_linetype_manual(breaks=scalevals.linetype$names.levels,values=scalevals.linetype$values.fac,name=NULL)
     }
     if("val.point"%in%colnames(pklong4)){
+        ## with colour - you easily get too many, so it's not good
+        ## p1 <- p1+
+        ##     geom_point(aes_string(col.time,"val.point",colour=col.idwithin,size="type"))+
+        ##     scale_shape_manual(breaks=scalevals.shape$names.levels,values=scalevals.shape$values.fac,name=NULL)
         p1 <- p1+
-            geom_point(aes_string(col.time,"val.point",colour=col.idwithin,size="type"))+
-            scale_shape_manual(breaks=scalevals.shape$names.levels,values=scalevals.shape$values.fac,name=NULL) 
+            geom_point(aes_string(col.time,"val.point",size="type"),data=function(x)subset(x,ID!="mean"))+
+            geom_point(aes_string(col.ntim,"val.point",size="type"),data=function(x)subset(x,ID=="mean"))+
+            scale_shape_manual(breaks=scalevals.shape$names.levels,values=scalevals.shape$values.fac,name=NULL)
     }
     if(all(c("val.ci.l","val.ci.u")%in%colnames(pklong4))){
         ## geom_linerange(aes(NOMTIME,ymin=mean.grp.l,ymax=mean.grp.u,linetype=variable),data=function(d)d[variable=="DV"])+
-        p1 <- p1 + geom_errorbar(aes_string(col.ntim,ymin="val.ci.l",ymax="val.ci.u",linetype="variable"))
+        p1 <- p1 + geom_errorbar(aes_string(col.ntim,ymin="val.ci.l",ymax="val.ci.u"))
+##                                           ,linetype="variable"))
     }
-    if(any(c("cal.point","val.line")%in%colnames(pklong4))){
-    p1 <- p1+
+    if(any(c("val.point","val.line")%in%colnames(pklong4))){
+        p1 <- p1+
 ### this should only be in case of points or lines
-        scale_size_manual(breaks=scalevals.size$names.levels,values=scalevals.size$values.fac,name=NULL)
+            scale_size_manual(limits=scalevals.size$names.levels,values=scalevals.size$values.fac,name=NULL)
     }
-    p1 <- p1 +
-        scale_colour_manual(breaks=scalevals.colour$names.levels,values=scalevals.colour$values.fac)
-
+### if colouring is not used, this must be disabled
+    ## p1 <- p1 +
+    ##     scale_colour_manual(breaks=scalevals.colour$names.levels,values=scalevals.colour$values.fac)
+    
     if(log.y){
         p1 <- p1+scale_y_log10()
     }

@@ -104,7 +104,7 @@
 
 
 
-ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp, amt , id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, par.prof=NULL, x.inc,grp.label = grp, debug = F, debug.sheet){
+ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp, amt , id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, par.prof=NULL, x.inc,grp.label = grp, labels=TRUE, debug = F, debug.sheet){
     if(debug) browser()
 
 
@@ -134,8 +134,8 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
 
     
 ##### check arguments
-    stopifnot(is.data.frame(data))
-    stopifnot(x%in%colnames(data))
+    if(!is.data.frame(data)) stop("data has to be a data.frame.")
+    if(!x%in%colnames(data)) {stop(paste(x,"not found in data (see x argument)."))}
     ## if data does not contain an EVID column, it is assumed to be only observations
     if(!"EVID"%in%colnames(data)) x[,"EVID"] <- 0
 
@@ -523,7 +523,14 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
         ##        if(unique(tmp2$sheet)==30) browser()
         message(paste0(unique(tmp2$sheet),": ", ptitle, " created." ))
         ##            cat("s.dv.dos is",s.dv.dos,"\n")
+
+        if(!labels){
+            p <- p+theme(
+                       strip.background = element_blank(),
+                       strip.text.x = element_blank())
+        }
         p
+        
     }
     
     
