@@ -1,9 +1,5 @@
-##' Plot individual profiles and doses based on NM style dataset data,
-##' run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp,
-##' amt = "AMT", id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL,
-##' scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2,
-##' facet=id, par.prof=NULL, x.inc,grp.label = grp, debug = F,
-##' debug.sheet
+##' Plot individual profiles and doses based on NM style dataset
+##' 
 ##' @param data The dataset to plot.
 ##' @param run The main title of the plot. Called run becaus you often
 ##'     want a Nonmem run name here.
@@ -44,6 +40,10 @@
 ##'     (including 80 mg and 280 mg). In order to sort correctly, you
 ##'     must use the numeric variable for grp. But in order to get
 ##'     nice labels, use the character variable for labels.
+##' @param labels The default is to include the subject id's in labels
+##'     above the plots (using facet_wrap()). Set this to FALSE to
+##'     remove these labels in order to have more space for the plots
+##'     themselves.
 ##' @param debug Start by calling debug()?
 ##' @param debug.sheet If something goes wrong when plotting, this may
 ##'     be the debug method to use. Pass an integer to call browser()

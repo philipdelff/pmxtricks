@@ -9,7 +9,7 @@ test_that("basic",{
     df2 <- data.frame(y=letters[1:11],
                       x2 = 1:11)
 
-    mc1 <- mergeCheck(df1,df2)
+    mc1 <- mergeCheck(df1,df2,by="y")
     
     expect_equal_to_reference(mc1,fileRef)
 })
@@ -24,7 +24,7 @@ test_that("increasing number of rows",{
     df2 <- data.frame(y=c("a",letters[1:11]),
                       x2 = c(44,1:11))
 
-    expect_error( mergeCheck(df1,df2))
+    expect_error( mergeCheck(df1,df2,by="y"))
     
 })
 
@@ -39,7 +39,7 @@ test_that("a dt and a df",{
                       x2 = 1:11)
 
 ### notice, this is a left join
-    res3 <- mergeCheck(dt1,df2)
+    res3 <- mergeCheck(dt1,df2,by="y")
     
     expect_equal_to_reference(res3,fileRef)
     
@@ -56,7 +56,7 @@ test_that("a df and a dt",{
                       x2 = 1:11)
 
 
-    res4 <- mergeCheck(df2,dt1,all.x=T)
+    res4 <- mergeCheck(df2,dt1,by="y",all.x=T)
     
     expect_equal_to_reference(res4,fileRef)
     

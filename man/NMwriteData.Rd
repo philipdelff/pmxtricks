@@ -4,18 +4,14 @@
 \alias{NMwriteData}
 \title{Write dataset for use in Nonmem (and R)}
 \usage{
-NMwriteData(data, file, drop = NULL, drop.lowercase = FALSE,
-  write.csv = TRUE, write.RData = F, write.rds = write.csv,
-  force.row = FALSE, script, args.stamp, debug = FALSE)
+NMwriteData(data, file, write.csv = TRUE, write.RData = F,
+  write.rds = write.csv, force.row = FALSE, script, args.stamp,
+  debug = FALSE)
 }
 \arguments{
 \item{data}{The dataset to write to Nonmem.}
 
 \item{file}{The file to write to.}
-
-\item{drop}{Specific columns to drop before writing the data to file.}
-
-\item{drop.lowercase}{Drop all columns which names containe lowercase letters}
 
 \item{write.csv}{Write to csv file?}
 

@@ -1,12 +1,12 @@
 Package: pmxtricks
 Type: Package
 Title: Every-day pharmacometrics helper functions
-Version: 0.0.4.905
+Version: 0.0.4.908
 Date: 2019-10-29
 Author: Philip Delff <philip@delff.dk>
 Maintainer: Philip Delff <philip@delff.dk>
 Description: Tools mainly for pharmacometrics related tasks. 
-License: GPL-3
+License: MIT
 RoxygenNote: 6.1.1
 Depends: R (>= 3.2.4)
 Imports: nonmem2R (>= 0.1.10),

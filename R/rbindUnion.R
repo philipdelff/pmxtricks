@@ -1,9 +1,9 @@
 ##' rbind data.frames by filling in NA's
 ##'
-##' This function is an implementation of the functionality as in rbind.fill in
-##' plyr. The intention of writing this function is to avoid being dependent on
-##' plyr. There is no advantage of using this function instead of
-##' plyr::rbind.fill or dplyr::bind_rows.
+##' This function is an implementation of the functionality as in
+##' plyr::rbind.fill for not being dependent on that package. The
+##' function is no longer maintained, and it is advised to use
+##' data.table::rbind(...,fill) instead.
 ##' 
 ##' @param ... data frames to stack. Must be of class data.frame.
 ##' @return a data.frame containing all data
@@ -13,9 +13,10 @@
 ##' x <- data.frame(a=1:3)
 ##' y <- data.frame(b=1:3,c="h")
 ##' z <- data.frame(a=4:5,b=letters[4:5],d=c(NA,5))
-##' rbindUnion(x,y,z)
-##' @author philip@delff.dk
-##' @export 
+##' pmxtricks:::rbindUnion(x,y,z)
+
+### No longer to be exported. Use data.table::rbind(...,fill=T) instead.
+
 
 rbindUnion <- function(...){
 

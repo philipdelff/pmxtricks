@@ -4,7 +4,8 @@
 \alias{genCovFun}
 \title{create R function that generates param values based on covariates}
 \usage{
-genCovFun(NMcode0, pars0, covs0, theta0, omega0, name.fun, debug = F)
+genCovFun(NMcode0, pars0, covs0, theta0, omega0, name.fun, verbose = F,
+  debug = F)
 }
 \arguments{
 \item{NMcode0}{Nonmem code that translates THETA and OMEGA into PK/PD
@@ -21,6 +22,9 @@ function.}
 \item{omega0}{default omega for resulting function. See details.}
 
 \item{name.fun}{The name of the function to be generated.}
+
+\item{verbose}{print the resulting function to the terminal? Default is
+FALSE.}
 
 \item{debug}{Start by calling browser()?}
 }

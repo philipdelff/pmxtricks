@@ -21,7 +21,7 @@ taken from https://www.r-bloggers.com/adding-watermarks-to-plots/
 }
 \examples{
 library(ggplot2)
-ff <- qplot(1:10, 11:20) + ggWater()
+ff <- qplot(1:10, 11:20) + pmxtricks:::ggWater()
 }
 \seealso{
 Other Plotting: \code{\link{NMplotBOV}},

@@ -3,7 +3,7 @@
 ##' The aim with this function is to take a (say PK) dataset and a pre-specified
 ##' table of flags, assign the flags automatically.
 ##'
-##' @param data.
+##' @param data The dataset to assign flags to.
 ##' @param tab.flags A data.frame containing at least these named columns: FLAG,
 ##'     flag, condition. Condition is disregarded for FLAG==0.
 ##' @param return.all If TRUE, both the edited dataset and the table of flags
@@ -12,6 +12,9 @@
 ##'     it does not contain "flag", flag will be set to "Value below LLOQ". LLOQ
 ##'     can only handle one value of LLOQ. This is insuffiecient for PKPD
 ##'     datasets. Likely to change.
+##' @param col.id The name of the subject ID column. Default is "ID".
+##' @param col.dv The name of the data value column. Default is "DV".
+##' @param debug Start by calling browser()?
 ##' @return The dataset with flags added. See parameter flags.return as well.
 ##' @import data.table
 ##' @export

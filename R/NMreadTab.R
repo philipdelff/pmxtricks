@@ -14,6 +14,15 @@ NMreadTab <- function(file,silent=F,...,debug=F) {
 
     if(debug) browser()
 
+
+#### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
+
+    TABLE <- NULL
+    TABLENO <- NULL
+
+### Section end: Dummy variables, only not to get NOTE's in pacakge checks
+
+    
     ## arg checks
     if(!is.character(file)) stop("file should be a character string",call.=F)
     if(!file.exists(file)) stop("argument file is not a path to an existing file.",call.=F)

@@ -4,14 +4,14 @@
 \alias{NMscanTables}
 \title{read all output data tables in nonmem run}
 \usage{
-NMscanTables(file, details = F, dt = FALSE)
+NMscanTables(file, details = F, as.dt = TRUE)
 }
 \arguments{
 \item{file}{the nonmem file to read (normally .mod or .lst)}
 
 \item{details}{If TRUE, metadata is added to output. In this case, you get a list. I'd say, enable if doing programming.}
 
-\item{dt}{return data.tables? Tables will not be keyed.}
+\item{as.dt}{return data.tables? Tables will not be keyed.}
 }
 \value{
 A list of all the tables as data.frames. If details=TRUE, this is in one element, called data, and meta is another element. If not, only the element corresponding to data is returned.

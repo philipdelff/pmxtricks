@@ -2,15 +2,18 @@
 % Please edit documentation in R/mergeCheck.R
 \name{mergeCheck}
 \alias{mergeCheck}
-\title{Merge, order, and check number of resulting rows.}
+\title{Merge, order, and check resulting rows and columns.}
 \usage{
-mergeCheck(df1, df2, debug = F, ...)
+mergeCheck(df1, df2, by, debug = F, ...)
 }
 \arguments{
 \item{df1}{A data.fram with the number of rows must should be obtained from
 the merge. The resulting data.frame will be ordered like df1.}
 
 \item{df2}{A data.frame that will be merged onto df1.}
+
+\item{by}{The column(s) to merge by. Character string (vector). Must be
+supplied.}
 
 \item{debug}{Start by calling browser()?}
 
@@ -21,12 +24,19 @@ error will be returned.}
 a data.frame resulting from merging df1 and df2
 }
 \description{
-So far, this one can only check that we get the same no of rows as the first
-df supplied. It is likely that much faster, better and prettier functions
-are available out there. But for 95% of the author's merges, this does
-exactly the checks and ordering, he wants. And it only uses base R for
-data.frames. It also supports data.tables for compatibility but if you use
-data.table, there may be faster ways to do this within that framework.
+This function is a useful wrapper for merges where df1 will be extended with
+columns from df2, i.e. all rows in df1 are retained, and no new rows can be
+created. For this very common type of (simple) merges, mergeCheck does the
+merge and ensures that exactly this happened.
+}
+\details{
+Besides merging and checking rows, mergeCheck makes sure the order
+    in df1 is retained in the resulting data. Also, a warning is given if
+    column names are overlapping, making merge create new column names like
+    col.x and col.y. Merges and other operations are done using
+    data.table. If df1 is a data.frame (and not a data.table), it will
+    internally be converted to a data.table, and the resulting data.table
+    will be converted back to a data.frame before returning.
 }
 \seealso{
 Other DataWrangling: \code{\link{NMaddColumns}},

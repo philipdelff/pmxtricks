@@ -17,9 +17,7 @@ Calculate coefficient of variation of data
 }
 \details{
 This function is intended to be used on data. For a log-normal
-    THETA[1]*EXP(OMEGA[1]) Nonmem ## parameter, do
-    CV=sqrt(exp(OMEGA[1,1])-1).
-importFrom stats var sd
+    THETA[1]*EXP(OMEGA[1]) Nonmem parameter, do CV=sqrt(exp(OMEGA[1,1])-1).
 }
 \seealso{
 Other Calc: \code{\link{geomean}}, \code{\link{means}},

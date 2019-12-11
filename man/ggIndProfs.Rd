@@ -13,7 +13,8 @@ ggIndProfs(data, run, x = "TIME", dv = "DV", pred = "PRED",
   ipred = c("IPRED", "IPRE"), grp, amt, id = "ID", xlab = NULL,
   ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F,
   NPerSheet = 12, LLOQ = NULL, use.evid2, facet = id,
-  par.prof = NULL, x.inc, grp.label = grp, debug = F, debug.sheet)
+  par.prof = NULL, x.inc, grp.label = grp, labels = TRUE,
+  debug = F, debug.sheet)
 }
 \arguments{
 \item{data}{The dataset to plot.}
@@ -76,6 +77,11 @@ dose including 80 and 280) while grp.label is a character
 (including 80 mg and 280 mg). In order to sort correctly, you
 must use the numeric variable for grp. But in order to get
 nice labels, use the character variable for labels.}
+
+\item{labels}{The default is to include the subject id's in labels
+above the plots (using facet_wrap()). Set this to FALSE to
+remove these labels in order to have more space for the plots
+themselves.}
 
 \item{debug}{Start by calling debug()?}
 

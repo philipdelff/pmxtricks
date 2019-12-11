@@ -4,14 +4,41 @@
 \alias{NMorderColumns}
 \title{Order columns in dataset for use in Nonmem.}
 \usage{
-NMorderColumns(data, first, last, debug = F)
+NMorderColumns(data, first, last, lower.last = T, chars.last = T,
+  nomtime = "NOMTIME", row = "ROW", debug = F)
 }
 \arguments{
 \item{data}{The dataset which columns to reorder.}
 
-\item{first}{Columns that should come before alphabetic sorting. Default is c("ROW","ID","NTIM","TIME","EVID","CMT","AMT","RATE","DV","MDV","FLAG","OCC","ROUTE","GRP","TRIAL")}
+\item{first}{Columns that should come before alphabetic
+sorting. Default is
+c("ROW","ID","NTIM","TIME","EVID","CMT","AMT","RATE","DV","MDV","FLAG","OCC","ROUTE","GRP","TRIAL")}
 
-\item{last}{Columns to sort after alphabetic ordering. Default is none.}
+\item{last}{Columns to sort after alphabetic ordering. Default is
+none.}
+
+\item{lower.last}{Should columns which names contain lowercase
+characters be moved toward the end? Some people use a standard
+of lowercase variables (say "race") being character
+representations ("asian", "caucasian", etc.) variables and the
+uppercase (1,2,...) being the numeric representation for
+Nonmem.}
+
+\item{chars.last}{Should columns which cannot be converted to
+numeric be put towards the end? A column can be a character or
+a factor in R, but still be valied in Nonmem. So rather than
+only looking at the column class, the columns are attempted
+converted to numeric. Notice, it will attempted to be
+converted to numeric to test wheather Nonmem will be able to
+make sense of it, but the values in the resulting dataset will
+be untouched. No values will be edited. If TRUE, logicals will
+always be put last.}
+
+\item{nomtime}{The name of the column containing nominal time. If
+given, it will put the column quite far left.}
+
+\item{row}{A row counter column. This will be the first column in
+the dataset.}
 
 \item{debug}{Start by calling browser()?}
 }
@@ -21,9 +48,13 @@ columns like "ROW", "ID", "NTIM", etc. will be first by default, then other
 capital case named columns, then lowercase named columns (one or more
 lowercase letter means that column is sorted as lowercase). Except for
 columns mentioned in "first" and "last" arguments, columns are sorted
-alphabetically (after by case). In sohort, priority is 1: Case, first/last,
+alphabetically (after by case). In short, priority is 1: Case, first/last,
 alphabetical. This means that last="BW" will put body weight as last of
 capital, but before lowercase columns.
+}
+\details{
+This function will change the order of columns but it
+    will never edit values in any columns.
 }
 \seealso{
 Other DataWrangling: \code{\link{NMaddColumns}},

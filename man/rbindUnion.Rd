@@ -13,10 +13,10 @@ rbindUnion(...)
 a data.frame containing all data
 }
 \description{
-This function is an implementation of the functionality as in rbind.fill in
-plyr. The intention of writing this function is to avoid being dependent on
-plyr. There is no advantage of using this function instead of
-plyr::rbind.fill or dplyr::bind_rows.
+This function is an implementation of the functionality as in
+plyr::rbind.fill for not being dependent on that package. The
+function is no longer maintained, and it is advised to use
+data.table::rbind(...,fill) instead.
 }
 \details{
 Consider using data.table::rbindlist(...,fill=TRUE) instead.
@@ -25,7 +25,7 @@ Consider using data.table::rbindlist(...,fill=TRUE) instead.
 x <- data.frame(a=1:3)
 y <- data.frame(b=1:3,c="h")
 z <- data.frame(a=4:5,b=letters[4:5],d=c(NA,5))
-rbindUnion(x,y,z)
+pmxtricks:::rbindUnion(x,y,z)
 }
 \seealso{
 Other DataWrangling: \code{\link{NMaddColumns}},
@@ -39,8 +39,5 @@ Other DataWrangling: \code{\link{NMaddColumns}},
   \code{\link{roundResp0}}, \code{\link{selectVars}},
   \code{\link{signif2}}, \code{\link{stampObj}},
   \code{\link{tmpcol}}
-}
-\author{
-philip@delff.dk
 }
 \concept{DataWrangling}

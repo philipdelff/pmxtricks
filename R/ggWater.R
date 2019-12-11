@@ -8,8 +8,9 @@
 ##' @family Plotting
 ##' @examples
 ##' library(ggplot2)
-##' ff <- qplot(1:10, 11:20) + ggWater()
-##' @export
+##' ff <- qplot(1:10, 11:20) + pmxtricks:::ggWater()
+
+### 2019-12-11: this has stopped working, and I don't understand why. On the todo, but until then, not exported.
 
 ggWater <- function(text="Not validated",scale=1,rot=0){
     
@@ -32,6 +33,6 @@ ggWater <- function(text="Not validated",scale=1,rot=0){
     
 
     ##    annotation_custom(watermarkGrob(text,scale=scale,rot=rot))
-    annotation_custom(xmin=-Inf, ymin=-Inf, xmax=Inf, ymax=Inf,watermarkGrob(text,scale=scale,rot=rot))
+    annotation_custom(grob=watermarkGrob(text,scale=scale,rot=rot),xmin=-Inf, ymin=-Inf, xmax=Inf, ymax=Inf)
 
 }

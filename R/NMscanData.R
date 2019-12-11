@@ -1,20 +1,36 @@
 ##' automatically find Nonmem tables and organize data
 ##'
-##' @param file A nonmem control stream or output file from nonmem (.mod or
-##'     .lst)
-##' @param col.id The name of the subject ID variable, default is "ID".
-##' @param col.row A column that is unique for each row. Such a column is needed
-##'     for this function to work well.
-##' @param col.grp If present, ID and OCC level info is grouped by col.grp. So
-##'     should only be needed for cross-over.
-##' @param col.occ The name of a non-mandatory occasion variable (say "OCC").
-##' @param structure Either "full" or something else. If full, all variables that can be represented will be included at all levels. If not, only row-level data will be included in $row, only occasion-level data in $occ, etc.
-##' @param use.input Merge with columns in input data? Using this, you don't
-##'     have to worry about remembering including all relevant variables in the
-##'     output tables.
-##' @param reconstructRows Include rows from input data files that do not exist
-##'     in output tables? A column called nmout will be TRUE when the row was
-##'     found in output tables, and FALSE when not.
+##' @param file A nonmem control stream or output file from nonmem
+##'     (.mod or .lst)
+##' @param col.id The name of the subject ID variable, default is
+##'     "ID".
+##' @param col.row A column that is unique for each row. Such a column
+##'     is needed for this function to work well.
+##' @param col.grp If present, ID and OCC level info is grouped by
+##'     col.grp. So should only be needed for cross-over.
+##' @param col.occ The name of a non-mandatory occasion variable (say
+##'     "OCC").
+##' @param structure Either "full" or something else. If full, all
+##'     variables that can be represented will be included at all
+##'     levels. If not, only row-level data will be included in $row,
+##'     only occasion-level data in $occ, etc.
+##' @param use.input Merge with columns in input data? Using this, you
+##'     don't have to worry about remembering including all relevant
+##'     variables in the output tables.
+##' @param reconstructRows Include rows from input data files that do
+##'     not exist in output tables? A column called nmout will be TRUE
+##'     when the row was found in output tables, and FALSE when
+##'     not. This is still experimental.
+##' @param add.name If a character string, a column of this name will
+##'     be included in all tables containing the model name. The
+##'     default is to store this in a column called "model". See
+##'     argument "name" as well. Set to NULL if not wanted.
+##' @param name The model name to be stored if add.name is not
+##'     NULL. If name is not supplied, the name will be taken from the
+##'     control stream file name.
+##' @param quiet The default is to give some information along the way
+##'     on what data is found. But consider setting this to TRUE for
+##'     non-interactive use.
 ##' @param debug start by running browser()?
 ##'
 ##' @details This function makes it very easy to collect the data from a Nonmem
@@ -38,7 +54,7 @@
 
 
 ### todo
-## check if variables are consistent within ROW: ID (others?) This is fatal and will happen when using long ID's and non-matching format when writing tables from Nonmem.
+## No longer sure this is an issue with the new data combination method: check if variables are consistent within ROW: ID (others?) This is fatal and will happen when using long ID's and non-matching format when writing tables from Nonmem.
 
 ## bug: skip input data if not found.
 
@@ -46,19 +62,30 @@
 
 ## use default values for col.grp and col.occ. Use if present.
 
+## TODO: check overview.tables. Either they must be firstonly, or they must be full.length.
+
+## TODO: col.row can only be used if found in both input and at least one output table.
+
+## TODO: There are certain variables that can only be row specifc: WRES, CWRES, etc.
+
 ### end todo 
 
-NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC",structure="full",use.input=T,reconstructRows=F,debug=F){
+NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC",structure="full",use.input=T,reconstructRows=FALSE,add.name="model",name,quiet=FALSE,debug=FALSE){
+
     if(debug) browser()
 
 #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
 
-firstonly <- NULL
-has.col.ROW <- NULL
-type <- NULL
+    firstonly <- NULL
+    has.row <- NULL
+    type <- NULL
+    maxLength <- NULL
+    full.length <- NULL
+    all.firstonly <- NULL
+    nmout <- NULL
+    tab.out <- NULL
 
 ### Section end: Dummy variables, only not to get NOTE's in pacakge checks
-
 
 
     
@@ -67,52 +94,83 @@ type <- NULL
     if(!file.exists(file)) stop(paste0("Model file ",file," does not exist."),call. = F)
     dir <- dirname(file)
 
+    if(!is.null(add.name)){
+        if(!is.character(add.name) || length(add.name)!=1 ||  add.name=="" ){
+            stop("If not NULL, add.name must be a character name of the column to store the run name. The string cannot be empty.")
+        }
+        if (!missing(name)) {
+            runname <- name
+        } else {
+            runname <- sub("\\.lst$","",basename(sub(" $","",file)))
+        }
+        include.model <- TRUE
+    } else {
+        include.model <- FALSE
+    }
+    
 ###}
 
 
 ###{ read all output tables and merge to max one firstonly and max one row
-    tables <- NMscanTables(file,details=T,as.dt=FALSE)
+    tables <- NMscanTables(file,details=T,as.dt=T)
     data <- tables$data
     overview.tables <- tables$meta
+
+#### TODO: check overview.tables. Either they must be firstonly, or they must be full.length.
+    
     
 #### add has.grp, has.occ, has.id?
-    overview.tables <- cbind(overview.tables,setNames(as.data.frame(do.call(rbind,lapply(data,function(x)c(col.row%in%names(x))))),c("has.col.ROW")))
-    overview.tables <- within(overview.tables,{maxLength=nrow==max(nrow)})
+    fun.has.row <- function(names) do.call(c,lapply(names,function(name)col.row%in%colnames(data[[name]])))
+    overview.tables[,has.row:=fun.has.row(name)]
+######## here
+    overview.tables[,maxLength:=nrow==max(nrow)]
+    overview.tables[,full.length:=!firstonly&maxLength]
+    NrowFull <- overview.tables[full.length==TRUE,unique(nrow)]
 
-    overview.tables <- within(overview.tables,{full.length=!firstonly&maxLength&has.col.ROW})
-    
     ## browser()
     
 ### combine full tables into one
-    tabs.row <- which(overview.tables$full.length)
-    if(!length(tabs.row)) stop("col.row not found in any full.length tables.")
-    all.row <- NULL
-    if(length(tabs.row)){
-        all.row <- setNames(
-            data.frame(col.row=data[[tabs.row[1]]][,col.row])
-           ,col.row)
-        for(I in tabs.row){
-            all.row <- merge(all.row,data[[I]][,c(col.row,setdiff(names(data[[I]]),names(all.row)))])
-        }
+    tabs.full <- which(overview.tables$full.length)
+    if(overview.tables[,sum(full.length)]==0) {
+        stop("No full-length tables found. This is currently not supported (but should be, sorry).")
     }
+    if(!overview.tables[,sum(has.row)]) {
+        warning("col.row not found in any full.length tables. This is experimental. Input data cannotbe used.")
+        use.input <- FALSE
+    }
+    tab.row <- NULL
+    ##    if(sum(overview.tables$full.length&overview.tables$has.row)){
+    if(any(overview.tables[,full.length&has.row])){
+        ## take row column from the first table in which it appears.
+        first.table.with.row <- data[[overview.tables[has.row==TRUE&full.length==TRUE,name[1]]]]
+        tab.row <- data.table(col.row=first.table.with.row[,get(col.row)])
+    } else {
+        tab.row <- data.table(col.row=1:NrowFull)
+    }
+    
+    setnames(tab.row,old="col.row",new=col.row)
+    
+    for(I in which(overview.tables[,full.length])){
+        tab.row <- cbind(tab.row,data[[I]][,setdiff(names(data[[I]]),names(tab.row)),with=F])
+    }
+
 
 ### combine firstonly tables into one
     tabs.firstonly <- which(overview.tables$firstonly)
-    all.firstonly <- NULL
+    tab.firstonly <- NULL
     if(length(tabs.firstonly)){
-        all.firstonly <- setNames(
-            data.frame(col.id=data[[tabs.firstonly[1]]][,col.id])
-           ,col.id)
+        tab.firstonly <- data.table(col.id=data[[tabs.firstonly[1]]][,col.id,with=FALSE])
+        ## setnames(all.row,old="col.id",new=col.id)
         for(I in tabs.firstonly){
             ## mergeCheck?
-            all.firstonly <- merge(all.firstonly,data[[I]][,c(col.id,setdiff(names(data[[I]]),names(all.firstonly)))])
+            tab.firstonly <- merge(all.firstonly,data[[I]][,c(col.id,setdiff(names(data[[I]]),names(all.firstonly)))],by=col.id)
         }
     }
-    
-    data2 <- data[-c(tabs.row,tabs.firstonly)]
-    data <- c(data2,list(all.row),list(all.firstonly))
-    
-    
+
+    ## data2 <- data[-c(tabs.full,tabs.firstonly)]
+    ## data <- c(data2,list(all.row),list(all.firstonly))
+
+
 ###### all row tables combined into one
 ###}
 
@@ -122,271 +180,174 @@ type <- NULL
     ## scan for occasion variables
     ## check if col.row is present. If so, look for row-level info
 
-    coltypes <- lapply(1:length(data),function(I){
-        dat <- data[[I]]
-        cnames <- colnames(dat)
-        cnames.left <- cnames
-
-        tab.id <- NULL
-        if(col.id%in%cnames.left){
-            covs.maybe <- findCovs(dat[,cnames.left],cols.id=c(col.id,col.grp))
-            vars <- setdiff(names(covs.maybe),c(col.row,col.id,col.occ,col.grp,"CWRES","RES","WRES","PRED","IPRE","DV"))
-            if(length(vars)){
-                tab.id <- data.frame(type="id",table=I,var=vars,stringsAsFactors=F)
-                cnames.left <- setdiff(cnames.left,vars)
-            }
-        }
-
-        tab.occ <- NULL
-        if(all(c(col.id,col.occ)%in%cnames.left)){
-            covs.maybe <- findCovs(dat[,cnames.left],cols.id=c(col.id,col.occ,col.grp))
-            vars <- setdiff(names(covs.maybe),c(col.row,col.id,col.occ,col.grp,"CWRES","RES","WRES","PRED","IPRE","DV"))
-            if(length(vars)){
-                tab.occ <- data.frame(type="occ",table=I,var=vars,stringsAsFactors=F)
-                cnames.left <- setdiff(cnames.left,vars)
-            }
-        }
-        
-        tab.row <- NULL
-        if(length(cnames.left)){
-            vars <- setdiff(cnames.left,c(col.row,col.id,col.grp))
-            tab.row <- data.frame(type="row",table=I,var=vars,stringsAsFactors=F)
-            cnames.left <- setdiff(cnames.left,vars)
-        }
-        
-        rbind(tab.row,tab.id,tab.occ)
-    }
-    )
-    
-coltypes <- do.call(rbind,coltypes)
-###}
-
-###{ reduce to the three data.frames we want    
-###### now compare between tables and combine into one classsification of variables
-    ## row-level and occ-level vars are only accepted from tables with most rows
-    dims <- setNames(as.data.frame(do.call(rbind,lapply(data,dim))),c("nrow","ncol"))
-    dims <- within(dims,{table=1:nrow(dims)})
-    coltypes <- merge(coltypes,dims,all.x=T)
-    coltypes <- within(coltypes,{maxLength=nrow==max(nrow)})
-    coltypes <- subset(coltypes,!(type%in%c("row","occ")&!maxLength))
-
-    ## first look at tables with max rows. Keep variables in only one of them. This is discarding redundant info.
-    ## dismiss anything in tables with non-max nrows if it is present in a maxrow table    
-    ## dismiss redundant info in non-max row tables.
-    coltypes <- coltypes[with(coltypes,order(type,-xtfrm(maxLength),var)),]
-    coltypes <- coltypes[!duplicated(coltypes[,c("type","var")]),]
-
-### dismiss overlapping with priority: row, occ, id.
-    coltypes <- within(coltypes,{type.tmp=factor(type,levels=c("row","occ","id"))})
-    ## coltypes <- plyr::arrange(coltypes,type.tmp)
-    coltypes <- coltypes[order(coltypes$type.tmp),]
-    coltypes <- coltypes[!duplicated(coltypes[,c("var")]),]
-    coltypes$type.tmp <- NULL
+    ## nmout is used to keep track of wether rows are from output data or only
+    ## from input data.
+    tab.row[,nmout:=TRUE]
 
     
-    
-### create output data.frames
-    ## coltypes
-    
-    ## row-level
-    tab.row <- NULL
-    if(any(coltypes$type=="row")){
-        tab.row <- unique(do.call(rbind,
-                                  lapply(data,function(x) {
-                                      if(all(c(col.row,col.id,col.grp)%in%names(x))){
-                                          x[,c(col.row,col.id,col.grp),drop=F]
-                                      } else {
-                                          NULL
-                                      }
-                                  })))
-        ## now merge with all tables
-        tabs.to.merge <- unique(coltypes$table[coltypes$type=="row"])
-        for(I in tabs.to.merge){
-            tab.row <-
-                merge(tab.row,data[[I]][,c(col.row,subset(coltypes,table==I&type=="row")$var),drop=F],by=col.row)
-        }
-    }
-
-    ## subject-level
-    tab.id <- NULL
-    if(any(coltypes$type=="id")){
-        tab.id <- unique(do.call(rbind,
-                                 lapply(data,function(x) {
-                                     if(all(c(col.id,col.grp)%in%names(x))){
-                                         x[,c(col.id,col.grp),drop=F]
-                                     } else {
-                                         NULL
-                                     }
-                                 })))
-        ## now merge with all tables
-        tabs.to.merge <- unique(coltypes$table[coltypes$type=="id"])
-
-        for(I in tabs.to.merge){
-            tab.id <-
-                merge(tab.id,
-                      unique(data[[I]][,c(col.id,col.grp,subset(coltypes,table==I&type=="id")$var),drop=F]),by=c(col.id,col.grp))
-        }
-    }
-    
-    ## occ-level
-    tab.occ <- NULL
-    if(any(coltypes$type=="occ")){
-        tab.occ <- unique(do.call(rbind,
-                                  lapply(data,function(x) {
-                                      if(all(c(col.id,col.occ,col.grp)%in%names(x))){
-                                          x[,c(col.id,col.occ,col.grp),drop=F]
-                                      } else {
-                                          NULL
-                                      }
-                                  })))
-        ## now merge with all tables
-        tabs.to.merge <- unique(coltypes$table[coltypes$type=="occ"])
-        for(I in tabs.to.merge){
-            tab.occ <-
-                merge(tab.occ,
-                      unique(data[[I]][,c(col.id,col.occ,col.grp,subset(coltypes,table==I&type=="occ")$var),drop=F]),by=c(col.id,col.occ,col.grp))
-        }
-    }
-    
-    if(structure=="full"){
-        
-        ## all merged
-        tab.all <- data.frame(toremove=1)
-        if(!is.null(tab.row)) tab.all <- merge(tab.all,tab.row)
-        if(!is.null(tab.id)) tab.all <- merge(tab.all,tab.id)
-        if(!is.null(tab.occ)) tab.all <- merge(tab.all,tab.occ)
-        tab.all$toremove <- NULL
-        tab.row <- tab.all
-
-        ## put id level vars on occ
-        if(!is.null(tab.occ)&&!is.null(tab.id)){
-            tab.occ.id <- merge(tab.occ,tab.id,by=c(col.id,col.grp),all.x=T)
-            tab.occ <- tab.occ.id
-        }
-        
-    }
-###}
 ###{ handle input data
     if(use.input){
-
-        data.input <- NMtransInput(file,debug=F)
         
-        cnames.in <- colnames(data.input)
-        
-        if(!is.null(tab.row)){
-            ## browser()
-            
-            data.output <- tab.row
-            cnames.out <- colnames(data.output)
-            ## we need col.row
-            stopifnot(col.row%in%cnames.in)
-            stopifnot(col.row%in%cnames.out)
-            
-            vars.to.recover <- cnames.in[!cnames.in%in%cnames.out]
-            dim.out.0 <- dim(data.output)
-            data.output.out <- merge(data.output,data.input[,unique(c(col.row,vars.to.recover))],by=col.row,all.x=T)
-            dim.out.1 <- dim(data.output.out)
+        data.input <- as.data.table(NMtransInput(file,quiet=quiet,debug=F))
+        cnames.input <- colnames(data.input)
 
-            if(!all((dim.out.0+c(0,length(vars.to.recover)))==dim.out.1)){
-                stop("Merge with input data resulted in unexpected number of columns. Please make sure that the $INPUT field in the .lst file matches the input dataset.")
+        if(col.row%in%cnames.input) {
+            if(data.input[,any(duplicated(get(col.row)))]){
+                stop("use.input is TRUE, but col.row has duplicate values in _input_ data. col.row must be a unique row identifier when use.input is TRUE.")
             }
-            data.output.out$nmout <- TRUE
-
-            tab.row <- data.output.out[order(data.output.out[,col.row]),]
-            
-        }
-
-        fun.merge <- function(data.in,data.out,cols.by,debug=F){
-            if(debug) browser()
-            cnames.in <- colnames(data.in)
-            cnames.out <- colnames(data.out)
-            ## if variables are in both in and output, output is preferred
-            stopifnot(all(cols.by%in%colnames(data.in)))
-            vars.common <- intersect(cnames.in,cnames.out)
-            if(length(vars.common)){
-                message("common variables in input and output. Only the ones from output are kept.")
-            }
-            vars.to.recover <- cnames.in[!cnames.in%in%cnames.out]
-            cnames.in.no.id <- cnames.in[!cnames.in%in%cols.by]
-            ## if these are present in input, they will be dropped
-            cnames.drop <- c("DV","PRED","RES","WRES")
-            
-            cnames.to.use <- vars.to.recover[!vars.to.recover%in%cnames.drop]
-            Nid <- nrow(unique(data.in[,cols.by,drop=FALSE]))
-            names.covs <- cnames.to.use[unlist(lapply(cnames.to.use,function(x) nrow(unique(data.in[,c(cols.by,x)]))==Nid))]
-            ## browser()
-            reduced.in <- unique(data.in[,c(cols.by,names.covs),drop=F])
-            ## browser()
-
-            ## and possibly reduce the output as well (e.g. row could easily be present)
-            Nid.out <- nrow(unique(data.out[,cols.by,drop=FALSE]))
-            names.out <- names(data.out)
-            names.out <-
-                names.out[
-                    unlist(lapply(names.out,function(x) nrow(unique(data.out[,c(cols.by,x)]))==Nid.out))
-                ]
-            data.out <- unique(data.out[,names.out,drop=F])
-            
-            ## report how many ids matched
-            ## this will only work if length(cols.by)==1
-            if(length(cols.by)==1){
-                uids.out <- unique(data.out[,cols.by])
-                nid.matched <- length(uids.out[uids.out%in%c(reduced.in[,cols.by,drop=T])])
-                message(paste0(nid.matched,"/",length(uids.out)," IDs matched"))
-            } 
-            
-            data.out.out <- merge(unique(data.out),reduced.in,by=cols.by,all.x=T)
+        } else {
+            warning("use.input is TRUE, but col.row not found in _input_ data. Only output data used.")
+            use.input <- FALSE
         }
         
-        if(!is.null(tab.id)){
-            tab.id <- fun.merge(data.out=tab.id,data.in=data.input,cols.by=c(col.id,col.grp),debug=F)
-        }
 
-        if(!is.null(tab.occ)){
-            tab.occ <- fun.merge(data.out=tab.occ,data.in=data.input,cols.by=c(col.id,col.grp,col.occ),debug=F)
+        if(col.row%in%colnames(tab.row)) {
+            if( tab.row[,any(duplicated(get(col.row)))]){
+                stop("use.input is TRUE, but col.row has duplicate values in _output_ data. col.row must be a unique row identifier. It is unique in input data, so how did rows get repeated in output data? Has input data been edited since the model was run?")
+            }
+        } else {
+            warning("use.input is TRUE, but col.row not found in _output_ data. Only output data used.")
+            use.input <- FALSE
         }
+        
+
+        if(use.input){
+            if(reconstructRows){
+                cat("Reconstructing input data. This is experimental.")
+                data.input[,nmout:=FALSE]
+                tab.row <- mergeCheck(data.input[,c(col.row,setdiff(colnames(data.input),colnames(tab.row))),with=FALSE],
+                                      tab.out,
+                                      by=col.row,all.x=T)
+            } else {
+
+                ## tab.row.1 <- copy(tab.row)
+                ## tab.row <- mergeCheck(tab.row,data.input[,c(col.row,setdiff(colnames(data.input),colnames(tab.row))),with=FALSE],by=col.row,all.x=T)
+                tab.row <- mergeCheck(tab.row,data.input[,c(col.row,setdiff(colnames(data.input),colnames(tab.row))),with=FALSE],by=col.row,all.x=T)
+                
+            }
+            
+        }
+        
     }
 
-    tab.run <- NULL
-    if(!is.null(tab.id)){
-        tab.run <- findCovs(tab.id)
-        if(structure!="full"){
-            tab.id <- tab.id[,setdiff(names(tab.id),colnames(tab.run))]
+    
+
+    
+
+##### TODO: There are certain variables that can only be row specifc: WRES, CWRES, etc.
+    t1 <- Sys.time()
+    t0 <- t1
+    if(structure=="full"){
+
+        ## tab.row
+        if(is.null(tab.row)){
+            all.row <- NULL
+            tab.occ <- NULL
+        } else {
+            ## t2 <- Sys.time()
+            ## cat("t2", t2-t0,"\n")
+            ## t0 <- t2
+            
+            all.row <- tab.row
+            if(!is.null(tab.firstonly)){
+                all.row <- merge(tab.row,
+                                 tab.firstonly[,c(col.id,setdiff(names(tab.firstonly),names(all.row))),with=FALSE],
+                                 by=col.id)
+
+                ## t3 <- Sys.time()
+                ## cat("t3: ", t3-t0,"\n")
+                ## t0 <- t3
+                
+            }
+            ## tab.occ
+            if(col.occ%in%colnames(all.row)){
+                
+                ## Sys.sleep(2)
+                ## t1 <- Sys.time()
+                ## tab.occ <- findCovs2(all.row,cols.id=c(col.id,col.occ),debug=F)
+                ## t2 <- Sys.time()
+                tab.occ <- findCovs(all.row,cols.id=c(col.id,col.occ),debug=F)
+                ## t3 <- Sys.time()
+                ## t3b <- Sys.time()
+                ## tab.occ <- findCovs_df(all.row,cols.id=c(col.id,col.occ),debug=F)
+                ## t4 <- Sys.time()
+                
+                ##  t4 <- Sys.time()
+                ## cat("t4: ", t4-t0,"\n")
+                ##  t0 <- t4
+                
+            } else {
+                tab.occ <- NULL
+            }
         }
+
+        ## tab.id
+        
+        tab.id <- findCovs(all.row,cols.id=c(col.id))
+        ## t5 <- Sys.time()
+        ## cat("t5: ", t5-t0,"\n")
+        ## t0 <- t5
+
+        
+        tab.run <- findCovs(all.row)
+        ## t6 <- Sys.time()
+        ## cat("t6: ", t6-t0,"\n")
+        ## t0 <- t6
+        
+        
+    } else {
+        stop("only structure=full is implemented.")
     }
 
-    if(use.input&&reconstructRows){
-        ## browser()
-        inp.touse <- data.input[setdiff(data.input[,col.row],tab.row[,col.row]),]
-        n.inp.touse <- names(inp.touse)
-        inp.touse$nmout <- FALSE
-        if(col.id%in%n.inp.touse) {
-            ## browser()
-            inp.touse <- merge(inp.touse,tab.id[,c(col.id,col.grp,setdiff(names(tab.id),n.inp.touse))],all.x=T)
-        }
-        if(col.occ%in%n.inp.touse) {
-            inp.touse <- merge(inp.touse,tab.occ[,c(col.id,col.occ,col.grp,setdiff(names(tab.occ),n.inp.touse))],all.x=T)
-        }
-        ##    browser()
-        tab.row <- rbindUnion(tab.row,inp.touse)
-        tab.row <- tab.row[order(tab.row[,col.row]),]
-    }
+###}
+
+
+###}
+
+    ## if(use.input&&reconstructRows){
+    ##     stop("row reconstruction not implemented yet")
+    
+    ##     ## browser()
+    ##     inp.touse <- data.input[setdiff(data.input[,col.row],tab.row[,col.row]),]
+    ##     n.inp.touse <- names(inp.touse)
+    ##     inp.touse$nmout <- FALSE
+    ##     if(col.id%in%n.inp.touse) {
+    ##         ## browser()
+    ##         inp.touse <- merge(inp.touse,tab.id[,c(col.id,col.grp,setdiff(names(tab.id),n.inp.touse))],all.x=T)
+    ##     }
+    ##     if(col.occ%in%n.inp.touse) {
+    ##         inp.touse <- merge(inp.touse,tab.occ[,c(col.id,col.occ,col.grp,setdiff(names(tab.occ),n.inp.touse))],all.x=T)
+    ##     }
+    ##     ##    browser()
+    ##     tab.row <- rbindUnion(tab.row,inp.touse)
+    ##     tab.row <- tab.row[order(tab.row[,col.row]),]
+    ## }
 ###}
 
     stopifnot(max(table(col.row))==1)
 
 
-    
+
     list.str <- list(
         col.id=col.id,
         col.row=col.row,
         col.occ=col.occ,
         col.grp=col.grp)
+
+    list.out <- list(run=tab.run,
+                     row=tab.row,
+                     id=tab.id,
+                     occ=tab.occ)
+
     
-    list(run=tab.run,
-         row=tab.row,
-         id=tab.id,
-         occ=tab.occ,
-         list.str=list.str)
+    for(I in 1:length(list.out)){
+        if(!is.null(list.out[[I]])){
+            list.out[[I]][,c(add.name):=runname]
+        }}
     
+    list.out <- c(
+        list.out,
+        list(list.str=list.str)
+    )
+
 }

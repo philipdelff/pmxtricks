@@ -1,5 +1,4 @@
 ##' Tabulate flags in a dataset
-
 ##' Create an overview of number of retained and discarded datapoints.
 ##' @param data The dataset including both FLAG and flag columns.
 ##' @param tab.flags A data.frame containing at least these named
@@ -7,29 +6,30 @@
 ##'     FLAG==0.
 ##' @param file A file to write the table of flag counts to. Will
 ##'     probably be removed and put in a separate function.
-##' @param tab.init If you have already counted something and then
-##'     reduced data. To be documented.
-##' @param mode How to report the summary. "discarded" means that the
-##'     reduction of number of observations and subjects resulting
-##'     from the flag, "retained" means the numbers that are left
-##'     after application of the flag. The default is "both" which
-##'     will report both.
-##' @details Notice that the number of subjects in mode="discarded"
-##'     mode can be misunderstood. If two is reported, it can mean
-##'     that the remining one observation of these two subjects are
-##'     discarded due to this flag. The majority of the samples can
-##'     have been discarded by earlier flags.
+##' @param col.id The name of the subject ID column. Default is
+##'     "ID".@param col.id The name of the subject ID column. Default
+##'     is "ID".
+##' @param by An optional column to group the counting by. This could
+##'     be "STUDY", "DRUG", "EVID", or a combination of multiple
+##'     columns.
+##' @param debug Start by calling browser()?
+##' @return A summary table with number of discarded and retained
+##'     subjects and observations when applying each condition in the
+##'     flag table. "discarded" means that the reduction of number of
+##'     observations and subjects resulting from the flag, "retained"
+##'     means the numbers that are left after application of the
+##'     flag. The default is "both" which will report both.
+##' @details Notice number of subjects in N.discarded mode can be
+##'     misunderstood. If two is reported, it can mean that the
+##'     remining one observation of these two subjects are discarded
+##'     due to this flag. The majority of the samples can have been
+##'     discarded by earlier flags.
 ##' @import data.table
+##' @importFrom utils write.csv
 ##' @export
 
 
-##### todo
-
-## Must be able to group by any no of variable, say both TRIAL and PARAM.
-
-##### end todo 
-
-flagsCount <- function(data,tab.flags,file,tab.init,fas.ids,col.id="ID",by=NULL,debug=F){
+flagsCount <- function(data,tab.flags,file,col.id="ID",by=NULL,debug=F){
 
     if(debug) browser()
 
@@ -47,16 +47,17 @@ flagsCount <- function(data,tab.flags,file,tab.init,fas.ids,col.id="ID",by=NULL,
 
     
 ########## Check tab.init missing ########
-    
-    if(!missing(tab.init)){
-        if(!is.data.frame(tab.init)) stop("tab.init must be a data.frame")
-        names.tab.init <- colnames(tab.init)
-        ## It should be checked that classes match.
-        if(!all(c("Data","Nobs","NID")%in%names.tab.init)) stop("tab.init must contain columns Data, Nobs, NID.")
-        tab.report <- tab.init
-    } else {
-        tab.report <- data.frame(Data="All data",Nobs=nrow(data),NID=data[,uniqueN(get(col.id))])
-    }
+    ## ##' @param tab.init If you have already counted something and then
+    ## ##'     reduced data. To be documented.
+    ## if(!missing(tab.init)){
+    ##     if(!is.data.frame(tab.init)) stop("tab.init must be a data.frame")
+    ##     names.tab.init <- colnames(tab.init)
+    ##     ## It should be checked that classes match.
+    ##     if(!all(c("Data","Nobs","NID")%in%names.tab.init)) stop("tab.init must contain columns Data, Nobs, NID.")
+    ##     tab.report <- tab.init
+    ## } else {
+    ##     tab.report <- data.frame(Data="All data",Nobs=nrow(data),NID=data[,uniqueN(get(col.id))])
+    ## }
     
 ######### END Check tab.init ########
 

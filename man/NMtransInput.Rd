@@ -4,15 +4,26 @@
 \alias{NMtransInput}
 \title{read input data and translate names according to the $INPUT section}
 \usage{
-NMtransInput(file, debug = F)
+NMtransInput(file, useRDS = TRUE, quiet = FALSE, debug = F)
 }
 \arguments{
-\item{file}{a .lst or a .mod. No matter which you provide, the .mod is required and is the only one to be read.}
+\item{file}{a .lst or a .mod. No matter which you provide, the .mod is
+required and is the only one to be read.}
+
+\item{useRDS}{If an rds file is found with the exact same name (except for
+.rds instead of say .csv) as the text file mentioned in the Nonmem
+control stream, should this be used instead? The default is yes, and
+NMwriteData will create this by default too.}
+
+\item{quiet}{Default is to inform a little, but TRUE is useful for
+non-interactive stuff.}
 
 \item{debug}{start by running browser()?}
 }
 \description{
-Based on a nonmem run, this function finds the input data and reads it. But it reads it like the nonmem run by applying DROP arguments and alternative naming of columns in the nonmem run.
+Based on a nonmem run, this function finds the input data and
+    reads it. But it reads it like the nonmem run by applying DROP arguments
+    and alternative naming of columns in the nonmem run.
 }
 \seealso{
 Other Nonmem: \code{\link{NMgetSection}},
