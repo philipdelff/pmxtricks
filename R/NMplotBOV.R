@@ -23,7 +23,8 @@
 ##' @importFrom tidyr gather
 ##' @importFrom GGally ggpairs
 ##' @family Plotting
-##' @export
+
+### not ready for export yet
 
 
 

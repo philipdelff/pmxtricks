@@ -78,6 +78,10 @@ NMreadRun <- function(run,debug=F){
     }
     out$run.ref <- run.ref
 
+    npars.symmat <- function(mat) {nrow(mat)+ ## the diagonal
+                                        (length(mat)-nrow(mat))/2 ## off diag
+                                        }
+    
 ### no of parameters - this is broken in extload. Has to be implemented differently
     ## if(file.exists(file.ext)){
     ##     n2r.ext <- extload(file.ext)
@@ -93,7 +97,15 @@ NMreadRun <- function(run,debug=F){
     ## } else {
     ##     out$Npars <- NA
     ## }
-    out$Npars <- NA
+
+    if(file.exists(file.ext)){
+        n2r.ext <- extload(file.ext)
+        n.pars.est <- with(n2r.ext,npars.symmat(sigma)+length(theta)+npars.symmat(omega)-length(fix))
+        out$Npars <- n.pars.est
+    } else {
+        out$Npars <- NA
+    }
+
 
     out2 <- newNames(out,names=data.frame(old=c("totNoOfIndividuals" ,"totNoOfObservations"),new=c("Nsubjs","Nobs")),debug=F)
 

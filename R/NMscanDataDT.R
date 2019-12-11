@@ -8,13 +8,22 @@
 ##' @param col.grp If present, ID and OCC level info is grouped by col.grp. So
 ##'     should only be needed for cross-over.
 ##' @param col.occ The name of a non-mandatory occasion variable (say "OCC").
-##' @param structure Either "full" or something else. If full, all variables that can be represented will be included at all levels. If not, only row-level data will be included in $row, only occasion-level data in $occ, etc.
+##' @param structure Either "full" or something else. If full, all variables
+##'     that can be represented will be included at all levels. If not, only
+##'     row-level data will be included in $row, only occasion-level data in
+##'     $occ, etc.
 ##' @param use.input Merge with columns in input data? Using this, you don't
 ##'     have to worry about remembering including all relevant variables in the
 ##'     output tables.
 ##' @param reconstructRows Include rows from input data files that do not exist
 ##'     in output tables? A column called nmout will be TRUE when the row was
-##'     found in output tables, and FALSE when not.
+##'     found in output tables, and FALSE when not. This is still experimental.
+##' @param add.name If a character string, a column of this name will be
+##'     included in all tables containing the model name. The default is to
+##'     store this in a column called "model". See argument "name" as well. Set
+##'     to NULL if not wanted.
+##' @param name The model name to be stored if add.name is not NULL. If name is
+##'     not supplied, the name will be taken from the control stream file name.
 ##' @param debug start by running browser()?
 ##'
 ##' @details This function makes it very easy to collect the data from a Nonmem
@@ -56,7 +65,7 @@
 
 
 
-NMscanDataDT <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC",structure="full",use.input=T,reconstructRows=F,debug=F){
+NMscanDataDT <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC",structure="full",use.input=T,reconstructRows=FALSE,add.name="model",name,quiet=FALSE,debug=FALSE){
 
     if(debug) browser()
 
@@ -75,6 +84,20 @@ NMscanDataDT <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OC
     if(!file.exists(file)) stop(paste0("Model file ",file," does not exist."),call. = F)
     dir <- dirname(file)
 
+    if(!is.null(add.name)){
+        if(!is.character(add.name) || length(add.name)!=1 ||  add.name=="" ){
+            stop("If not NULL, add.name must be a character name of the column to store the run name. The string cannot be empty.")
+        }
+        if (!missing(name)) {
+            runname <- name
+        } else {
+            runname <- sub("\\.lst$","",basename(sub(" $","",file)))
+        }
+        include.model <- TRUE
+    } else {
+        include.model <- FALSE
+    }
+    
 ###}
 
 
@@ -84,7 +107,6 @@ NMscanDataDT <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OC
     overview.tables <- tables$meta
 
 #### TODO: check overview.tables. Either they must be firstonly, or they must be full.length.
-### TODO: col.row can only be used if found in both input and at least one output table.
     
     
 #### add has.grp, has.occ, has.id?
@@ -148,16 +170,53 @@ NMscanDataDT <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OC
     ## scan for occasion variables
     ## check if col.row is present. If so, look for row-level info
 
+    ## nmout is used to keep track of wether rows are from output data or only
+    ## from input data.
+    tab.row[,nmout:=TRUE]
 
-
+    
 ###{ handle input data
     if(use.input){
         
-        data.input <- as.data.table(NMtransInput(file,debug=F))
+        data.input <- as.data.table(NMtransInput(file,quiet=quiet,debug=F))
+        cnames.input <- colnames(data.input)
 
-        ## tab.row.1 <- copy(tab.row)
-        ## tab.row <- mergeCheck(tab.row,data.input[,c(col.row,setdiff(colnames(data.input),colnames(tab.row))),with=FALSE],by=col.row,all.x=T)
-        tab.row <- merge(tab.row,data.input[,c(col.row,setdiff(colnames(data.input),colnames(tab.row))),with=FALSE],by=col.row,all.x=T)
+        if(col.row%in%cnames.input) {
+            if(data.input[,any(duplicated(get(col.row)))]){
+                stop("use.input is TRUE, but col.row has duplicate values in _input_ data. col.row must be a unique row identifier when use.input is TRUE.")
+            }
+        } else {
+            warning("use.input is TRUE, but col.row not found in _input_ data. Only output data used.")
+            use.input <- FALSE
+        }
+        
+
+        if(col.row%in%colnames(tab.row)) {
+            if( tab.row[,any(duplicated(get(col.row)))]){
+                stop("use.input is TRUE, but col.row has duplicate values in _output_ data. col.row must be a unique row identifier. It is unique in input data, so how did rows get repeated in output data? Has input data been edited since the model was run?")
+            }
+        } else {
+            warning("use.input is TRUE, but col.row not found in _output_ data. Only output data used.")
+            use.input <- FALSE
+        }
+        
+
+        if(use.input){
+            if(reconstructRows){
+                cat("Reconstructing input data. This is experimental.")
+                data.input[,nmout:=FALSE]
+                tab.row <- mergeCheck(data.input[,c(col.row,setdiff(colnames(data.input),colnames(tab.row))),with=FALSE],
+                                      tab.out,
+                                      by=col.row,all.x=T)
+            } else {
+
+                ## tab.row.1 <- copy(tab.row)
+                ## tab.row <- mergeCheck(tab.row,data.input[,c(col.row,setdiff(colnames(data.input),colnames(tab.row))),with=FALSE],by=col.row,all.x=T)
+                tab.row <- mergeCheck(tab.row,data.input[,c(col.row,setdiff(colnames(data.input),colnames(tab.row))),with=FALSE],by=col.row,all.x=T)
+                
+            }
+            
+        }
         
     }
 
@@ -235,24 +294,24 @@ NMscanDataDT <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OC
 
 ###}
 
-    if(use.input&&reconstructRows){
-        stop("row reconstruction not implemented yet")
-        
-        ## browser()
-        inp.touse <- data.input[setdiff(data.input[,col.row],tab.row[,col.row]),]
-        n.inp.touse <- names(inp.touse)
-        inp.touse$nmout <- FALSE
-        if(col.id%in%n.inp.touse) {
-            ## browser()
-            inp.touse <- merge(inp.touse,tab.id[,c(col.id,col.grp,setdiff(names(tab.id),n.inp.touse))],all.x=T)
-        }
-        if(col.occ%in%n.inp.touse) {
-            inp.touse <- merge(inp.touse,tab.occ[,c(col.id,col.occ,col.grp,setdiff(names(tab.occ),n.inp.touse))],all.x=T)
-        }
-        ##    browser()
-        tab.row <- rbindUnion(tab.row,inp.touse)
-        tab.row <- tab.row[order(tab.row[,col.row]),]
-    }
+    ## if(use.input&&reconstructRows){
+    ##     stop("row reconstruction not implemented yet")
+    
+    ##     ## browser()
+    ##     inp.touse <- data.input[setdiff(data.input[,col.row],tab.row[,col.row]),]
+    ##     n.inp.touse <- names(inp.touse)
+    ##     inp.touse$nmout <- FALSE
+    ##     if(col.id%in%n.inp.touse) {
+    ##         ## browser()
+    ##         inp.touse <- merge(inp.touse,tab.id[,c(col.id,col.grp,setdiff(names(tab.id),n.inp.touse))],all.x=T)
+    ##     }
+    ##     if(col.occ%in%n.inp.touse) {
+    ##         inp.touse <- merge(inp.touse,tab.occ[,c(col.id,col.occ,col.grp,setdiff(names(tab.occ),n.inp.touse))],all.x=T)
+    ##     }
+    ##     ##    browser()
+    ##     tab.row <- rbindUnion(tab.row,inp.touse)
+    ##     tab.row <- tab.row[order(tab.row[,col.row]),]
+    ## }
 ###}
 
     stopifnot(max(table(col.row))==1)
@@ -265,10 +324,20 @@ NMscanDataDT <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OC
         col.occ=col.occ,
         col.grp=col.grp)
 
-    list(run=tab.run,
-         row=tab.row,
-         id=tab.id,
-         occ=tab.occ,
-         list.str=list.str)
+    list.out <- list(run=tab.run,
+                     row=tab.row,
+                     id=tab.id,
+                     occ=tab.occ)
+
+    
+    for(I in 1:length(list.out)){
+        if(!is.null(list.out[[I]])){
+            list.out[[I]][,c(add.name):=runname]
+        }}
+    
+    list.out <- c(
+        list.out,
+        list(list.str=list.str)
+    )
 
 }

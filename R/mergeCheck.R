@@ -1,24 +1,31 @@
-##' Merge, order, and check number of resulting rows.
+##' Merge, order, and check resulting rows and columns.
 ##'
-##' So far, this one can only check that we get the same no of rows as the first
-##' df supplied. It is likely that much faster, better and prettier functions
-##' are available out there. But for 95% of the author's merges, this does
-##' exactly the checks and ordering, he wants. And it only uses base R for
-##' data.frames. It also supports data.tables for compatibility but if you use
-##' data.table, there may be faster ways to do this within that framework.
+##' This function is a useful wrapper for merges where df1 will be extended with
+##' columns from df2, i.e. all rows in df1 are retained, and no new rows can be
+##' created. For this very common type of (simple) merges, mergeCheck does the
+##' merge and ensures that exactly this happened. 
 ##'
 ##' @param df1 A data.fram with the number of rows must should be obtained from
 ##'     the merge. The resulting data.frame will be ordered like df1.
 ##' @param df2 A data.frame that will be merged onto df1.
+##' @param by The column(s) to merge by. Character string (vector). Must be
+##'     supplied.
 ##' @param debug Start by calling browser()?
 ##' @param ... additional arguments passed to merge. If all is among them, an
 ##'     error will be returned.
+##' @details Besides merging and checking rows, mergeCheck makes sure the order
+##'     in df1 is retained in the resulting data. Also, a warning is given if
+##'     column names are overlapping, making merge create new column names like
+##'     col.x and col.y. Merges and other operations are done using
+##'     data.table. If df1 is a data.frame (and not a data.table), it will
+##'     internally be converted to a data.table, and the resulting data.table
+##'     will be converted back to a data.frame before returning.
 ##' @family DataWrangling
-##' @import data.table 
+##' @import data.table
 ##' @return a data.frame resulting from merging df1 and df2
 ##' @export
 
-mergeCheck <- function(df1,df2,debug=F,...){
+mergeCheck <- function(df1,df2,by,debug=F,...){
     if(debug) browser()
     
     name.df1 <- deparse(substitute(df1))
@@ -54,11 +61,22 @@ mergeCheck <- function(df1,df2,debug=F,...){
         reorder <- F
     }
     
-    df3 <- merge(df1,df2,...)
+    df3 <- merge(df1,df2,by=by,...)
     if(reorder){
-        if(!(all(df1[,get(rowcol)]%in%df3[,get(rowcol)]) && nrow(df1)==nrow(df3))){
-            
-            stop("merge changed dimensions.")
+        rows.disappeared <- !(all(df1[,get(rowcol)]%in%df3[,get(rowcol)]))
+        if(rows.disappeared) cat("Rows disappeared during merge.\n")
+        rows.created <- !(all(df3[,get(rowcol)]%in%df1[,get(rowcol)]))
+        if(rows.created) cat("New rows appeared during merge.\n")
+        rows.number.changed <- nrow(df1)!=nrow(df3)
+        if(rows.number.changed) cat("Number of rows changed during merge.\n")
+        
+        if(any(c(rows.disappeared,rows.created,rows.number.changed))){
+
+            cat(paste0("nrow(",name.df1,"):"),nrow(df1),"\n")
+            cat(paste0("nrow(",name.df2,"):"),nrow(df2),"\n")
+            cat(paste0("nrow(",name.df3,"):"),nrow(df3),"\n")
+
+            stop("Merge added and/or removed rows.")
         }
         ## if(nrow(df3)!=nrow(df1)){
         ##  cat(paste0("nrow(",name.df1,"):"),nrow(df1),"\n")
@@ -66,8 +84,7 @@ mergeCheck <- function(df1,df2,debug=F,...){
         ##  cat(paste0("nrow(",name.df3,"):"),nrow(df3),"\n")
         ##  stop("merge changed dimensions")        
         ## }
-        df3 <- df3[order(get(rowcol))]
-        
+        df3 <- setorderv(df3,rowcol)
         df3[,(rowcol):=NULL]
     }
     

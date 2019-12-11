@@ -11,6 +11,8 @@
 ##' @param omega0 default omega for resulting function. See details.
 ##' @param name.fun The name of the function to be generated.
 ##' @param debug Start by calling browser()?
+##' @param verbose print the resulting function to the terminal? Default is
+##'     FALSE.
 ##' @return A character string which can be evaluated to create a function.
 ##' @details The function returns a function in plain text. If you want to store
 ##'     the code, paste this text to a file. If you want to use it right away,
@@ -56,7 +58,7 @@
 ## In case the resulting function doesn't take any covariates (covs <- NULL) the resulting code could be simplified. It seems overly complicated to have a loop over covs when covs is NULL. Should the df.covs argument even be included if none are used anyway?
 ## TODO end
 
-genCovFun <- function(NMcode0,pars0,covs0,theta0,omega0,name.fun,debug=F){
+genCovFun <- function(NMcode0,pars0,covs0,theta0,omega0,name.fun,verbose=F,debug=F){
     if(debug) browser()
 
     text.name <- ifelse(missing(name.fun),"",paste0(name.fun," <- "))
@@ -174,6 +176,6 @@ paste(c(omega0),collapse=","),"),nrow=",sqrt(length(omega0)),")
         return(list(pars=df.par,covs=df.cov,all=df.all))
 }
 ")
-    cat(lines)
+    if(verbose) cat(lines)
     return(lines)
 }

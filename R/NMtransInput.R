@@ -1,12 +1,21 @@
 ##' read input data and translate names according to the $INPUT section
 ##' 
-##' @description Based on a nonmem run, this function finds the input data and reads it. But it reads it like the nonmem run by applying DROP arguments and alternative naming of columns in the nonmem run.
-##' @param file a .lst or a .mod. No matter which you provide, the .mod is required and is the only one to be read.
+##' @description Based on a nonmem run, this function finds the input data and
+##'     reads it. But it reads it like the nonmem run by applying DROP arguments
+##'     and alternative naming of columns in the nonmem run.
+##' @param file a .lst or a .mod. No matter which you provide, the .mod is
+##'     required and is the only one to be read.
+##' @param useRDS If an rds file is found with the exact same name (except for
+##'     .rds instead of say .csv) as the text file mentioned in the Nonmem
+##'     control stream, should this be used instead? The default is yes, and
+##'     NMwriteData will create this by default too.
+##' @param quiet Default is to inform a little, but TRUE is useful for
+##'     non-interactive stuff.
 ##' @param debug start by running browser()?
 ##' @family Nonmem
 ##' @export
 
-NMtransInput <- function(file,debug=F){
+NMtransInput <- function(file,useRDS=TRUE,quiet=FALSE,debug=F){
 
 if(debug) browser()
     
@@ -54,13 +63,13 @@ if(debug) browser()
 
 
     path.data.input.rds <- sub("^(.+)\\..+$","\\1.rds",path.data.input)
-    if(file.exists(path.data.input.rds)){
-        message("found rds input file. This will be used.")
+    if(useRDS && file.exists(path.data.input.rds)){
+        if(!quiet) message("found rds input file. This will be used.")
         path.data.input <- path.data.input.rds
         data.input <- readRDS(path.data.input)
     } else {
         if(file.exists(path.data.input)){
-            message("Found input data file. Reading with NMreadCsv")
+            if(!quiet) message("Found input data file. Reading with NMreadCsv")
             data.input <- NMreadCsv(path.data.input)
         } else {
             stop(paste("Input data file not found. Was expecting to find",path.data.input))
