@@ -6,31 +6,51 @@
 \usage{
 NMscanData(file, col.id = "ID", col.row = "ROW", col.grp = NULL,
   col.occ = "OCC", structure = "full", use.input = T,
-  reconstructRows = F, debug = F)
+  reconstructRows = FALSE, add.name = "model", name, quiet = FALSE,
+  debug = FALSE)
 }
 \arguments{
-\item{file}{A nonmem control stream or output file from nonmem (.mod or
-.lst)}
+\item{file}{A nonmem control stream or output file from nonmem
+(.mod or .lst)}
 
-\item{col.id}{The name of the subject ID variable, default is "ID".}
+\item{col.id}{The name of the subject ID variable, default is
+"ID".}
 
-\item{col.row}{A column that is unique for each row. Such a column is needed
-for this function to work well.}
+\item{col.row}{A column that is unique for each row. Such a column
+is needed for this function to work well.}
 
-\item{col.grp}{If present, ID and OCC level info is grouped by col.grp. So
-should only be needed for cross-over.}
+\item{col.grp}{If present, ID and OCC level info is grouped by
+col.grp. So should only be needed for cross-over.}
 
-\item{col.occ}{The name of a non-mandatory occasion variable (say "OCC").}
+\item{col.occ}{The name of a non-mandatory occasion variable (say
+"OCC").}
 
-\item{structure}{Either "full" or something else. If full, all variables that can be represented will be included at all levels. If not, only row-level data will be included in $row, only occasion-level data in $occ, etc.}
+\item{structure}{Either "full" or something else. If full, all
+variables that can be represented will be included at all
+levels. If not, only row-level data will be included in $row,
+only occasion-level data in $occ, etc.}
 
-\item{use.input}{Merge with columns in input data? Using this, you don't
-have to worry about remembering including all relevant variables in the
-output tables.}
+\item{use.input}{Merge with columns in input data? Using this, you
+don't have to worry about remembering including all relevant
+variables in the output tables.}
 
-\item{reconstructRows}{Include rows from input data files that do not exist
-in output tables? A column called nmout will be TRUE when the row was
-found in output tables, and FALSE when not.}
+\item{reconstructRows}{Include rows from input data files that do
+not exist in output tables? A column called nmout will be TRUE
+when the row was found in output tables, and FALSE when
+not. This is still experimental.}
+
+\item{add.name}{If a character string, a column of this name will
+be included in all tables containing the model name. The
+default is to store this in a column called "model". See
+argument "name" as well. Set to NULL if not wanted.}
+
+\item{name}{The model name to be stored if add.name is not
+NULL. If name is not supplied, the name will be taken from the
+control stream file name.}
+
+\item{quiet}{The default is to give some information along the way
+on what data is found. But consider setting this to TRUE for
+non-interactive use.}
 
 \item{debug}{start by running browser()?}
 }
@@ -51,7 +71,7 @@ This function makes it very easy to collect the data from a Nonmem
 \seealso{
 Other DataWrangling: \code{\link{NMaddColumns}},
   \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
-  \code{\link{NMscanDataDT}}, \code{\link{compareNames}},
+  \code{\link{NMscanDataDF}}, \code{\link{compareNames}},
   \code{\link{factor2}}, \code{\link{findCovs_df}},
   \code{\link{findCovs}}, \code{\link{findVars}},
   \code{\link{mergeCheck}}, \code{\link{newNames}},

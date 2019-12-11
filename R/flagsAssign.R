@@ -1,4 +1,4 @@
-##' Assign flags to a dataset based on specified table
+##' Assign exclusion flags to a dataset based on specified table
 ##'
 ##' The aim with this function is to take a (say PK) dataset and a pre-specified
 ##' table of flags, assign the flags automatically.

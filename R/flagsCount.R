@@ -1,4 +1,3 @@
-##' Tabulate flags in a dataset
 ##' Create an overview of number of retained and discarded datapoints.
 ##' @param data The dataset including both FLAG and flag columns.
 ##' @param tab.flags A data.frame containing at least these named

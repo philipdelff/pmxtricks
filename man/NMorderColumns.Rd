@@ -58,7 +58,7 @@ This function will change the order of columns but it
 }
 \seealso{
 Other DataWrangling: \code{\link{NMaddColumns}},
-  \code{\link{NMcompAllRes}}, \code{\link{NMscanDataDT}},
+  \code{\link{NMcompAllRes}}, \code{\link{NMscanDataDF}},
   \code{\link{NMscanData}}, \code{\link{compareNames}},
   \code{\link{factor2}}, \code{\link{findCovs_df}},
   \code{\link{findCovs}}, \code{\link{findVars}},

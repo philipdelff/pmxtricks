@@ -15,33 +15,37 @@ model run, subject, subject-occasion, and row.
 ** Create data, export to Nonmem, read results
 These are the steps that this package especially helps with. Here are some hightlights:
 
+flagsAssign - Assign exclusion flags to a dataset based on specified table
 
-flagsAssign
-flagsCount
-NMorderColumns          Order columns in dataset for use in Nonmem.
-NMwriteData             Write dataset for use in Nonmem (and R)
+flagsCount - Create an overview of number of retained and discarded datapoints.
 
+NMorderColumns - Order columns in dataset for use in Nonmem.
+
+NMwriteData - Write dataset (with creation info documentation) for use in Nonmem (and R)
+
+NMscanData - automatically find Nonmem input and output tables and organize data
+
+metadata function for documentation of column contents is under development.
 
 ** Analyze nonmem results
-ggIndProfs              Plot individual profiles and doses based on NM
-                        style dataset data
+ggIndProfs - Plot individual profiles and doses based on NM style dataset data
 
-NMrunLog                get an overview of your Nonmem runs
+NMrunLog - get an overview of your Nonmem runs
 
 ** Edit nonmem runs
-NMgetSection            extract sections of Nonmem control streams
-NMreplacePart           replace ($)sections of a nonmem control stream
+NMgetSection - extract sections of Nonmem control streams
+
+NMreplacePart - replace ($)sections of a nonmem control stream
 
 
 ** Create simulation code in R
-*** NMcode2R                
-Translate NM $PK section or other Nonmem code to R code
+NMcode2R - Translate NM $PK section or other Nonmem code to R code
 
-*** genCovFun               
-create R function that generates param values based on covariates
+genCovFun - create R function that generates param values based on covariates
 
 ** Handy data wrangling tools
-findCovs
+findCovs - Extract columns that do not vary within variables in a data.frame
 
-findVars
+findVars - Extract columns that vary within values of other columns in a data.frame
 
+mergeCheck - Merge, order, and check resulting rows and columns.

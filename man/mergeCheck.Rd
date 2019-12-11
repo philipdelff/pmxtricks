@@ -41,7 +41,7 @@ Besides merging and checking rows, mergeCheck makes sure the order
 \seealso{
 Other DataWrangling: \code{\link{NMaddColumns}},
   \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
-  \code{\link{NMscanDataDT}}, \code{\link{NMscanData}},
+  \code{\link{NMscanDataDF}}, \code{\link{NMscanData}},
   \code{\link{compareNames}}, \code{\link{factor2}},
   \code{\link{findCovs_df}}, \code{\link{findCovs}},
   \code{\link{findVars}}, \code{\link{newNames}},

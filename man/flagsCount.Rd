@@ -2,8 +2,7 @@
 % Please edit documentation in R/flagsCount.R
 \name{flagsCount}
 \alias{flagsCount}
-\title{Tabulate flags in a dataset
-Create an overview of number of retained and discarded datapoints.}
+\title{Create an overview of number of retained and discarded datapoints.}
 \usage{
 flagsCount(data, tab.flags, file, col.id = "ID", by = NULL,
   debug = F)
@@ -37,7 +36,6 @@ A summary table with number of discarded and retained
     flag. The default is "both" which will report both.
 }
 \description{
-Tabulate flags in a dataset
 Create an overview of number of retained and discarded datapoints.
 }
 \details{

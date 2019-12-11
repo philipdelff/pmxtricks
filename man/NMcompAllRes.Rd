@@ -18,7 +18,7 @@ make sure all Nonmem results are saved in rds files
 }
 \seealso{
 Other DataWrangling: \code{\link{NMaddColumns}},
-  \code{\link{NMorderColumns}}, \code{\link{NMscanDataDT}},
+  \code{\link{NMorderColumns}}, \code{\link{NMscanDataDF}},
   \code{\link{NMscanData}}, \code{\link{compareNames}},
   \code{\link{factor2}}, \code{\link{findCovs_df}},
   \code{\link{findCovs}}, \code{\link{findVars}},

@@ -2,12 +2,7 @@
 % Please edit documentation in R/ggIndProfs.R
 \name{ggIndProfs}
 \alias{ggIndProfs}
-\title{Plot individual profiles and doses based on NM style dataset data,
-run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp,
-amt = "AMT", id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL,
-scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2,
-facet=id, par.prof=NULL, x.inc,grp.label = grp, debug = F,
-debug.sheet}
+\title{Plot individual profiles and doses based on NM style dataset}
 \usage{
 ggIndProfs(data, run, x = "TIME", dv = "DV", pred = "PRED",
   ipred = c("IPRED", "IPRE"), grp, amt, id = "ID", xlab = NULL,
@@ -90,12 +85,7 @@ be the debug method to use. Pass an integer to call browser()
 when creating the corresponding sheet.}
 }
 \description{
-Plot individual profiles and doses based on NM style dataset data,
-run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp,
-amt = "AMT", id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL,
-scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2,
-facet=id, par.prof=NULL, x.inc,grp.label = grp, debug = F,
-debug.sheet
+Plot individual profiles and doses based on NM style dataset
 }
 \details{
 The resulting plot object has been limited on x axis by

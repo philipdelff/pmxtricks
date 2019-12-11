@@ -2,7 +2,7 @@
 % Please edit documentation in R/flagsAssign.R
 \name{flagsAssign}
 \alias{flagsAssign}
-\title{Assign flags to a dataset based on specified table}
+\title{Assign exclusion flags to a dataset based on specified table}
 \usage{
 flagsAssign(data, tab.flags, return.all = F, LLOQ = NULL,
   col.id = "ID", col.dv = "DV", debug = F)
