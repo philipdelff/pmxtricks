@@ -81,7 +81,7 @@ val.cov <- NULL
         etas.l <- melt(etas,id.vars=c(col.id,covs.num,covs.char),measure.vars=names.etas.var,value.name="value",variable.name="param")
         ##
         ## compare.names(etas,pkpars)
-        etas.l <- mergeCheck(etas.l,pkpars)
+        etas.l <- mergeCheck(etas.l,pkpars,by=c(col.id,covs.num,covs.char))
         
         ## g1 <- ggplot(etas.l,aes(value))+
         ##     geom_histogram()+
@@ -135,14 +135,15 @@ val.cov <- NULL
             warning(paste0("The following numerical parameters were not found:\n",paste(covs.num.drop,collapse=", ")))
             covs.num <- setdiff(covs.num,covs.num.drop)
         }
-
+        
         ## use only covariates that vary
         covs.num <- names(which(
             sapply(pkpars[,covs.num,drop=F],function(x)length(unique(x)))  > 1
         ))
         
-        etas.l2.n <- mergeCheck(etas.l,unique(pkpars[c(col.id,covs.num)]))
-        etas.l2.n <- etas.l2.n[,c(col.id,"param","value",covs.num)]
+##        etas.l2.n <- mergeCheck(etas.l,unique(pkpars[c(col.id,covs.num)]),by=col.id)
+##        etas.l2.n <- etas.l2.n[,c(col.id,"param","value",covs.num)]
+        etas.l2.n <- etas.l[,c(col.id,"param","value",covs.num)]
 
         if(length(names(etas.l2.n)[!names(etas.l2.n)%in%c("ID","param","value")])){
         etas.covs.n <- gather_(etas.l2.n,"cov","val.cov",names(etas.l2.n)[!names(etas.l2.n)%in%c("ID","param","value")])
@@ -160,12 +161,12 @@ val.cov <- NULL
         ggwrite(p.iiv.covsn,file=fun.file("iiv_covs_n.png"),save=save,stamp=stamp)
         all.output[["iiv.covsn"]] <- p.iiv.covsn
         }
-        ##        browser()
         if(!is.null(covs.char)){
+         
             
-            etas.l2.c <-
-                mergeCheck(etas.l,unique(pkpars[,c(col.id,covs.char),drop=F]))
-            etas.l2.c <- etas.l2.c[,c(col.id,"param","value",covs.char)]
+            ## etas.l2.c <- mergeCheck(etas.l,unique(pkpars[,c(col.id,covs.char),drop=F]),by=col.id)
+            ## etas.l2.c <- etas.l2.c[,c(col.id,"param","value",covs.char)]
+               etas.l2.c <- etas.l[,c(col.id,"param","value",covs.char)]
 
 #### gather_ does not respect factor levels. Using data.table for this melt/gather.
             ## etas.covs.c <- gather_(etas.l2.c,"cov","val.cov",names(etas.l2.c)[!names(etas.l2.c)%in%c("ID","param","value")])

@@ -7,7 +7,8 @@
 ##' @param col.row A column that is unique for each row. Such a column
 ##'     is needed for this function to work well.
 ##' @param col.grp If present, ID and OCC level info is grouped by
-##'     col.grp. So should only be needed for cross-over.
+##'     col.grp. So should only be needed for cross-over. This is not
+##'     working at the moment.
 ##' @param col.occ The name of a non-mandatory occasion variable (say
 ##'     "OCC").
 ##' @param structure Either "full" or something else. If full, all
@@ -17,10 +18,12 @@
 ##' @param use.input Merge with columns in input data? Using this, you
 ##'     don't have to worry about remembering including all relevant
 ##'     variables in the output tables.
-##' @param reconstructRows Include rows from input data files that do
-##'     not exist in output tables? A column called nmout will be TRUE
-##'     when the row was found in output tables, and FALSE when
-##'     not. This is still experimental.
+##' @param recoverRows Include rows from input data files that do not
+##'     exist in output tables? This will be added to the $row dataset
+##'     only, and $run, $id, and $occ datasets are created before this
+##'     is taken into account. A column called nmout will be TRUE when
+##'     the row was found in output tables, and FALSE when not. This
+##'     is still experimental. More testing is needed.
 ##' @param add.name If a character string, a column of this name will
 ##'     be included in all tables containing the model name. The
 ##'     default is to store this in a column called "model". See
@@ -28,14 +31,22 @@
 ##' @param name The model name to be stored if add.name is not
 ##'     NULL. If name is not supplied, the name will be taken from the
 ##'     control stream file name.
+##' @param useRDS If an rds file is found with the exact same name
+##'     (except for .rds instead of say .csv) as the input data file
+##'     mentioned in the Nonmem control stream, should this be used
+##'     instead? The default is yes, and NMwriteData will create this
+##'     by default too.
 ##' @param quiet The default is to give some information along the way
 ##'     on what data is found. But consider setting this to TRUE for
 ##'     non-interactive use.
+##' @param as.dt The default is to return data in data.tables. If
+##'     data.frames are wanted, use as.dt=FALSE.
 ##' @param debug start by running browser()?
 ##'
-##' @details This function makes it very easy to collect the data from a Nonmem
-##'     run. Only, you have to make sure to include a row counter in your input
-##'     data files and your output tables. It reorganises the data into four different levels
+##' @details This function makes it very easy to collect the data from
+##'     a Nonmem run. Only, you have to make sure to include a row
+##'     counter in your input data files and your output tables. It
+##'     reorganises the data into four different levels:
 ##' \itemize{
 ##'   \item run
 ##'   \item id
@@ -43,6 +54,7 @@
 ##'   \item row
 ##' }
 ##' @family DataWrangling
+##' @import data.table
 ##' @import stats
 ##' @export
 
@@ -70,7 +82,7 @@
 
 ### end todo 
 
-NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC",structure="full",use.input=T,reconstructRows=FALSE,add.name="model",name,quiet=FALSE,debug=FALSE){
+NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC",structure="full",use.input=T,recoverRows=FALSE,add.name="model",name,quiet=FALSE,useRDS=TRUE,as.dt=TRUE,debug=FALSE){
 
     if(debug) browser()
 
@@ -188,7 +200,7 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
 ###{ handle input data
     if(use.input){
         
-        data.input <- as.data.table(NMtransInput(file,quiet=quiet,debug=F))
+        data.input <- as.data.table(NMtransInput(file,quiet=quiet,useRDS=useRDS,debug=F))
         cnames.input <- colnames(data.input)
 
         if(col.row%in%cnames.input) {
@@ -212,19 +224,10 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
         
 
         if(use.input){
-            if(reconstructRows){
-                cat("Reconstructing input data. This is experimental.")
-                data.input[,nmout:=FALSE]
-                tab.row <- mergeCheck(data.input[,c(col.row,setdiff(colnames(data.input),colnames(tab.row))),with=FALSE],
-                                      tab.out,
-                                      by=col.row,all.x=T)
-            } else {
 
-                ## tab.row.1 <- copy(tab.row)
-                ## tab.row <- mergeCheck(tab.row,data.input[,c(col.row,setdiff(colnames(data.input),colnames(tab.row))),with=FALSE],by=col.row,all.x=T)
-                tab.row <- mergeCheck(tab.row,data.input[,c(col.row,setdiff(colnames(data.input),colnames(tab.row))),with=FALSE],by=col.row,all.x=T)
-                
-            }
+            ## tab.row.1 <- copy(tab.row)
+            ## tab.row <- mergeCheck(tab.row,data.input[,c(col.row,setdiff(colnames(data.input),colnames(tab.row))),with=FALSE],by=col.row,all.x=T)
+            tab.row <- mergeCheck(tab.row,data.input[,c(col.row,setdiff(colnames(data.input),colnames(tab.row))),with=FALSE],by=col.row,all.x=T)
             
         }
         
@@ -299,11 +302,22 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
         stop("only structure=full is implemented.")
     }
 
-###}
 
 
-###}
 
+    if(use.input&&recoverRows){
+        setkeyv(data.input,col.row)
+        message("Recovering input data that were not part of analysis. This is experimental.")
+        data.recover <- data.input[!get(col.row)%in%tab.row[,get(col.row)]]
+        ## data.input[get(col.row)%in%tab.row[,get(col.row)]]
+        data.recover <- data.input[,nmout:=FALSE]
+        tab.row <- rbind(tab.row,data.recover,fill=T)
+        setkeyv(tab.row,col.row)
+
+        ## TODO: if not quite, tell user how much was added.
+        
+    }
+    
     ## if(use.input&&reconstructRows){
     ##     stop("row reconstruction not implemented yet")
     
@@ -322,7 +336,6 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
     ##     tab.row <- rbindUnion(tab.row,inp.touse)
     ##     tab.row <- tab.row[order(tab.row[,col.row]),]
     ## }
-###}
 
     stopifnot(max(table(col.row))==1)
 
@@ -344,10 +357,14 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
         if(!is.null(list.out[[I]])){
             list.out[[I]][,c(add.name):=runname]
         }}
+    if(!as.dt) list.out <- lapply(list.out,as.data.frame)
     
     list.out <- c(
         list.out,
         list(list.str=list.str)
     )
+
+    
+    
 
 }

@@ -1,6 +1,7 @@
 * pmxtricks todo
 ** Structure etc
-*** TODO Dependencies
+*** DONE Dependencies
+    CLOSED: [2019-12-12 Thu 09:48]
 **** DONE nonmem2R
      CLOSED: [2019-02-07 Thu 15:36]
 **** PKPDsim
@@ -9,13 +10,15 @@
     Used to be: exportPattern("^[[:alpha:]]+")
 ** Bugs
 *** NMscanData
-**** TODO If col.row is not supplied, the function fails
+**** DONE If col.row is not supplied, the function fails
+     CLOSED: [2019-12-12 Thu 09:57]
 ***** DONE As of now, It must report an error since col.row is always necessary.
       CLOSED: [2019-01-24 Thu 18:39]
-***** TODO Ideally, it just treats output tables if tab.row not found
+***** DONE Ideally, it just treats output tables if tab.row not found
+      CLOSED: [2019-12-12 Thu 09:57]
 *** TODO theme_pp doesn't run
 *** NMreadRun
-**** TODO No. of parameters 
+**** WAITING No. of parameters 
 extload sometimes fails to get FIX info creating problems for
 determining no of estimated parameters.
 *** signif2
@@ -41,8 +44,11 @@ NMcompAllRes
 *** TODO Read Nonmem data rds files if available and up2date, if not create
     Could be an option to NMscan. For now, it's a new function called
     NMcompRes.     
-*** TODO Function to add columns to all elements in a scanned data obj
-*** TODO Individual profile plots
+*** DONE Function to add columns to all elements in a scanned data obj
+    CLOSED: [2019-12-12 Thu 09:57]
+NMaddColumns
+*** DONE Individual profile plots
+    CLOSED: [2019-12-12 Thu 09:57]
 *** TODO Check nonmem data set
 **** Checks/analyses to include
 **** NA TIME
@@ -58,11 +64,13 @@ NMcompAllRes
 **** positive AMT for !EVID%in%c(1,4)
 **** NA EVID, EVID in 1:4
 **** negative time (for nonmem)
+*** TODO Meta data functions
 ** Documentation
 *** TODO Tests
 ** Improvements
 *** mergeCheck
-**** TODO Add support for data.frame merge.
+**** DONE Add support for data.frame merge.
+     CLOSED: [2019-12-12 Thu 15:08]
 The would mean that input is converted to df's and then merged. The
 problem is that merge.data.table works slightly differently,
 especially without by. Maybe it would be sufficient to support adding
@@ -84,11 +92,19 @@ counter are there, and that no of rows is retained.
 **** DONE Check uniqueness of column names
      CLOSED: [2019-11-08 Fri 10:03]
      Give a warning if merge results in new column names col.x and col.y.
+*** findVars
+**** TODO Add support for missing cols.id
+include a dummy column, use it, remove it
+*** findCovs
+**** TODO Add support for missing cols.id
+include a dummy column, use it, remove it
+
 *** NMreadTab
 **** TODO Option to use colnames for all subtables?
 With the current implementation, this would make processing extremely much slower.
 **** TODO Check if correct seperator chosen
-**** TODO Use fread rather than readLines
+**** DONE Use fread rather than readLines
+     CLOSED: [2019-12-12 Thu 09:59]
 Enourmous performance gain for large tables. Especially for VPC's this is necessary. 
 *** NMrunLog
 **** TODO Add convergence info
@@ -99,13 +115,13 @@ Enourmous performance gain for large tables. Especially for VPC's this is necess
 **** DONE Add Nobs
      CLOSED: [2019-01-15 Tue 13:43]
 **** TODO shortcut for a model devel tab
-
 ***** TODO Colour code checks
 **** TODO Shortcut for a runlog presentation tab
 **** TODO Scan for available lst's and mod's. 
 The user doesn't have to supply which ones to include.
 *** gg_theme
-**** TODO Add choice of base theme
+**** DONE Add choice of base theme
+     CLOSED: [2019-12-12 Thu 10:01]
 *** NMreadRun
 **** DONE If lst does not exist, take what you can from .mod
      CLOSED: [2019-01-15 Tue 17:34]
@@ -114,7 +130,7 @@ The user doesn't have to supply which ones to include.
 **** TODO add timestamp
 **** DONE If lst does not exist, take what you can from .mod
      CLOSED: [2019-01-15 Tue 17:35]
-**** TODO Add smalles p-value of test mu=0
+**** TODO Add smallest p-value of test mu=0
 *** pkpdSimMany
 This function is dead. If at all relevant, this will be developed in a separate package.
 **** CANCELED Doses should not be multiplied by a factor
@@ -126,9 +142,25 @@ This function is dead. If at all relevant, this will be developed in a separate 
 *** NMscanData
 **** TODO check if .mod file exists
 Right now it is assumed. But check for it. And if a new argument "dir.data" is
-given, it is not needed.
+given, it is not needed. This is to be implemented in NMtransInput.
 **** TODO Clean up messages
-Messages seem a bit random. Maybe introduce a quiet option?
+Messages seem a bit random.
+**** TODO NMdata class
+Output should be of class NMdata and contain helpful extra information.
+**** TODO Fix the now missing col.grp functionality
+**** DONE as.dt argument
+     CLOSED: [2019-12-12 Thu 15:10]
+**** DONE introduce a quiet option
+     CLOSED: [2019-12-12 Thu 10:03]
+**** DONE recoverRows argument
+     CLOSED: [2019-12-12 Thu 15:10]
+If recoverRows, do
+***** take the not used lines from input data
+***** What to do about id-level and occ-level variables?
+They could differ from output, should they be overwritten then? I
+really don't think so. But $id and $row are made before this, right? A
+simple approach would be to do nothing but just rbind. We can then add
+some tests and some warnings.
 *** trapez
 **** DONE strategy for cumulative auc
      CLOSED: [2019-10-24 Thu 14:18]

@@ -159,8 +159,13 @@ NMplotFit <- function(data,
     }
     
     ## mvars <- c("DV","PRED","IPRED")[c("DV","PRED","IPRED")%in%colnames(pksim2)]
+### these checks should be done first thing
     mvars <- c(col.dv,col.pred,col.ipred)
-    pklong1 <- melt(pklong0,id.vars=c(col.id,"ROW",col.time,col.ntim,col.grp),measure.vars=mvars)
+    stopifnot(all(mvars%in%colnames(pklong0)))
+    id.vars <- c(col.id,"ROW",col.time,col.ntim,col.grp)
+    stopifnot(all(id.vars%in%colnames(pklong0)))
+    
+    pklong1 <- melt(pklong0,id.vars=id.vars,measure.vars=mvars)
 
 ### adding means
 
