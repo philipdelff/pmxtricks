@@ -147,6 +147,10 @@ given, it is not needed. This is to be implemented in NMtransInput.
 Messages seem a bit random.
 **** TODO NMdata class
 Output should be of class NMdata and contain helpful extra information.
+***** Methods needed
+****** TODO rbind
+****** TODO merge
+****** TODO summary
 **** TODO Fix the now missing col.grp functionality
 **** DONE as.dt argument
      CLOSED: [2019-12-12 Thu 15:10]
