@@ -234,9 +234,6 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
     }
 
     
-
-    
-
 ##### TODO: There are certain variables that can only be row specifc: WRES, CWRES, etc.
     t1 <- Sys.time()
     t0 <- t1
@@ -247,37 +244,17 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
             all.row <- NULL
             tab.occ <- NULL
         } else {
-            ## t2 <- Sys.time()
-            ## cat("t2", t2-t0,"\n")
-            ## t0 <- t2
-            
             all.row <- tab.row
             if(!is.null(tab.firstonly)){
                 all.row <- merge(tab.row,
                                  tab.firstonly[,c(col.id,setdiff(names(tab.firstonly),names(all.row))),with=FALSE],
                                  by=col.id)
-
-                ## t3 <- Sys.time()
-                ## cat("t3: ", t3-t0,"\n")
-                ## t0 <- t3
                 
             }
-            ## tab.occ
+
             if(col.occ%in%colnames(all.row)){
-                
-                ## Sys.sleep(2)
-                ## t1 <- Sys.time()
-                ## tab.occ <- findCovs2(all.row,cols.id=c(col.id,col.occ),debug=F)
-                ## t2 <- Sys.time()
+
                 tab.occ <- findCovs(all.row,cols.id=c(col.id,col.occ),debug=F)
-                ## t3 <- Sys.time()
-                ## t3b <- Sys.time()
-                ## tab.occ <- findCovs_df(all.row,cols.id=c(col.id,col.occ),debug=F)
-                ## t4 <- Sys.time()
-                
-                ##  t4 <- Sys.time()
-                ## cat("t4: ", t4-t0,"\n")
-                ##  t0 <- t4
                 
             } else {
                 tab.occ <- NULL
@@ -287,17 +264,8 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
         ## tab.id
         
         tab.id <- findCovs(all.row,cols.id=c(col.id))
-        ## t5 <- Sys.time()
-        ## cat("t5: ", t5-t0,"\n")
-        ## t0 <- t5
-
-        
         tab.run <- findCovs(all.row)
-        ## t6 <- Sys.time()
-        ## cat("t6: ", t6-t0,"\n")
-        ## t0 <- t6
-        
-        
+
     } else {
         stop("only structure=full is implemented.")
     }
@@ -339,19 +307,20 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
 
     stopifnot(max(table(col.row))==1)
 
-
+    
 
     list.str <- list(
-        col.id=col.id,
-        col.row=col.row,
-        col.occ=col.occ,
-        col.grp=col.grp)
+        id=col.id,
+        row=col.row,
+        occ=col.occ,
+        grp=col.grp)
 
-    list.out <- list(run=tab.run,
+    list.out <- list(pop=tab.run,
                      row=tab.row,
                      id=tab.id,
                      occ=tab.occ)
-
+    attr(list.out,"columns") <- list.str
+    class(list.out)  <- "NMdata"
     
     for(I in 1:length(list.out)){
         if(!is.null(list.out[[I]])){
@@ -359,12 +328,12 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
         }}
     if(!as.dt) list.out <- lapply(list.out,as.data.frame)
     
-    list.out <- c(
-        list.out,
-        list(list.str=list.str)
-    )
+    ## list.out <- c(
+    ##     list.out,
+    ##     list(list.str=list.str)
+    ## )
 
-    
+    list.out
     
 
 }
