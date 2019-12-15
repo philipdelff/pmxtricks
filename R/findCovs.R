@@ -13,22 +13,13 @@
 ##' \dontrun{
 ##' dat <- NMreadTab("TABLE_OUTPUT.txt")
 ##' ### very common use
-##' findCovs(dat,cols.id="ID",cols.drop=c("IRES","TABLE"))
+##' findCovs(dat,cols.id="ID")
 ##' ###  an ID column is not needed.
-##' findCovs(dat,cols.id=c(),cols.drop=c("IRES","TABLE"))
+##' findCovs(dat,cols.id=c())
 ##' ### need a new data.frame to test for length(cols.id)>1
 ##' }
 
 
-
-### for a more data.table pure approach, I tried to do this. But it's horribly slow. 
-    ## dt2 <- data[, .SD[, lapply(.SD, function(x)uniqueN(x)==1)], keyby=cols.id]
-    ## ifkeep <- dt2[,sapply(.SD,all),.SDcols=setdiff(colnames(dt2),cols.id)]
-    ## keep <- c(cols.id,setdiff(colnames(dt2),cols.id)[ifkeep])
-    ## reduced <- unique(data[,keep,with=F])
-### I also tried same approach as in findCovs but using data.frames. That was
-### horribly slow too. For one example, the approach above was 28 secs, the one
-### below based on data.frames 20 seconds, and the one above 2.3 seconds.
 
 
 findCovs <- function(data,cols.id=NULL,debug=F){
@@ -50,13 +41,12 @@ findCovs <- function(data,cols.id=NULL,debug=F){
     if(is.null(cols.id)){
         Nid <- 1
     } else {
+        ## This is a little clumpsy, but it works when cols.id is of length > 1.
         Nid <- nrow(unique(data[,cols.id,with=F]))
     }
 
-
     names.covs <- cnames.to.use[unlist(lapply(cnames.to.use,function(x) nrow(unique(data[,c(cols.id,x),with=F]))==Nid))]
 
-    
     reduced <- unique(data[,c(cols.id,names.covs),with=F])
     if(!is.null(cols.id)){
         reduced <- reduced[order(get(cols.id))]

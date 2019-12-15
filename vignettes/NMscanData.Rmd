@@ -81,5 +81,5 @@ if a combination of columns can make it up for one, like
 c("ID","EVID","TIME"). No general solution exist here, you need to
 analyse the data to find out.
 
-
+## How the input data is read
 

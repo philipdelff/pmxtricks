@@ -93,12 +93,13 @@ counter are there, and that no of rows is retained.
      CLOSED: [2019-11-08 Fri 10:03]
      Give a warning if merge results in new column names col.x and col.y.
 *** findVars
-**** TODO Add support for missing cols.id
-include a dummy column, use it, remove it
+**** DONE Add support for missing cols.id
+     CLOSED: [2019-12-15 Sun 18:43]
+This already worked
 *** findCovs
-**** TODO Add support for missing cols.id
+**** DONE Add support for missing cols.id
+     CLOSED: [2019-12-15 Sun 18:43]
 include a dummy column, use it, remove it
-
 *** NMreadTab
 **** TODO Option to use colnames for all subtables?
 With the current implementation, this would make processing extremely much slower.
