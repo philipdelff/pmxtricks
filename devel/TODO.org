@@ -145,13 +145,21 @@ Right now it is assumed. But check for it. And if a new argument "dir.data" is
 given, it is not needed. This is to be implemented in NMtransInput.
 **** TODO Clean up messages
 Messages seem a bit random.
-**** TODO NMdata class
+**** DONE NMdata class
+     CLOSED: [2019-12-14 Sat 22:29]
 Output should be of class NMdata and contain helpful extra information.
-***** Methods needed
-****** TODO rbind
-****** TODO merge
-****** TODO summary
+**** DONE rbind
+     CLOSED: [2019-12-14 Sat 22:28]
+**** TODO merge
+**** TODO summary
 **** TODO Fix the now missing col.grp functionality
+**** DONE rename $run to $pop
+     CLOSED: [2019-12-14 Sat 22:29]
+**** TODO Set correct keys
+id: ID, grp
+row: ROW (if available)
+occ: ID, occ, grp
+pop: grp
 **** DONE as.dt argument
      CLOSED: [2019-12-12 Thu 15:10]
 **** DONE introduce a quiet option
