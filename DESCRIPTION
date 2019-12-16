@@ -1,7 +1,7 @@
 Package: pmxtricks
 Type: Package
 Title: Every-day pharmacometrics helper functions
-Version: 0.0.5.904
+Version: 0.0.5.906
 Author: Philip Delff <philip@delff.dk>
 Maintainer: Philip Delff <philip@delff.dk>
 Description: Tools mainly for pharmacometrics related tasks. 
@@ -19,7 +19,6 @@ Imports: nonmem2R (>= 0.1.10),
  tidyr,
  utils,
  rlang,
- xpose4,
  gridExtra
 Suggests: testthat
 Encoding: UTF-8
