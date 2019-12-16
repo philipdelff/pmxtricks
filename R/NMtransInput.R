@@ -9,21 +9,25 @@
 ##'     .rds instead of say .csv) as the text file mentioned in the Nonmem
 ##'     control stream, should this be used instead? The default is yes, and
 ##'     NMwriteData will create this by default too.
+##' @param dir.data The data directory can only be read from the control stream
+##'     (.mod) and not from the output file (.lst). So if you only have the
+##'     output file, use dir.data to tell in which directory to find the data file.
 ##' @param quiet Default is to inform a little, but TRUE is useful for
 ##'     non-interactive stuff.
 ##' @param debug start by running browser()?
 ##' @family Nonmem
 ##' @export
 
-NMtransInput <- function(file,useRDS=TRUE,quiet=FALSE,debug=F){
+NMtransInput <- function(file,useRDS=TRUE,dir.data,quiet=FALSE,debug=F){
 
-if(debug) browser()
+    if(debug) browser()
     
 ### the lst file only contains the name of the data file, not the path to it. So we need to find the .mod instead.
-    if(grepl("\\.lst$",file)) file <- sub("\\.lst","\\.mod",file)
-
+    if(missing(dir.data)){
+        if(grepl("\\.lst$",file)) file <- sub("\\.lst$","\\.mod",file)
+    }
+    
     lines <- NMgetSection(file,section="INPUT",keepName=F)
-    lines
 
     line <- gsub(" +"," ",paste(lines,collapse=" "))
     line <- sub("^ ","",line)
@@ -40,7 +44,7 @@ if(debug) browser()
     nms <- sub("(.*) *= *DROP","\\1",nms)
     nms <- sub(".*=(.*)","\\1",nms)
 
-    ## translateInput <- function()
+
     ## get input data file name. Nonmem manual says:
 ###  The first character string appearing after $DATA is the name of the file
 ### containing the data. Since it is to be used in a FORTRAN OPEN statement,
@@ -52,15 +56,17 @@ if(debug) browser()
     lines.data2 <- paste(lines.data,collapse=" ")
     path.data.input <- sub(" *([^ ]+) +.*","\\1",lines.data2)
 
-    pathIsAbs <- function(path) grepl("^/",path)
-    if(pathIsAbs(path.data.input)){
+    if(missing(dir.data)){
+        pathIsAbs <- function(path) grepl("^/",path)
+        if(pathIsAbs(path.data.input)){
 ### assuming we are on windows
-        stop("absolute paths not supported")
-        path.data.input <- (path.data.input)
+            stop("absolute paths not supported")
+        } else {
+            path.data.input <- file.path(dirname(file),path.data.input)
+        }
     } else {
-        path.data.input <- file.path(dirname(file),path.data.input)
+        path.data.input <- filePathSimple(dir.data,basename(path.data.input))
     }
-
 
     path.data.input.rds <- sub("^(.+)\\..+$","\\1.rds",path.data.input)
     if(useRDS && file.exists(path.data.input.rds)){
@@ -73,7 +79,7 @@ if(debug) browser()
             data.input <- NMreadCsv(path.data.input)
         } else {
             stop(paste("Input data file not found. Was expecting to find",path.data.input))
-    ##        use.input <- FALSE
+            ##        use.input <- FALSE
         }
     }
     
