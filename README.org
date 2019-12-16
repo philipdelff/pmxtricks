@@ -11,7 +11,7 @@ called NMscanData. It automatically finds and reads tables generated
 by Nonmem, merges with input data (the data submitted to Nonmem), and
 creates a standardised representation at four levels of variability:
 population (model run), subject, subject-occasion, and row. A separate
-vignette is included about this function.
+vignette is under development this function.
 
 ** Create data, export to Nonmem, read results
 These are the steps that this package especially helps with. Here are some hightlights:
