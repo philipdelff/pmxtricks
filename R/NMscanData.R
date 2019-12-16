@@ -150,7 +150,7 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
         stop("No full-length tables found. This is currently not supported (but should be, sorry).")
     }
     if(!overview.tables[,sum(has.row)]) {
-        warning("col.row not found in any full.length tables. This is experimental. Input data cannotbe used.")
+        warning("col.row not found in any full-length (not firstonly) output tables. Input data cannot be used. See argument col.row.")
         use.input <- FALSE
     }
     tab.row <- NULL
