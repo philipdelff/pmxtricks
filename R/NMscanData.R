@@ -1,46 +1,48 @@
 ##' automatically find Nonmem tables and organize data
 ##'
-##' @param file A nonmem control stream or output file from nonmem
-##'     (.mod or .lst)
-##' @param col.id The name of the subject ID variable, default is
-##'     "ID".
-##' @param col.row A column that is unique for each row. Such a column
-##'     is needed for this function to work well.
+##' @param file A nonmem control stream or output file from nonmem (.mod or
+##'     .lst)
+##' @param col.id The name of the subject ID variable, default is "ID".
+##' @param col.row A column that is unique for each row. Such a column is needed
+##'     for this function to work well.
 ##' @param col.grp If present, ID and OCC level info is grouped by
-##'     col.grp. So should only be needed for cross-over. This is not
-##'     working at the moment.
-##' @param col.occ The name of a non-mandatory occasion variable (say
-##'     "OCC").
-##' @param structure Either "full" or something else. If full, all
-##'     variables that can be represented will be included at all
-##'     levels. If not, only row-level data will be included in $row,
-##'     only occasion-level data in $occ, etc.
-##' @param use.input Merge with columns in input data? Using this, you
-##'     don't have to worry about remembering including all relevant
-##'     variables in the output tables.
-##' @param recoverRows Include rows from input data files that do not
-##'     exist in output tables? This will be added to the $row dataset
-##'     only, and $run, $id, and $occ datasets are created before this
-##'     is taken into account. A column called nmout will be TRUE when
-##'     the row was found in output tables, and FALSE when not. This
-##'     is still experimental. More testing is needed.
-##' @param add.name If a character string, a column of this name will
-##'     be included in all tables containing the model name. The
-##'     default is to store this in a column called "model". See
-##'     argument "name" as well. Set to NULL if not wanted.
-##' @param name The model name to be stored if add.name is not
-##'     NULL. If name is not supplied, the name will be taken from the
-##'     control stream file name.
-##' @param useRDS If an rds file is found with the exact same name
-##'     (except for .rds instead of say .csv) as the input data file
-##'     mentioned in the Nonmem control stream, should this be used
-##'     instead? The default is yes, and NMwriteData will create this
-##'     by default too.
-##' @param quiet The default is to give some information along the way
-##'     on what data is found. But consider setting this to TRUE for
-##'     non-interactive use.
-##' @param as.dt The default is to return data in data.tables. If
-##'     data.frames are wanted, use as.dt=FALSE.
+##'     col.grp. Should only be needed for cross-over - if not grp is a
+##'     covariate. Please make sure that the (within-subject varying) grouping
+##'     variable is not returned in an output table with firstonly option for
+##'     now. For now, this may return unintended merges.
+##' @param col.occ The name of a non-mandatory occasion variable (say "OCC").
+##' @param structure Either "full" or something else. If full, all variables
+##'     that can be represented will be included at all levels. If not, only
+##'     row-level data will be included in $row, only occasion-level data in
+##'     $occ, etc.
+##' @param use.input Merge with columns in input data? Using this, you don't
+##'     have to worry about remembering including all relevant variables in the
+##'     output tables.
+##' @param recoverRows Include rows from input data files that do not exist in
+##'     output tables? This will be added to the $row dataset only, and $run,
+##'     $id, and $occ datasets are created before this is taken into account. A
+##'     column called nmout will be TRUE when the row was found in output
+##'     tables, and FALSE when not. This is still experimental. More testing is
+##'     needed.
+##' @param add.name If a character string, a column of this name will be
+##'     included in all tables containing the model name. The default is to
+##'     store this in a column called "model". See argument "name" as well. Set
+##'     to NULL if not wanted.
+##' @param name The model name to be stored if add.name is not NULL. If name is
+##'     not supplied, the name will be taken from the control stream file name.
+##' @param useRDS If an rds file is found with the exact same name (except for
+##'     .rds instead of say .csv) as the input data file mentioned in the Nonmem
+##'     control stream, should this be used instead? The default is yes, and
+##'     NMwriteData will create this by default too.
+##' @param dir.data The data directory can only be read from the control stream
+##'     (.mod) and not from the output file (.lst). So if you only have the
+##'     output file, use dir.data to tell in which directory to find the data
+##'     file.
+##' @param quiet The default is to give some information along the way on what
+##'     data is found. But consider setting this to TRUE for non-interactive
+##'     use.
+##' @param as.dt The default is to return data in data.tables. If data.frames
+##'     are wanted, use as.dt=FALSE.
 ##' @param debug start by running browser()?
 ##'
 ##' @details This function makes it very easy to collect the data from
@@ -82,7 +84,7 @@
 
 ### end todo 
 
-NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC",structure="full",use.input=T,recoverRows=FALSE,add.name="model",name,quiet=FALSE,useRDS=TRUE,as.dt=TRUE,debug=FALSE){
+NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC",structure="full",use.input=T,recoverRows=FALSE,add.name="model",name,dir.data,quiet=FALSE,useRDS=TRUE,as.dt=TRUE,debug=FALSE){
 
     if(debug) browser()
 
@@ -124,7 +126,8 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
 
 
 ###{ read all output tables and merge to max one firstonly and max one row
-    tables <- NMscanTables(file,details=T,as.dt=T)
+    if(!quiet) message("Scanning for output tables.")
+    tables <- NMscanTables(file,details=T,as.dt=T,quiet=quiet)
     data <- tables$data
     overview.tables <- tables$meta
 
@@ -198,8 +201,15 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
 
     
 ###{ handle input data
+    if(use.input) {
+        file.mod <- sub("\\.lst","\\.mod",file)
+        if(!file.exists(file.mod)&&missing(dir.data)){
+            warning("control stream (.mod) not found next to .lst file. If you don't have a .mod file, see the dir.data argument. Input data not used.")
+            use.input <- FALSE
+        }
+    }
     if(use.input){
-        
+        if(!quiet) message("Searching for input data.")
         data.input <- as.data.table(NMtransInput(file,quiet=quiet,useRDS=useRDS,debug=F))
         cnames.input <- colnames(data.input)
 
@@ -234,12 +244,7 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
     }
 
     
-
-    
-
 ##### TODO: There are certain variables that can only be row specifc: WRES, CWRES, etc.
-    t1 <- Sys.time()
-    t0 <- t1
     if(structure=="full"){
 
         ## tab.row
@@ -247,37 +252,17 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
             all.row <- NULL
             tab.occ <- NULL
         } else {
-            ## t2 <- Sys.time()
-            ## cat("t2", t2-t0,"\n")
-            ## t0 <- t2
-            
             all.row <- tab.row
             if(!is.null(tab.firstonly)){
                 all.row <- merge(tab.row,
                                  tab.firstonly[,c(col.id,setdiff(names(tab.firstonly),names(all.row))),with=FALSE],
                                  by=col.id)
-
-                ## t3 <- Sys.time()
-                ## cat("t3: ", t3-t0,"\n")
-                ## t0 <- t3
                 
             }
-            ## tab.occ
+
             if(col.occ%in%colnames(all.row)){
-                
-                ## Sys.sleep(2)
-                ## t1 <- Sys.time()
-                ## tab.occ <- findCovs2(all.row,cols.id=c(col.id,col.occ),debug=F)
-                ## t2 <- Sys.time()
-                tab.occ <- findCovs(all.row,cols.id=c(col.id,col.occ),debug=F)
-                ## t3 <- Sys.time()
-                ## t3b <- Sys.time()
-                ## tab.occ <- findCovs_df(all.row,cols.id=c(col.id,col.occ),debug=F)
-                ## t4 <- Sys.time()
-                
-                ##  t4 <- Sys.time()
-                ## cat("t4: ", t4-t0,"\n")
-                ##  t0 <- t4
+
+                tab.occ <- findCovs(all.row,cols.id=c(col.id,col.occ,col.grp),debug=F)
                 
             } else {
                 tab.occ <- NULL
@@ -286,18 +271,9 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
 
         ## tab.id
         
-        tab.id <- findCovs(all.row,cols.id=c(col.id))
-        ## t5 <- Sys.time()
-        ## cat("t5: ", t5-t0,"\n")
-        ## t0 <- t5
-
-        
+        tab.id <- findCovs(all.row,cols.id=c(col.id,col.grp))
         tab.run <- findCovs(all.row)
-        ## t6 <- Sys.time()
-        ## cat("t6: ", t6-t0,"\n")
-        ## t0 <- t6
-        
-        
+
     } else {
         stop("only structure=full is implemented.")
     }
@@ -339,19 +315,20 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
 
     stopifnot(max(table(col.row))==1)
 
-
+    
 
     list.str <- list(
-        col.id=col.id,
-        col.row=col.row,
-        col.occ=col.occ,
-        col.grp=col.grp)
+        id=col.id,
+        row=col.row,
+        occ=col.occ,
+        grp=col.grp)
 
-    list.out <- list(run=tab.run,
+    list.out <- list(pop=tab.run,
                      row=tab.row,
                      id=tab.id,
                      occ=tab.occ)
-
+    attr(list.out,"columns") <- list.str
+    class(list.out)  <- "NMdata"
     
     for(I in 1:length(list.out)){
         if(!is.null(list.out[[I]])){
@@ -359,12 +336,5 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
         }}
     if(!as.dt) list.out <- lapply(list.out,as.data.frame)
     
-    list.out <- c(
-        list.out,
-        list(list.str=list.str)
-    )
-
-    
-    
-
+    list.out
 }

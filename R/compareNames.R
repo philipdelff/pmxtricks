@@ -46,9 +46,17 @@ compareNames <- function(...,keepNames=T,debug=F){
 
     colnames(mat.nms) <- names.dots
 
+    
     ## browser()
     mat.nms <- mat.nms[do.call(order,mat.nms),]
+    no.descripancy <- all(rowSums(mat.nms=="x")==length(dots))
 
+    if(testEqual) return(no.descripancy)
+    
+    if(no.descripancy&&quietIfEqual) {
+        return(invisible(mat.nms))
+    }
+    
     mat.nms
 }
 

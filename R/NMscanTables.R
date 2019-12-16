@@ -6,8 +6,8 @@
 ##' @family Nonmem
 ##' @import data.table
 ##' @export
-NMscanTables <- function(file,details=F,as.dt=TRUE){
-    
+NMscanTables <- function(file,details=F,as.dt=TRUE,quiet=FALSE){
+
     dir <- dirname(file)
     extract.info <- function(x,NAME,default){
         r1 <- regexpr(paste0(NAME," *= *[^ ]*"),x)
@@ -46,8 +46,11 @@ NMscanTables <- function(file,details=F,as.dt=TRUE){
         meta[I,"nrow"] <- dim.tmp[1]
         meta[I,"ncol"] <- dim.tmp[2]
     }
-    
-    
+
+    if(!quiet){
+        message(paste0("Read ",nrow(meta)," table(s)."))
+    }
+
     names(tables) <- meta$name
     if(!as.dt) {
         tables <- lapply(tables,as.data.frame)
@@ -61,7 +64,7 @@ NMscanTables <- function(file,details=F,as.dt=TRUE){
     } else {
         out <- tables
     }
-
+    
     return(out)
 
 }
