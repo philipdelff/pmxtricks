@@ -5,8 +5,11 @@
 ##' @param col.id The name of the subject ID variable, default is "ID".
 ##' @param col.row A column that is unique for each row. Such a column is needed
 ##'     for this function to work well.
-##' @param col.grp If present, ID and OCC level info is grouped by col.grp. So
-##'     should only be needed for cross-over. This is not working at the moment.
+##' @param col.grp If present, ID and OCC level info is grouped by
+##'     col.grp. Should only be needed for cross-over - if not grp is a
+##'     covariate. Please make sure that the (within-subject varying) grouping
+##'     variable is not returned in an output table with firstonly option for
+##'     now. For now, this may return unintended merges.
 ##' @param col.occ The name of a non-mandatory occasion variable (say "OCC").
 ##' @param structure Either "full" or something else. If full, all variables
 ##'     that can be represented will be included at all levels. If not, only
@@ -259,7 +262,7 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
 
             if(col.occ%in%colnames(all.row)){
 
-                tab.occ <- findCovs(all.row,cols.id=c(col.id,col.occ),debug=F)
+                tab.occ <- findCovs(all.row,cols.id=c(col.id,col.occ,col.grp),debug=F)
                 
             } else {
                 tab.occ <- NULL
@@ -268,7 +271,7 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
 
         ## tab.id
         
-        tab.id <- findCovs(all.row,cols.id=c(col.id))
+        tab.id <- findCovs(all.row,cols.id=c(col.id,col.grp))
         tab.run <- findCovs(all.row)
 
     } else {
