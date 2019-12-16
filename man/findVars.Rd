@@ -9,24 +9,15 @@ findVars(data, cols.id = NULL, debug = F)
 \arguments{
 \item{data}{data.frame in which to look for covariates}
 
-\item{cols.id}{covariates will be searched for in combinations of values in
-these columns. Often cols.id will be either empty or ID. But it
-can also be both say c("ID","DRUG") or c("ID","TRT").}
+\item{cols.id}{optional covariates will be searched for in
+combinations of values in these columns. Often cols.id will be
+either empty or ID. But it can also be both say c("ID","DRUG")
+or c("ID","TRT").}
 
 \item{debug}{start by running browser()?}
 }
 \description{
 Extract columns that vary within values of other columns in a data.frame
-}
-\examples{
-\dontrun{
-dat <- NMreadTab("TABLE_OUTPUT.txt")
-### very common use
-findCovs(dat,cols.id="ID",cols.drop=c("IRES","TABLE"))
-###  an ID column is not needed.
-findCovs(dat,cols.id=c(),cols.drop=c("IRES","TABLE"))
-### need a new data.frame to test for length(cols.id)>1
-}
 }
 \seealso{
 Other DataWrangling: \code{\link{NMaddColumns}},

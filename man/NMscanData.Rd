@@ -6,51 +6,66 @@
 \usage{
 NMscanData(file, col.id = "ID", col.row = "ROW", col.grp = NULL,
   col.occ = "OCC", structure = "full", use.input = T,
-  reconstructRows = FALSE, add.name = "model", name, quiet = FALSE,
-  debug = FALSE)
+  recoverRows = FALSE, add.name = "model", name, dir.data,
+  quiet = FALSE, useRDS = TRUE, as.dt = TRUE, debug = FALSE)
 }
 \arguments{
-\item{file}{A nonmem control stream or output file from nonmem
-(.mod or .lst)}
+\item{file}{A nonmem control stream or output file from nonmem (.mod or
+.lst)}
 
-\item{col.id}{The name of the subject ID variable, default is
-"ID".}
+\item{col.id}{The name of the subject ID variable, default is "ID".}
 
-\item{col.row}{A column that is unique for each row. Such a column
-is needed for this function to work well.}
+\item{col.row}{A column that is unique for each row. Such a column is needed
+for this function to work well.}
 
 \item{col.grp}{If present, ID and OCC level info is grouped by
-col.grp. So should only be needed for cross-over.}
+col.grp. Should only be needed for cross-over - if not grp is a
+covariate. Please make sure that the (within-subject varying) grouping
+variable is not returned in an output table with firstonly option for
+now. For now, this may return unintended merges.}
 
-\item{col.occ}{The name of a non-mandatory occasion variable (say
-"OCC").}
+\item{col.occ}{The name of a non-mandatory occasion variable (say "OCC").}
 
-\item{structure}{Either "full" or something else. If full, all
-variables that can be represented will be included at all
-levels. If not, only row-level data will be included in $row,
-only occasion-level data in $occ, etc.}
+\item{structure}{Either "full" or something else. If full, all variables
+that can be represented will be included at all levels. If not, only
+row-level data will be included in $row, only occasion-level data in
+$occ, etc.}
 
-\item{use.input}{Merge with columns in input data? Using this, you
-don't have to worry about remembering including all relevant
-variables in the output tables.}
+\item{use.input}{Merge with columns in input data? Using this, you don't
+have to worry about remembering including all relevant variables in the
+output tables.}
 
-\item{reconstructRows}{Include rows from input data files that do
-not exist in output tables? A column called nmout will be TRUE
-when the row was found in output tables, and FALSE when
-not. This is still experimental.}
+\item{recoverRows}{Include rows from input data files that do not exist in
+output tables? This will be added to the $row dataset only, and $run,
+$id, and $occ datasets are created before this is taken into account. A
+column called nmout will be TRUE when the row was found in output
+tables, and FALSE when not. This is still experimental. More testing is
+needed.}
 
-\item{add.name}{If a character string, a column of this name will
-be included in all tables containing the model name. The
-default is to store this in a column called "model". See
-argument "name" as well. Set to NULL if not wanted.}
+\item{add.name}{If a character string, a column of this name will be
+included in all tables containing the model name. The default is to
+store this in a column called "model". See argument "name" as well. Set
+to NULL if not wanted.}
 
-\item{name}{The model name to be stored if add.name is not
-NULL. If name is not supplied, the name will be taken from the
-control stream file name.}
+\item{name}{The model name to be stored if add.name is not NULL. If name is
+not supplied, the name will be taken from the control stream file name.}
 
-\item{quiet}{The default is to give some information along the way
-on what data is found. But consider setting this to TRUE for
-non-interactive use.}
+\item{dir.data}{The data directory can only be read from the control stream
+(.mod) and not from the output file (.lst). So if you only have the
+output file, use dir.data to tell in which directory to find the data
+file.}
+
+\item{quiet}{The default is to give some information along the way on what
+data is found. But consider setting this to TRUE for non-interactive
+use.}
+
+\item{useRDS}{If an rds file is found with the exact same name (except for
+.rds instead of say .csv) as the input data file mentioned in the Nonmem
+control stream, should this be used instead? The default is yes, and
+NMwriteData will create this by default too.}
+
+\item{as.dt}{The default is to return data in data.tables. If data.frames
+are wanted, use as.dt=FALSE.}
 
 \item{debug}{start by running browser()?}
 }
@@ -58,9 +73,10 @@ non-interactive use.}
 automatically find Nonmem tables and organize data
 }
 \details{
-This function makes it very easy to collect the data from a Nonmem
-    run. Only, you have to make sure to include a row counter in your input
-    data files and your output tables. It reorganises the data into four different levels
+This function makes it very easy to collect the data from
+    a Nonmem run. Only, you have to make sure to include a row
+    counter in your input data files and your output tables. It
+    reorganises the data into four different levels:
 \itemize{
   \item run
   \item id

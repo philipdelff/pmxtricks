@@ -9,17 +9,17 @@ License: MIT
 RoxygenNote: 6.1.1
 Depends: R (>= 3.2.4)
 Imports: nonmem2R (>= 0.1.10),
-	 data.table,
-	 ggplot2, 
-	 grDevices,
-	 grid,
-	 scales,
-	 stats,
-	 GGally,
-	 tidyr,
-	 utils,
-	 rlang,
-	 xpose4,
-	 gridExtra
+ data.table,
+ ggplot2, 
+ grDevices,
+ grid,
+ scales,
+ stats,
+ GGally,
+ tidyr,
+ utils,
+ rlang,
+ xpose4,
+ gridExtra
 Suggests: testthat
 Encoding: UTF-8

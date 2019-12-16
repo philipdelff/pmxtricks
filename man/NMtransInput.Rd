@@ -4,7 +4,7 @@
 \alias{NMtransInput}
 \title{read input data and translate names according to the $INPUT section}
 \usage{
-NMtransInput(file, useRDS = TRUE, quiet = FALSE, debug = F)
+NMtransInput(file, useRDS = TRUE, dir.data, quiet = FALSE, debug = F)
 }
 \arguments{
 \item{file}{a .lst or a .mod. No matter which you provide, the .mod is
@@ -14,6 +14,10 @@ required and is the only one to be read.}
 .rds instead of say .csv) as the text file mentioned in the Nonmem
 control stream, should this be used instead? The default is yes, and
 NMwriteData will create this by default too.}
+
+\item{dir.data}{The data directory can only be read from the control stream
+(.mod) and not from the output file (.lst). So if you only have the
+output file, use dir.data to tell in which directory to find the data file.}
 
 \item{quiet}{Default is to inform a little, but TRUE is useful for
 non-interactive stuff.}

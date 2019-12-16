@@ -22,9 +22,9 @@ Extract columns that do not vary within variables in a data.frame
 \dontrun{
 dat <- NMreadTab("TABLE_OUTPUT.txt")
 ### very common use
-findCovs(dat,cols.id="ID",cols.drop=c("IRES","TABLE"))
+findCovs(dat,cols.id="ID")
 ###  an ID column is not needed.
-findCovs(dat,cols.id=c(),cols.drop=c("IRES","TABLE"))
+findCovs(dat,cols.id=c())
 ### need a new data.frame to test for length(cols.id)>1
 }
 }
