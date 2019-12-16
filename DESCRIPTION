@@ -8,7 +8,7 @@ Description: Tools mainly for pharmacometrics related tasks.
 License: MIT
 RoxygenNote: 6.1.1
 Depends: R (>= 3.2.4)
-Imports: nonmem2R (>= 0.1.10),
+Imports: nonmem2R,
  data.table,
  ggplot2, 
  grDevices,
