@@ -166,7 +166,10 @@ NMscanData <- function(file,col.id="ID",col.row="ROW",col.grp=NULL,col.occ="OCC"
     setnames(tab.row,old="col.row",new=col.row)
     
     for(I in which(overview.tables[,full.length])){
-        tab.row <- cbind(tab.row,data[[I]][,setdiff(names(data[[I]]),names(tab.row)),with=F])
+        dt.to.add <- data[[I]][,setdiff(names(data[[I]]),names(tab.row)),with=F]
+        if(ncol(dt.to.add)>0){
+            tab.row <- cbind(tab.row,dt.to.add)
+        }
     }
 
 

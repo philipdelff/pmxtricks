@@ -9,12 +9,19 @@ NMscanTables(file, details = F, as.dt = TRUE, quiet = FALSE)
 \arguments{
 \item{file}{the nonmem file to read (normally .mod or .lst)}
 
-\item{details}{If TRUE, metadata is added to output. In this case, you get a list. I'd say, enable if doing programming.}
+\item{details}{If TRUE, metadata is added to output. In this case, you get a
+list. I'd say, enable if doing programming.}
 
 \item{as.dt}{return data.tables? Tables will not be keyed.}
+
+\item{quiet}{The default is to give some information along the way on what
+data is found. But consider setting this to TRUE for non-interactive
+use.}
 }
 \value{
-A list of all the tables as data.frames. If details=TRUE, this is in one element, called data, and meta is another element. If not, only the element corresponding to data is returned.
+A list of all the tables as data.frames. If details=TRUE, this is in
+    one element, called data, and meta is another element. If not, only the
+    element corresponding to data is returned.
 }
 \description{
 read all output data tables in nonmem run
