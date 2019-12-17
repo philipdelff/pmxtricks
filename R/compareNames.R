@@ -9,6 +9,9 @@
 ##' @param keepNames If TRUE, the original dataset names are used in reported
 ##'     table. If not, generic x1, x2,... are used. The latter may be preferred
 ##'     for readability.
+##' @param testEqual Do you just want a TRUE/FALSE to whether the names of the
+##'     two objects are the same? Default is FALSE which means to return an
+##'     overview for interactive use.
 ##' @param debug If TRUE, browser is called to begin with.
 ##' @family DataWrangling
 ##' @export
@@ -21,7 +24,7 @@
 
 ### End todo
 
-compareNames <- function(...,keepNames=T,debug=F){
+compareNames <- function(...,keepNames=T,testEqual=F,debug=F){
     ## Compares the names of the contents of lists (can be
     ## data.frames). This is useful when combining datasets to get an
     ## overview of compatibility.
