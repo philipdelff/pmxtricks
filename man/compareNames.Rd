@@ -4,7 +4,7 @@
 \alias{compareNames}
 \title{Compare element names in lists}
 \usage{
-compareNames(..., keepNames = T, debug = F)
+compareNames(..., keepNames = T, testEqual = F, debug = F)
 }
 \arguments{
 \item{...}{objects which element names to compare}
@@ -12,6 +12,10 @@ compareNames(..., keepNames = T, debug = F)
 \item{keepNames}{If TRUE, the original dataset names are used in reported
 table. If not, generic x1, x2,... are used. The latter may be preferred
 for readability.}
+
+\item{testEqual}{Do you just want a TRUE/FALSE to whether the names of the
+two objects are the same? Default is FALSE which means to return an
+overview for interactive use.}
 
 \item{debug}{If TRUE, browser is called to begin with.}
 }
