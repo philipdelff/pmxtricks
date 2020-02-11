@@ -36,7 +36,7 @@ NMtransInput <- function(file,useRDS=TRUE,dir.data,quiet=FALSE,debug=F){
     nms <- strsplit(line," ")[[1]]
 
     ## find all equals. drop or rename?
-    drop <- grepl("= *DROP",nms)
+    ## drop <- grepl("= *DROP",nms)
 ### this is if they are not intended to be kept.
     ## nms <- sub(".*=(.*)","\\1",nms)
     ## nms[nms=="DROP"] <- paste0("DROP",1:sum(nms=="DROP"))

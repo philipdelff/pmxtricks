@@ -53,7 +53,7 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,paper="s
 ### table it must be written with draw.grid, and if not by print.
     print1 <- function(plot){
         if("gtable"%in%class(plot)) {
-            cat("using grid::grid.draw\n")
+            message("plot is of class gtable. Using grid::grid.draw.")
             grid::grid.draw(plot)
         } else {
             if(!is.null(plot)){

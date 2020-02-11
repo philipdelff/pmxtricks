@@ -1,7 +1,7 @@
 ##' calculate arithmetic or geometric mean and confidence intervals
 ##'
 ##' @param x vector to calculate the geometric mean of
-##' @param type type of mean. Default is arithmetic, geometric is available as well. Only first letters needed, so say "geo" or even "g" is enough.
+##' @param type type of mean or median. Default is arithmetic, geometric and median are available as well. Only first letters needed, so say "geo" or even "g" is enough.
 ##' @param na.rm Remove NA's before doing calculations?
 ##' @param z.rm removes zeros before calculation? Default is FALSE. Can only be TRUE if type="geometric".
 ##' @param ci if TRUE, a data.frame including point estimate and confidence interval returned. If FALSE, a numeric representing the mean value returned.

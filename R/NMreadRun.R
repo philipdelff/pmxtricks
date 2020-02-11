@@ -98,6 +98,49 @@ NMreadRun <- function(run,debug=F){
     ##     out$Npars <- NA
     ## }
 
+### Minimization succesful
+    out$min.success <- any(grepl("^0MINIMIZATION SUCCESSFUL",lines.lst))
+### problems with minimization
+    out$min.problem <- any(grepl("^ HOWEVER, PROBLEMS OCCURRED WITH THE MINIMIZATION.",lines.lst))
+    
+### Parameter near boundary
+    out$near.bound <- any(grepl("^0PARAMETER ESTIMATE IS NEAR ITS BOUNDARY",lines.lst))
+
+    ## NMgetSection2(file=file.models("BaseModel/run7162.lst"),section="ITERATION",char.section="0",type="res",debug=F)
+### find last gradients
+    its=NMgetSection2(lines=lines.lst,section="ITERATION",char.section="0",type="res",debug=F)
+    last.grad=its[max(grep("^ *GRADIENT",its))]
+    last.grad <- sub("^ *GRADIENT: *","",last.grad)
+    last.grad.n <- read.table(text=last.grad,header=F)[1,]
+
+### Max gradient
+    out$grad.max <- as.numeric(last.grad.n[which.max(abs(last.grad.n))])
+
+    
+### zero gradient
+    out$gradient.zero <- any(last.grad.n==0)
+
+### a summary of convergence
+    convsum <- ifelse(out$min.success,"OK","Minimization failed")
+    
+    if(convsum=="OK"){
+        if(any(out$min.problem,out$near.bound,out$gradient.zero)){
+            convsum <- ""
+            if(out$min.problem) convsum <- paste0(convsum,"Problems. ")
+            if(out$near.bound) convsum <- paste0(convsum,"Near bound. ")
+            if(out$gradient.zero) convsum <- paste0(convsum,"Zero gradient. ")
+            
+            if(convsum=="Problems. ") convsum <- paste0(convsum,"max.grad=",out$grad.max)
+        }
+    }
+    out$convsum <- convsum
+
+### a summary of covariance step
+    ## requested?
+    ## attempted?
+    ## successful?
+
+    
     if(file.exists(file.ext)){
         n2r.ext <- extload(file.ext)
         n.pars.est <- with(n2r.ext,npars.symmat(sigma)+length(theta)+npars.symmat(omega)-length(fix))

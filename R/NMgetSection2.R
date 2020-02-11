@@ -1,10 +1,14 @@
-##' extract sections of Nonmem control streams
+##' NMgetSection generalized with support for lst results
 ##'
 ##' @param file A file to read from. Normally a .mod or .lst. See lines also.
-##' @param lines Text lines to process. This is an alternative to use the file
+##' @param lines Text lines to process. This is an alternative to use the fiole
 ##'     argument.
+##' @param end A regular expression to capture the end of the section.
 ##' @param section The name of section to extract. Examples: "INPUT", "PK",
 ##'     "TABLE", etc.
+##' @param char.section. The section denoter as a string compatible with regular
+##'     expressions. "\\$" for sections in .mod files, "0" for results in .lst
+##'     files.
 ##' @param return If "text", plain text lines are returned. If "idx", matching
 ##'     line numbers are returned. "text" is default.
 ##' @param keepEmpty Keep empty lines in output? Default is FALSE.
@@ -20,15 +24,23 @@
 ##'     interactive analysis. For programming, you probably want FALSE.
 ##' @param cleanSpaces If TRUE, leading and trailing are removed, and multiplied
 ##'     succeeding white spaces are reduced to single white spaces.
+##' @param type Either mod, res or NULL. mod is for information that is given in
+##'     .mod (.lst can be used but results section is disregarded. If NULL, NA
+##'     or empty string, everything is considered.
+##' @details This function is planned to get a more general name and then be
+##'     called by NMgetSection.
+##' @debug Start by calling browser()?
 ##' @family Nonmem
 ##' @examples
 ##' NMgetSection(pmxtricks_filepath("examples/nonmem/run001.lst"),section="DATA")
 ##'
-##' @export
+##' 
 
 
-NMgetSection <- function(file, lines, section, return="text", keepEmpty=FALSE, keepName=TRUE, keepComments=TRUE, asOne=TRUE, simplify=TRUE, cleanSpaces=FALSE){
-    
+NMgetSection2 <- function(file, lines, section, end,char.section, return="text", keepEmpty=FALSE, keepName=TRUE, keepComments=TRUE, asOne=TRUE, simplify=TRUE, cleanSpaces=FALSE, type="mod",debug=F){
+
+    if(debug) browser()
+ 
 ### check arguments
     if(!missing(file) & !missing(lines) ) stop("Supply either file or lines, not both")
     if(missing(file) & missing(lines) ) stop("Supply either file or lines.")
@@ -39,29 +51,42 @@ NMgetSection <- function(file, lines, section, return="text", keepEmpty=FALSE, k
     if(!return%in%c("idx","text")) stop("text must be one of text or idx.")
     
     ## works with both .mod and .lst
-    lines <-
-        lines[1:(min(c(length(lines),grep("NM-TRAN MESSAGES|WARNINGS AND ERRORS \\(IF ANY\\) FOR PROBLEM",lines)-1)))]
+    if(length(type)>1) stop("type must be a single-element character.")
+    if(is.null(type)||is.na(type)||grepl("^ *$",type)){
+        type <- "all"
+    }
+    lines <- switch(type,
+                    mod={
+                        lines[1:(min(c(length(lines),grep("NM-TRAN MESSAGES|WARNINGS AND ERRORS \\(IF ANY\\) FOR PROBLEM",lines)-1)))]
+                    },
+                    res={
+                        idx.res.start <- min(grep("NM-TRAN MESSAGES|WARNINGS AND ERRORS \\(IF ANY\\) FOR PROBLEM",lines))
+                        if(length(idx.res.start)==0) stop("type=res, but there are no results in the file/text to be analyzed.")
+                        lines[idx.res.start:length(lines)]
+                    },
+                    all={lines}
+                    )
     
     ## Find all the lines that start with the $section
-    idx.section <- grep(paste0("^ *\\$",section),lines)
-    idx.dollars <- grep("^ *\\$",lines)
+    idx.starts <- grep(paste0("^ *",char.section,section),lines)
+    idx.ends <- grep(paste0("^ *",char.section),lines)
 
     ## get the sections
-    idx.sections <- lapply(idx.section,function(idx.start){
-        idx.dollars.after <- idx.dollars[idx.dollars>idx.start]
+    idx.sections <- lapply(idx.starts,function(idx.st){
+        idx.dollars.after <- idx.ends[idx.ends>idx.st]
         if(length(idx.dollars.after)==0) {
             idx.end <- length(lines)
         } else {
             idx.end <- min(idx.dollars.after)-1
         }
-        idx.section <- idx.start:idx.end
+        idx.section <- idx.st:idx.end
     })
     result <- idx.sections
 
     if(!keepEmpty){
         result <- lapply(result,function(x)
             x[!grepl("^ *$",lines[x])]
-        )
+            )
     }
     
     if(!keepComments){
@@ -104,7 +129,7 @@ NMgetSection <- function(file, lines, section, return="text", keepEmpty=FALSE, k
 
 
 
-    ## idx or text
-    ## keepName option to omit $SECTION. Only if return="text"
-    ## if as.one, stack the resulting list elements
-    ## list. if simplify=T and length=1, then return list[[1]]
+## idx or text
+## keepName option to omit $SECTION. Only if return="text"
+## if as.one, stack the resulting list elements
+## list. if simplify=T and length=1, then return list[[1]]

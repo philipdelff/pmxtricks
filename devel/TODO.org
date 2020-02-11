@@ -185,3 +185,8 @@ No, cumsum does not support na.rm
 If an rds exists but was called with other options, it is still
 used. That is risky. Maybe save all options to function call in
 object? Or compare with the meta data object?
+*** NMtransInput
+**** Check input file vs $INPUT
+If renaming is being done, provide an overview of what is being
+renamed. From such an overview, it should be very easy to see if it's
+intentional.

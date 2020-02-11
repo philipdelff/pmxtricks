@@ -22,9 +22,11 @@
 ##' @family Plotting
 ##' @export
 
-NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fun.file=identity,save=FALSE,stamp=NULL,debug=F){if(debug) {browser()}
+NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fun.file=identity,save=FALSE,stamp=NULL,debug=F){
+
+    if(debug) {browser()}
     
-    pkpars <- as.data.frame(data)
+    pkpars <- as.data.table(data)
 
     if(missing(covs.num)) covs.num <- NULL
     if(missing(covs.char)) covs.char <- NULL
@@ -52,15 +54,17 @@ val.cov <- NULL
     names.etas <- setdiff(names.etas,c(covs.num,covs.char))
     
     ## only the ones that vary
-    names.etas.var <- names(which(
-        sapply(pkpars[,names.etas],function(x)length(unique(x)))  > 1
-    ))
+    ## names.etas.var <- names(which(
+    ##     sapply(pkpars[,names.etas,with=F],function(x)length(unique(x)))  > 1
+    ## ))
+    names.etas.var <- colnames(findVars(pkpars[,names.etas,with=F]))
 
     etas <- NULL
     etas.l <- NULL
     
     if(length(names.etas.var)){
-        etas <- pkpars[,c("ID", names.etas.var,covs.num,covs.char)]
+##        etas <- pkpars[,c("ID", names.etas.var,covs.num,covs.char)]
+        etas <- pkpars[,c("ID", names.etas.var,covs.num,covs.char),with=F]
         
 ### etas against each other. Notice, all etas, even those = 0.
 
@@ -137,9 +141,10 @@ val.cov <- NULL
         }
         
         ## use only covariates that vary
-        covs.num <- names(which(
-            sapply(pkpars[,covs.num,drop=F],function(x)length(unique(x)))  > 1
-        ))
+        ## covs.num <- names(which(
+        ##     sapply(pkpars[,covs.num,drop=F],function(x)length(unique(x)))  > 1
+        ## ))
+        covs.num <- colnames(findVars(pkpars[,covs.num,with=F]))
         
 ##        etas.l2.n <- mergeCheck(etas.l,unique(pkpars[c(col.id,covs.num)]),by=col.id)
 ##        etas.l2.n <- etas.l2.n[,c(col.id,"param","value",covs.num)]
@@ -166,7 +171,7 @@ val.cov <- NULL
             
             ## etas.l2.c <- mergeCheck(etas.l,unique(pkpars[,c(col.id,covs.char),drop=F]),by=col.id)
             ## etas.l2.c <- etas.l2.c[,c(col.id,"param","value",covs.char)]
-               etas.l2.c <- etas.l[,c(col.id,"param","value",covs.char)]
+               etas.l2.c <- etas.l[,c(col.id,"param","value",covs.char),with=F]
 
 #### gather_ does not respect factor levels. Using data.table for this melt/gather.
             ## etas.covs.c <- gather_(etas.l2.c,"cov","val.cov",names(etas.l2.c)[!names(etas.l2.c)%in%c("ID","param","value")])

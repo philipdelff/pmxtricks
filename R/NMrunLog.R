@@ -28,8 +28,8 @@ NMrunLog <- function(dir,runs,runs.omit,debug=F){
 
     if(length(runs)<1) stop("No runs matched.")
     if(!missing(dir)) runs <- lapply(runs,function(run) filePathSimple(dir,run))
-    
-    tab <- do.call(rbind,lapply(runs,
+
+    runs.list <- lapply(runs,
                                 function(run){
                                     cat(run,"\n")
                                     reslist <- try(NMreadRun(run))
@@ -38,10 +38,15 @@ NMrunLog <- function(dir,runs,runs.omit,debug=F){
                                       return(NULL)
                                     } else {
                                         as.data.frame(
-                                        reslist[c("run","problem","Npars","OFV","run.ref","covRun","finalZeroGradient","covSuccessful","conditionNumber","Nsubjs","Nobs","minSuccessful","roundingErrors")]
+                                            reslist[c("run","problem","Npars","OFV","run.ref","covRun","finalZeroGradient","covSuccessful","conditionNumber","Nsubjs","Nobs","minSuccessful","roundingErrors","min.problem","near.bound","grad.max","convsum")],
+                                            stringsAsFactors=F
                                     )
                                 }}
-                                ))
+                        )
+    
+    tab <- do.call(rbind,runs.list)
+
+    
 
     tab$Model <- 1:nrow(tab)
     tab[,c("Model",setdiff(colnames(tab),"Model"))]
