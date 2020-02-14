@@ -38,7 +38,7 @@
 ##' 
 
 
-NMextractText <- function(file, lines, text, section, end,char.section,char.end=char.section, return="text", keepEmpty=FALSE, keepName=TRUE, keepComments=TRUE, asOne=TRUE, simplify=TRUE, cleanSpaces=FALSE, type="mod",debug=F){
+NMextractText <- function(file, lines, text, section, end,char.section,char.end=char.section, return="text", keepEmpty=FALSE, keepName=TRUE, keepComments=TRUE, asOne=TRUE, simplify=TRUE, cleanSpaces=FALSE, type="mod",linesep="\n",debug=F){
 
     if(debug) browser()
     
@@ -50,10 +50,15 @@ NMextractText <- function(file, lines, text, section, end,char.section,char.end=
            !missing(lines)&&!is.null(lines),
            !missing(text)&&!is.null(text)
            )!=1) stop("Exactly one of file, lines, or text must be supplied")
-    if(!missing(file)) {
+    if(!missing(file)&&!is.null(file)) {
         if(!file.exists(file)) stop("When using the file argument, file has to point to an existing file.")
         lines <- readLines(file)
     }
+    if(!missing(text)&&!is.null(text)) {
+        lines <- strsplit(text,split=linesep)[[1]]
+    }
+
+    
     if(!return%in%c("idx","text")) stop("text must be one of text or idx.")
     
     ## works with both .mod and .lst
