@@ -34,12 +34,12 @@ in nonmem, and it exports a rds file as well which is highly preferable for
 use in R.
 }
 \seealso{
-Other Nonmem: \code{\link{NMgetSection}},
-  \code{\link{NMreadCsv}}, \code{\link{NMreadRun}},
-  \code{\link{NMreadTabDF}}, \code{\link{NMreadTab}},
-  \code{\link{NMreplacePart}}, \code{\link{NMrunLog}},
-  \code{\link{NMscanTables}}, \code{\link{NMtransInput}},
-  \code{\link{NMundoReplace}}, \code{\link{extFormat}},
-  \code{\link{sumofork}}
+Other Nonmem: \code{\link{NMextractText}},
+  \code{\link{NMgetSection}}, \code{\link{NMreadCsv}},
+  \code{\link{NMreadRun}}, \code{\link{NMreadTabDF}},
+  \code{\link{NMreadTab}}, \code{\link{NMreplacePart}},
+  \code{\link{NMrunLog}}, \code{\link{NMscanTables}},
+  \code{\link{NMtransInput}}, \code{\link{NMundoReplace}},
+  \code{\link{extFormat}}, \code{\link{sumofork}}
 }
 \concept{Nonmem}

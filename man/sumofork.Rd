@@ -24,12 +24,12 @@ This is a fork of nonmem2R::sumo with very little
     modification. Many thanks to Magnus for a great job!
 }
 \seealso{
-Other Nonmem: \code{\link{NMgetSection}},
-  \code{\link{NMreadCsv}}, \code{\link{NMreadRun}},
-  \code{\link{NMreadTabDF}}, \code{\link{NMreadTab}},
-  \code{\link{NMreplacePart}}, \code{\link{NMrunLog}},
-  \code{\link{NMscanTables}}, \code{\link{NMtransInput}},
-  \code{\link{NMundoReplace}}, \code{\link{NMwriteData}},
-  \code{\link{extFormat}}
+Other Nonmem: \code{\link{NMextractText}},
+  \code{\link{NMgetSection}}, \code{\link{NMreadCsv}},
+  \code{\link{NMreadRun}}, \code{\link{NMreadTabDF}},
+  \code{\link{NMreadTab}}, \code{\link{NMreplacePart}},
+  \code{\link{NMrunLog}}, \code{\link{NMscanTables}},
+  \code{\link{NMtransInput}}, \code{\link{NMundoReplace}},
+  \code{\link{NMwriteData}}, \code{\link{extFormat}}
 }
 \concept{Nonmem}

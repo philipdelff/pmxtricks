@@ -3,12 +3,13 @@
 ##' @param file A file to read from. Normally a .mod or .lst. See lines also.
 ##' @param lines Text lines to process. This is an alternative to use the fiole
 ##'     argument.
-##' @param end A regular expression to capture the end of the section.
 ##' @param section The name of section to extract. Examples: "INPUT", "PK",
 ##'     "TABLE", etc.
 ##' @param char.section. The section denoter as a string compatible with regular
 ##'     expressions. "\\$" for sections in .mod files, "0" for results in .lst
 ##'     files.
+##' @param char.end A regular expression to capture the end of the section. The
+##'     default is to look for the next occurrence of char.section.
 ##' @param return If "text", plain text lines are returned. If "idx", matching
 ##'     line numbers are returned. "text" is default.
 ##' @param keepEmpty Keep empty lines in output? Default is FALSE.
@@ -29,7 +30,7 @@
 ##'     or empty string, everything is considered.
 ##' @details This function is planned to get a more general name and then be
 ##'     called by NMgetSection.
-##' @debug Start by calling browser()?
+##' @param debug Start by calling browser()?
 ##' @family Nonmem
 ##' @examples
 ##' NMgetSection(pmxtricks_filepath("examples/nonmem/run001.lst"),section="DATA")
@@ -37,13 +38,18 @@
 ##' 
 
 
-NMgetSection2 <- function(file, lines, section, end,char.section, return="text", keepEmpty=FALSE, keepName=TRUE, keepComments=TRUE, asOne=TRUE, simplify=TRUE, cleanSpaces=FALSE, type="mod",debug=F){
+NMextractText <- function(file, lines, text, section, end,char.section,char.end=char.section, return="text", keepEmpty=FALSE, keepName=TRUE, keepComments=TRUE, asOne=TRUE, simplify=TRUE, cleanSpaces=FALSE, type="mod",debug=F){
 
     if(debug) browser()
- 
+    
 ### check arguments
-    if(!missing(file) & !missing(lines) ) stop("Supply either file or lines, not both")
-    if(missing(file) & missing(lines) ) stop("Supply either file or lines.")
+    ## if(!missing(file) & !missing(lines) ) stop("Supply either file or lines, not both")
+    ## if(missing(file) & missing(lines) ) stop("Supply either file or lines.")
+
+    if(sum(!missing(file)&&!is.null(file),
+           !missing(lines)&&!is.null(lines),
+           !missing(text)&&!is.null(text)
+           )!=1) stop("Exactly one of file, lines, or text must be supplied")
     if(!missing(file)) {
         if(!file.exists(file)) stop("When using the file argument, file has to point to an existing file.")
         lines <- readLines(file)
@@ -69,7 +75,7 @@ NMgetSection2 <- function(file, lines, section, end,char.section, return="text",
     
     ## Find all the lines that start with the $section
     idx.starts <- grep(paste0("^ *",char.section,section),lines)
-    idx.ends <- grep(paste0("^ *",char.section),lines)
+    idx.ends <- grep(paste0("^ *",char.end),lines)
 
     ## get the sections
     idx.sections <- lapply(idx.starts,function(idx.st){
@@ -126,10 +132,3 @@ NMgetSection2 <- function(file, lines, section, end,char.section, return="text",
     return (result)
     
 }
-
-
-
-## idx or text
-## keepName option to omit $SECTION. Only if return="text"
-## if as.one, stack the resulting list elements
-## list. if simplify=T and length=1, then return list[[1]]

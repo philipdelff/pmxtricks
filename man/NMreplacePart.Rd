@@ -44,12 +44,12 @@ NMreplacePart(path=pmxtricks_filepath("examples/nonmem/run001.mod"),
 section="EST", newlines=newlines)
 }
 \seealso{
-Other Nonmem: \code{\link{NMgetSection}},
-  \code{\link{NMreadCsv}}, \code{\link{NMreadRun}},
-  \code{\link{NMreadTabDF}}, \code{\link{NMreadTab}},
-  \code{\link{NMrunLog}}, \code{\link{NMscanTables}},
-  \code{\link{NMtransInput}}, \code{\link{NMundoReplace}},
-  \code{\link{NMwriteData}}, \code{\link{extFormat}},
-  \code{\link{sumofork}}
+Other Nonmem: \code{\link{NMextractText}},
+  \code{\link{NMgetSection}}, \code{\link{NMreadCsv}},
+  \code{\link{NMreadRun}}, \code{\link{NMreadTabDF}},
+  \code{\link{NMreadTab}}, \code{\link{NMrunLog}},
+  \code{\link{NMscanTables}}, \code{\link{NMtransInput}},
+  \code{\link{NMundoReplace}}, \code{\link{NMwriteData}},
+  \code{\link{extFormat}}, \code{\link{sumofork}}
 }
 \concept{Nonmem}

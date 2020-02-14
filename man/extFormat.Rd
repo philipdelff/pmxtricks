@@ -17,12 +17,12 @@ extFormat(ext, format.estimate = "\% -#6.4g", format.rse = "\%#6.3g")
 The code is copied from nonmem2R and only slightly modified.
 }
 \seealso{
-Other Nonmem: \code{\link{NMgetSection}},
-  \code{\link{NMreadCsv}}, \code{\link{NMreadRun}},
-  \code{\link{NMreadTabDF}}, \code{\link{NMreadTab}},
-  \code{\link{NMreplacePart}}, \code{\link{NMrunLog}},
-  \code{\link{NMscanTables}}, \code{\link{NMtransInput}},
-  \code{\link{NMundoReplace}}, \code{\link{NMwriteData}},
-  \code{\link{sumofork}}
+Other Nonmem: \code{\link{NMextractText}},
+  \code{\link{NMgetSection}}, \code{\link{NMreadCsv}},
+  \code{\link{NMreadRun}}, \code{\link{NMreadTabDF}},
+  \code{\link{NMreadTab}}, \code{\link{NMreplacePart}},
+  \code{\link{NMrunLog}}, \code{\link{NMscanTables}},
+  \code{\link{NMtransInput}}, \code{\link{NMundoReplace}},
+  \code{\link{NMwriteData}}, \code{\link{sumofork}}
 }
 \concept{Nonmem}

@@ -18,9 +18,9 @@
 ## " tables " = c ("003. TAB " , " sdtab003 ")
 ## )
 
-## **** TODO Add dataset name
-## **** TODO Add output tables
+## TODO Add dataset name
 ## TODO add timestamp
+## TODO summarize covariance step
 ## TODO If lst does not exist, take what you can from .mod
 
 
@@ -79,8 +79,8 @@ NMreadRun <- function(run,debug=F){
     out$run.ref <- run.ref
 
     npars.symmat <- function(mat) {nrow(mat)+ ## the diagonal
-                                        (length(mat)-nrow(mat))/2 ## off diag
-                                        }
+                                       (length(mat)-nrow(mat))/2 ## off diag
+    }
     
 ### no of parameters - this is broken in extload. Has to be implemented differently
     ## if(file.exists(file.ext)){
@@ -108,7 +108,7 @@ NMreadRun <- function(run,debug=F){
 
     ## NMgetSection2(file=file.models("BaseModel/run7162.lst"),section="ITERATION",char.section="0",type="res",debug=F)
 ### find last gradients
-    its=NMgetSection2(lines=lines.lst,section="ITERATION",char.section="0",type="res",debug=F)
+    its=NMextractText(lines=lines.lst,section="ITERATION",char.section="0",type="res",debug=F)
     last.grad=its[max(grep("^ *GRADIENT",its))]
     last.grad <- sub("^ *GRADIENT: *","",last.grad)
     last.grad.n <- read.table(text=last.grad,header=F)[1,]
@@ -135,10 +135,44 @@ NMreadRun <- function(run,debug=F){
     }
     out$convsum <- convsum
 
-### a summary of covariance step
-    ## requested?
-    ## attempted?
-    ## successful?
+    
+
+    
+    covinfo <- data.table(path.full.lst  = file.lst)
+    covinfo[,fn.lst:=basename(path.full.lst)]
+    ## covinfo[,path.full :=  file.models("BaseModel",fn.lst)]
+    covinfo[,ROW := 1:.N]
+    covinfo[,text.lst:= paste(readLines(path.full.lst),collapse="\n"),by = .(ROW)]
+
+    covinfo[,cov.request:= ifelse(is.null(NMgetSection(text = text.lst,section  =  "COV",keepName  = T,debug=F)),"No","Yes"),by = .(ROW)]
+
+    covinfo[,sec.cov:= paste(NMgetSection(text =  text.lst,section  =  "COV",keepName  =  T),collapse = "\n" ),by = .(ROW)]
+
+    covinfo[grepl("MATRIX",sec.cov),
+            cov.request := sub(".*MATRIX *= *([A-Z]*).*","\\1",sec.cov)]
+
+    ##    covinfo[,cov.abort:=grepl("0COVARIANCE STEP ABORTED",paste(text.lst))]
+
+    
+    covinfo[,cov.comment:=""]
+    covinfo[cov.request=="No",cov.comment:=NA_character_]
+
+    covinfo[cov.request!="No"&grepl("Elapsed covariance time in seconds",text.lst),cov.comment:="Success"]
+    covinfo[cov.request!="No"&grepl("0COVARIANCE STEP ABORTED",paste(text.lst)),cov.comment:="Aborted"]
+    covinfo[cov.request!="No"&grepl("0R MATRIX ALGORITHMICALLY SINGULAR",text.lst),cov.comment:=paste(cov.comment,"R singular.")]
+    covinfo[cov.request!="No"&grepl("0R MATRIX ALGORITHMICALLY NON-POSITIVE-SEMIDEFINITE",text.lst),cov.comment:=paste(cov.comment,"R non-pos semidef.")]
+    
+    covinfo[cov.request!="No"&grepl("0PARAMETER ESTIMATE IS NEAR ITS BOUNDARY",text.lst),cov.comment:=paste(cov.comment,"Near boundary.")]
+
+
+    ## remove text.lst before exporting
+    covinfo[,text.lst:=NULL]
+
+    out$cov.request <- covinfo[,cov.request]
+##    out$cov.abort <- covinfo[,cov.abort]
+    out$cov.comment <- covinfo[,cov.comment]
+    
+    out$covsum <- covinfo[,.(covsum=paste(cov.request,cov.comment,sep=" - ")),by=.(ROW)]$covsum
 
     
     if(file.exists(file.ext)){

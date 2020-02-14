@@ -22,12 +22,12 @@ Nonmem table as df.
 Read a table file from NONMEM
 }
 \seealso{
-Other Nonmem: \code{\link{NMgetSection}},
-  \code{\link{NMreadCsv}}, \code{\link{NMreadRun}},
-  \code{\link{NMreadTabDF}}, \code{\link{NMreplacePart}},
-  \code{\link{NMrunLog}}, \code{\link{NMscanTables}},
-  \code{\link{NMtransInput}}, \code{\link{NMundoReplace}},
-  \code{\link{NMwriteData}}, \code{\link{extFormat}},
-  \code{\link{sumofork}}
+Other Nonmem: \code{\link{NMextractText}},
+  \code{\link{NMgetSection}}, \code{\link{NMreadCsv}},
+  \code{\link{NMreadRun}}, \code{\link{NMreadTabDF}},
+  \code{\link{NMreplacePart}}, \code{\link{NMrunLog}},
+  \code{\link{NMscanTables}}, \code{\link{NMtransInput}},
+  \code{\link{NMundoReplace}}, \code{\link{NMwriteData}},
+  \code{\link{extFormat}}, \code{\link{sumofork}}
 }
 \concept{Nonmem}

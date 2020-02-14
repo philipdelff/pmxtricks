@@ -11,7 +11,7 @@ means(x, type = "arithmetic", na.rm = FALSE, z.rm = FALSE,
 \arguments{
 \item{x}{vector to calculate the geometric mean of}
 
-\item{type}{type of mean. Default is arithmetic, geometric is available as well. Only first letters needed, so say "geo" or even "g" is enough.}
+\item{type}{type of mean or median. Default is arithmetic, geometric and median are available as well. Only first letters needed, so say "geo" or even "g" is enough.}
 
 \item{na.rm}{Remove NA's before doing calculations?}
 

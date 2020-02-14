@@ -27,84 +27,21 @@
 ##' @export
 
 
-NMgetSection <- function(file, lines, section, return="text", keepEmpty=FALSE, keepName=TRUE, keepComments=TRUE, asOne=TRUE, simplify=TRUE, cleanSpaces=FALSE){
-    
-### check arguments
-    if(!missing(file) & !missing(lines) ) stop("Supply either file or lines, not both")
-    if(missing(file) & missing(lines) ) stop("Supply either file or lines.")
-    if(!missing(file)) {
-        if(!file.exists(file)) stop("When using the file argument, file has to point to an existing file.")
-        lines <- readLines(file)
-    }
-    if(!return%in%c("idx","text")) stop("text must be one of text or idx.")
-    
-    ## works with both .mod and .lst
-    lines <-
-        lines[1:(min(c(length(lines),grep("NM-TRAN MESSAGES|WARNINGS AND ERRORS \\(IF ANY\\) FOR PROBLEM",lines)-1)))]
-    
-    ## Find all the lines that start with the $section
-    idx.section <- grep(paste0("^ *\\$",section),lines)
-    idx.dollars <- grep("^ *\\$",lines)
+NMgetSection <- function(file=NULL, lines=NULL, text=NULL, section, return="text", keepEmpty=FALSE, keepName=TRUE, keepComments=TRUE, asOne=TRUE, simplify=TRUE, linesep="\n",cleanSpaces=FALSE,debug=F){
 
-    ## get the sections
-    idx.sections <- lapply(idx.section,function(idx.start){
-        idx.dollars.after <- idx.dollars[idx.dollars>idx.start]
-        if(length(idx.dollars.after)==0) {
-            idx.end <- length(lines)
-        } else {
-            idx.end <- min(idx.dollars.after)-1
-        }
-        idx.section <- idx.start:idx.end
-    })
-    result <- idx.sections
-
-    if(!keepEmpty){
-        result <- lapply(result,function(x)
-            x[!grepl("^ *$",lines[x])]
-        )
-    }
-    
-    if(!keepComments){
-        result <- lapply(result,function(x)
-            x[!grepl("^ *;",lines[x])]
-            )
-    }
-    
-    if(return=="text"){
-        result <- lapply(result,function(x)lines[x])
-    }
-    
-    if(!keepName){
-        if(!return=="text") {
-            stop("keepName can only be FALSE if return=='text'")
-        }
-        result <- lapply(result, function(x)sub(paste0("^ *\\$",section),"",x))
-    }
-
-    if(cleanSpaces){
-        if(!return=="text") {
-            stop("cleanSpaces can only be TRUE if return=='text'")
-        }
-        result <- lapply(result, function(x)sub(paste0("^ +"),"",x))
-        result <- lapply(result, function(x)sub(paste0(" +$"),"",x))
-        result <- lapply(result, function(x)sub(paste0(" +")," ",x))
-    }
-    
-    if(asOne) {result <- do.call(c,result)}
-
-    if(simplify && length(result)==1) result <- result[[1]]
-    
-
-########## formating return
-    
-    ## result <- unlist(result)
-    return (result)
+    NMextractText(file=file, lines=lines, text=text, section=section,
+                  ## this wrapper is especially made for "$" sections
+                  char.section="\\$",
+                  return=return,
+                  keepEmpty=keepEmpty,
+                  keepName=keepName,
+                  keepComments=keepComments,
+                  asOne=asOne,
+                  simplify=simplify,
+                  cleanSpaces=cleanSpaces,
+                  ## we only consider the model definition, not results.
+                  type="mod",
+                  debug=debug)
     
 }
 
-
-
-    ## idx or text
-    ## keepName option to omit $SECTION. Only if return="text"
-    ## if as.one, stack the resulting list elements
-    ## list. if simplify=T and length=1, then return list[[1]]

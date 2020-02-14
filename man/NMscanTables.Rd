@@ -27,12 +27,12 @@ A list of all the tables as data.frames. If details=TRUE, this is in
 read all output data tables in nonmem run
 }
 \seealso{
-Other Nonmem: \code{\link{NMgetSection}},
-  \code{\link{NMreadCsv}}, \code{\link{NMreadRun}},
-  \code{\link{NMreadTabDF}}, \code{\link{NMreadTab}},
-  \code{\link{NMreplacePart}}, \code{\link{NMrunLog}},
-  \code{\link{NMtransInput}}, \code{\link{NMundoReplace}},
-  \code{\link{NMwriteData}}, \code{\link{extFormat}},
-  \code{\link{sumofork}}
+Other Nonmem: \code{\link{NMextractText}},
+  \code{\link{NMgetSection}}, \code{\link{NMreadCsv}},
+  \code{\link{NMreadRun}}, \code{\link{NMreadTabDF}},
+  \code{\link{NMreadTab}}, \code{\link{NMreplacePart}},
+  \code{\link{NMrunLog}}, \code{\link{NMtransInput}},
+  \code{\link{NMundoReplace}}, \code{\link{NMwriteData}},
+  \code{\link{extFormat}}, \code{\link{sumofork}}
 }
 \concept{Nonmem}

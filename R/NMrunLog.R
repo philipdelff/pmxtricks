@@ -30,18 +30,18 @@ NMrunLog <- function(dir,runs,runs.omit,debug=F){
     if(!missing(dir)) runs <- lapply(runs,function(run) filePathSimple(dir,run))
 
     runs.list <- lapply(runs,
-                                function(run){
-                                    cat(run,"\n")
-                                    reslist <- try(NMreadRun(run))
-                                    if("try-error"%in%class(reslist)) {
-                                      warning("Could not read",run)
-                                      return(NULL)
-                                    } else {
-                                        as.data.frame(
-                                            reslist[c("run","problem","Npars","OFV","run.ref","covRun","finalZeroGradient","covSuccessful","conditionNumber","Nsubjs","Nobs","minSuccessful","roundingErrors","min.problem","near.bound","grad.max","convsum")],
-                                            stringsAsFactors=F
-                                    )
-                                }}
+                        function(run){
+                            cat(run,"\n")
+                            reslist <- try(NMreadRun(run))
+                            if("try-error"%in%class(reslist)) {
+                                warning("Could not read",run)
+                                return(NULL)
+                            } else {
+                                as.data.frame(
+                                    reslist[c("run","problem","Npars","OFV","run.ref","covRun","finalZeroGradient","covSuccessful","conditionNumber","Nsubjs","Nobs","minSuccessful","roundingErrors","min.problem","near.bound","grad.max","convsum","cov.request","cov.comment","covsum")],
+                                    stringsAsFactors=F
+                                )
+                            }}
                         )
     
     tab <- do.call(rbind,runs.list)
