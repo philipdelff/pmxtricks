@@ -12,13 +12,14 @@
 ##' @family Nonmem
 ##' @import data.table
 ##' @export
-NMscanTables <- function(file,details=F,as.dt=TRUE,quiet=FALSE){
-
+NMscanTables <- function(file,details=F,as.dt=TRUE,quiet=FALSE,debug=FALSE){
+    if(debug) browser()
+    
     dir <- dirname(file)
     extract.info <- function(x,NAME,default){
-        r1 <- regexpr(paste0(NAME," *= *[^ ]*"),x)
+        r1 <- regexpr(paste0(NAME," *= *[^ ]*"),x,ignore.case=T)
         rm1 <- regmatches(x,r1)
-        info <- sub(paste0(NAME," *= *"),"",rm1)
+        info <- sub(paste0(NAME," *= *"),"",rm1,ignore.case=T)
         if(length(info)==0&&!missing(default)) {
             info <- default
         }
@@ -28,7 +29,6 @@ NMscanTables <- function(file,details=F,as.dt=TRUE,quiet=FALSE){
     lines.table <- NMgetSection(file,section="TABLE",keepName=F,keepComments=F,keepEmpty=F,asOne=F,simplify=F)
 
 
-### TODO include firstonly
     tab.files <- lapply(lines.table,function(x) {
         tab <- data.frame(file=filePathSimple(dir,extract.info(x,"FILE"))
                          ,name=extract.info(x,"FILE")
@@ -46,7 +46,7 @@ NMscanTables <- function(file,details=F,as.dt=TRUE,quiet=FALSE){
     meta$ncol <- NA_real_
     tables <- list()
     for(I in 1:nrow(meta)){
-        if(!file.exists(meta[I,"file"])) stop(paste("NMscanTables: File not found:",meta[I,"file"]))
+        if(!file.exists(meta[I,"file"])) stop(paste0("NMscanTables: File not found: ",meta[I,'file'],". Did you copy the lst file but forgot table file?"))
         tables[[I]] <- NMreadTab(meta[I,"file"],sep=meta[I,"sep"],silent=T,showProgress=FALSE)
         dim.tmp <- dim(tables[[I]])
         meta[I,"nrow"] <- dim.tmp[1]

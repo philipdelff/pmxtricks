@@ -173,7 +173,7 @@ NMreadRun <- function(run,debug=F){
     out$cov.comment <- covinfo[,cov.comment]
     
     out$covsum <- covinfo[,.(covsum=paste(cov.request,cov.comment,sep=" - ")),by=.(ROW)]$covsum
-
+    out$conv.OK <- out$minSuccessful&!out$roundingErrors&out$finalZeroGradient==0&out$covSuccessful
     
     if(file.exists(file.ext)){
         n2r.ext <- extload(file.ext)

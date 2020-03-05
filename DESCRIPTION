@@ -1,7 +1,7 @@
 Package: pmxtricks
 Type: Package
 Title: Every-day pharmacometrics helper functions
-Version: 0.0.6.901
+Version: 0.0.6.902
 Author: Philip Delff <philip@delff.dk>
 Maintainer: Philip Delff <philip@delff.dk>
 Description: Tools mainly for pharmacometrics related tasks. 

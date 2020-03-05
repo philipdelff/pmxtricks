@@ -38,7 +38,7 @@ NMrunLog <- function(dir,runs,runs.omit,debug=F){
                                 return(NULL)
                             } else {
                                 as.data.frame(
-                                    reslist[c("run","problem","Npars","OFV","run.ref","covRun","finalZeroGradient","covSuccessful","conditionNumber","Nsubjs","Nobs","minSuccessful","roundingErrors","min.problem","near.bound","grad.max","convsum","cov.request","cov.comment","covsum")],
+                                    reslist[c("run","problem","Npars","OFV","run.ref","covRun","finalZeroGradient","covSuccessful","conditionNumber","Nsubjs","Nobs","minSuccessful","roundingErrors","min.problem","near.bound","grad.max","convsum","cov.request","cov.comment","covsum","conv.OK")],
                                     stringsAsFactors=F
                                 )
                             }}
