@@ -6,6 +6,7 @@
 ##'     data is found. But consider setting this to TRUE for non-interactive
 ##'     use.
 ##' @param as.dt return data.tables? Tables will not be keyed.
+##' @param debug Start by calling browser()?
 ##' @return A list of all the tables as data.frames. If details=TRUE, this is in
 ##'     one element, called data, and meta is another element. If not, only the
 ##'     element corresponding to data is returned.

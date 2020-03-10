@@ -4,7 +4,8 @@
 \alias{NMscanTables}
 \title{read all output data tables in nonmem run}
 \usage{
-NMscanTables(file, details = F, as.dt = TRUE, quiet = FALSE)
+NMscanTables(file, details = F, as.dt = TRUE, quiet = FALSE,
+  debug = FALSE)
 }
 \arguments{
 \item{file}{the nonmem file to read (normally .mod or .lst)}
@@ -17,6 +18,8 @@ list. I'd say, enable if doing programming.}
 \item{quiet}{The default is to give some information along the way on what
 data is found. But consider setting this to TRUE for non-interactive
 use.}
+
+\item{debug}{Start by calling browser()?}
 }
 \value{
 A list of all the tables as data.frames. If details=TRUE, this is in

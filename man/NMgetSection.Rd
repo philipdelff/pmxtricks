@@ -7,41 +7,56 @@
 NMgetSection(file = NULL, lines = NULL, text = NULL, section,
   return = "text", keepEmpty = FALSE, keepName = TRUE,
   keepComments = TRUE, asOne = TRUE, simplify = TRUE,
-  linesep = "\\n", cleanSpaces = FALSE, debug = F)
+  cleanSpaces = FALSE, debug = F, ...)
 }
 \arguments{
-\item{file}{A file to read from. Normally a .mod or .lst. See lines also.}
+\item{file}{A file to read from. Normally a .mod or .lst. See
+lines also.}
 
-\item{lines}{Text lines to process. This is an alternative to use the file
-argument.}
+\item{lines}{Text lines to process. This is an alternative to use
+the file argument.}
 
-\item{section}{The name of section to extract. Examples: "INPUT", "PK",
-"TABLE", etc.}
+\item{text}{Use this argument if the text to process is one long
+character string, and indicate the line seperator with the
+linesep argument (handled by NMextractText). Use only one of
+file, lines, and text.}
 
-\item{return}{If "text", plain text lines are returned. If "idx", matching
-line numbers are returned. "text" is default.}
+\item{section}{The name of section to extract. Examples: "INPUT",
+"PK", "TABLE", etc.}
+
+\item{return}{If "text", plain text lines are returned. If "idx",
+matching line numbers are returned. "text" is default.}
 
 \item{keepEmpty}{Keep empty lines in output? Default is FALSE.}
 
-\item{keepName}{Keep the section name in output (say, "$PROBLEM") Default is
-TRUE. It can only be FALSE, if return"idx".}
+\item{keepName}{Keep the section name in output (say, "$PROBLEM")
+Default is TRUE. It can only be FALSE, if return"idx".}
 
 \item{keepComments}{Keep comment lines?}
 
-\item{asOne}{If multiple hits, concatenate into one. This will most often be
-relevant with name="TABLE". If FALSE, a list will be returned, each
-element representing a table. Default is TRUE. So if you want to process
-the tables separately, you probably want FALSE here.}
+\item{asOne}{If multiple hits, concatenate into one. This will
+most often be relevant with name="TABLE". If FALSE, a list
+will be returned, each element representing a table. Default
+is TRUE. So if you want to process the tables separately, you
+probably want FALSE here.}
 
-\item{simplify}{If asOne=FALSE, do you want the result to be simplified if
-only one table is found? Default is TRUE which is desirable for
-interactive analysis. For programming, you probably want FALSE.}
+\item{simplify}{If asOne=FALSE, do you want the result to be
+simplified if only one table is found? Default is TRUE which
+is desirable for interactive analysis. For programming, you
+probably want FALSE.}
 
-\item{cleanSpaces}{If TRUE, leading and trailing are removed, and multiplied
-succeeding white spaces are reduced to single white spaces.}
+\item{cleanSpaces}{If TRUE, leading and trailing are removed, and
+multiplied succeeding white spaces are reduced to single white
+spaces.}
+
+\item{debug}{Start by calling browser()?}
+
+\item{...}{Additional arguments passed to NMextractText}
 }
 \description{
-extract sections of Nonmem control streams
+This is a very commonly used wrapper for the input part of the
+model file. Look NMextractText for more general functionality
+suitable for the results part too.
 }
 \examples{
 NMgetSection(pmxtricks_filepath("examples/nonmem/run001.lst"),section="DATA")
