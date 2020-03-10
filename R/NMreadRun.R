@@ -20,9 +20,8 @@
 
 ## TODO Add dataset name
 ## TODO add timestamp
-## TODO summarize covariance step
 ## TODO If lst does not exist, take what you can from .mod
-
+## TODO get shrinkage info
 
 
 NMreadRun <- function(run,debug=F){
@@ -114,7 +113,7 @@ NMreadRun <- function(run,debug=F){
     last.grad.n <- read.table(text=last.grad,header=F)[1,]
 
 ### Max gradient
-    out$grad.max <- as.numeric(last.grad.n[which.max(abs(last.grad.n))])
+    out$max.grad <- abs(as.numeric(last.grad.n[which.max(abs(last.grad.n))]))
 
     
 ### zero gradient
@@ -130,7 +129,7 @@ NMreadRun <- function(run,debug=F){
             if(out$near.bound) convsum <- paste0(convsum,"Near bound. ")
             if(out$gradient.zero) convsum <- paste0(convsum,"Zero gradient. ")
             
-            if(convsum=="Problems. ") convsum <- paste0(convsum,"max.grad=",out$grad.max)
+            if(convsum=="Problems. ") convsum <- paste0(convsum,"max.grad=",out$max.grad)
         }
     }
     out$convsum <- convsum
