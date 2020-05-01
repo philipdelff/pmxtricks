@@ -4,8 +4,9 @@
 ##' @details You probably want to run this on text obtained by using
 ##'     the NMgetSection function.
 ##' @family Simulation
-##' @export
 
+### Notice, this function is now part of NMdata. In the future, it should be
+### imported from NMdata instead.
 
 NMcode2R <- function(text){
 

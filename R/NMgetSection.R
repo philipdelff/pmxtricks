@@ -37,8 +37,7 @@
 ##' @family Nonmem
 ##' @examples
 ##' NMgetSection(pmxtricks_filepath("examples/nonmem/run001.lst"),section="DATA")
-##'
-##' @export
+
 
 
 NMgetSection <- function(file=NULL, lines=NULL, text=NULL, section, return="text", keepEmpty=FALSE, keepName=TRUE, keepComments=TRUE, asOne=TRUE, simplify=TRUE, cleanSpaces=FALSE, debug=F, ...){

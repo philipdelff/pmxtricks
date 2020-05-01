@@ -134,6 +134,7 @@ val.cov <- NULL
         all.output[["qq.bsv"]]  <- plot.qq
         
         ## IIV random effects vs covariates
+        if(!is.null(covs.num)){
         if(!all(covs.num%in%names(pkpars))){
             covs.num.drop <- setdiff(covs.num,names(pkpars))
             warning(paste0("The following numerical parameters were not found:\n",paste(covs.num.drop,collapse=", ")))
@@ -165,6 +166,7 @@ val.cov <- NULL
             facet_grid(param~cov,scales="free")
         ggwrite(p.iiv.covsn,file=fun.file("iiv_covs_n.png"),save=save,stamp=stamp)
         all.output[["iiv.covsn"]] <- p.iiv.covsn
+        }
         }
         if(!is.null(covs.char)){
          

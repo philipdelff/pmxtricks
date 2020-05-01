@@ -7,7 +7,6 @@
 ##' @return Nonmem table as df.
 ##' @import data.table
 ##' @family Nonmem
-##' @export
 
 
 NMreadTab <- function(file,silent=F,...,debug=F) {

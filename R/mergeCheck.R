@@ -23,7 +23,6 @@
 ##' @family DataWrangling
 ##' @import data.table
 ##' @return a data.frame resulting from merging df1 and df2
-##' @export
 
 mergeCheck <- function(df1,df2,by,debug=F,...){
     if(debug) browser()

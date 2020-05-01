@@ -7,7 +7,7 @@
 ##' @param debug start by running browser()?
 ##' @family DataWrangling
 ##' @import data.table
-##' @export
+
 
 ##' @examples
 ##' \dontrun{

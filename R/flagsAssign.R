@@ -17,8 +17,6 @@
 ##' @param debug Start by calling browser()?
 ##' @return The dataset with flags added. See parameter flags.return as well.
 ##' @import data.table
-##' @export
-
 
 ####### TODO #######
 

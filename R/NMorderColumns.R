@@ -39,7 +39,7 @@
 ##'     will never edit values in any columns.
 ##' @family DataWrangling
 ##' @importFrom data.table is.data.table
-##' @export
+
 
 
 NMorderColumns <- function(data,first,last,lower.last=T,chars.last=T,

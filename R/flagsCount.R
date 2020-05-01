@@ -25,7 +25,6 @@
 ##'     discarded by earlier flags.
 ##' @import data.table
 ##' @importFrom utils write.csv
-##' @export
 
 
 flagsCount <- function(data,tab.flags,file,col.id="ID",by=NULL,debug=F){

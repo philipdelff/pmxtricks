@@ -8,7 +8,11 @@
 ##' @param prefer.plain I base isn't in use already, use it without a digit
 ##'     appended?
 ##' @family DataWrangling
-##' @export
+
+### This function is exported from NMdata. It is included in NMdata not to
+### depend on pmxtricks. However, in the future, pmxtricks probably should
+### depend on NMdata.
+
 tmpcol <- function(data,names=NULL,base="atmpcol999",max.it=100,prefer.plain=TRUE){
     stopifnot(xor(missing(data),is.null(names)))
 

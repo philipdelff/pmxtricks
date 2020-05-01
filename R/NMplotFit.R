@@ -88,6 +88,8 @@ NMplotFit <- function(data,
                       col.ipred = c("IPRED","IPRE"),
                       col.pred = "PRED",
                       log.y=F,
+                      args.plot.mean=NULL,
+                      filter.rows,
                       debug=F){
 
     if(debug) browser()
@@ -107,7 +109,17 @@ NMplotFit <- function(data,
 
 ###  Section end: Dummy variables, only not to get NOTE's in pacakge checks
 
+    if(missing(filter.rows)){
+        if("EVID"%in%colnames(pklong0)){
+            filter.rows <- "EVID==0"
+        } else {
+            filter.rows <- NULL
+        }
+    }
     
+    if(!is.null(filter.rows) && !is.na(filter.rows)){
+        pklong0 <- pklong0[eval(parse(text=filter.rows))]
+    }
 ### look for ipred
     if(!is.null(col.ipred)) {
         if(length(col.ipred)==0) col.ipred <- NULL 
@@ -279,7 +291,9 @@ NMplotFit <- function(data,
         ##     scale_linetype_manual(breaks=scalevals.linetype$names.levels,values=scalevals.linetype$values.fac,name=NULL)
         p1 <- p1+
             geom_line(aes_string(col.time,y="val.line",linetype="variable",size="type",group="grp.line.1"),data=function(x) x[get(col.id)!="mean"])+
-            geom_line(aes_string(col.ntim,y="val.line",linetype="variable",size="type"),data=function(x)subset(x,ID=="mean"))+
+            ## geom_line(aes_string(col.ntim,y="val.line",linetype="variable",size="type"),data=function(x)subset(x,ID=="mean"))+
+            do.call(geom_line,c(list(mapping=aes_string(col.ntim,y="val.line",linetype="variable",size="type"),data=function(x)subset(x,ID=="mean")),args.plot.mean))+
+            
             scale_linetype_manual(breaks=scalevals.linetype$names.levels,values=scalevals.linetype$values.fac,name=NULL)
     }
     if("val.point"%in%colnames(pklong4)){
@@ -289,13 +303,18 @@ NMplotFit <- function(data,
         ##     scale_shape_manual(breaks=scalevals.shape$names.levels,values=scalevals.shape$values.fac,name=NULL)
         p1 <- p1+
             geom_point(aes_string(col.time,"val.point",size="type"),data=function(x)subset(x,ID!="mean"))+
-            geom_point(aes_string(col.ntim,"val.point",size="type"),data=function(x)subset(x,ID=="mean"))+
+            ## geom_point(aes_string(col.ntim,"val.point",size="type"),data=function(x)subset(x,ID=="mean"))+
+            do.call(geom_point,c(list(mapping=aes_string(col.ntim,y="val.point",size="type"),data=function(x)subset(x,ID=="mean")),args.plot.mean))+
             scale_shape_manual(breaks=scalevals.shape$names.levels,values=scalevals.shape$values.fac,name=NULL)
     }
     if(all(c("val.ci.l","val.ci.u")%in%colnames(pklong4))){
         ## geom_linerange(aes(NOMTIME,ymin=mean.grp.l,ymax=mean.grp.u,linetype=variable),data=function(d)d[variable=="DV"])+
-        p1 <- p1 + geom_errorbar(aes_string(col.ntim,ymin="val.ci.l",ymax="val.ci.u"))
-##                                           ,linetype="variable"))
+        
+        ## p1 <- p1 + geom_errorbar(aes_string(col.ntim,ymin="val.ci.l",ymax="val.ci.u"))
+        ##                                           ,linetype="variable"))
+        
+        p1 <- p1 +
+            do.call(geom_errorbar,c(list(mapping=aes_string(x=col.ntim,ymin="val.ci.l",ymax="val.ci.u")),args.plot.mean))
     }
     if(any(c("val.point","val.line")%in%colnames(pklong4))){
         p1 <- p1+

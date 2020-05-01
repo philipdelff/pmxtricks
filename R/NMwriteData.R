@@ -16,7 +16,6 @@
 ##' @param debug Start by running browser()?
 ##'
 ##' @family Nonmem
-##' @export
 
 ### Todo
 

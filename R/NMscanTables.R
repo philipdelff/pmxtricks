@@ -12,7 +12,7 @@
 ##'     element corresponding to data is returned.
 ##' @family Nonmem
 ##' @import data.table
-##' @export
+
 NMscanTables <- function(file,details=F,as.dt=TRUE,quiet=FALSE,debug=FALSE){
     if(debug) browser()
     

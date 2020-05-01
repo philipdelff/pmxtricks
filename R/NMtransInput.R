@@ -16,7 +16,6 @@
 ##'     non-interactive stuff.
 ##' @param debug start by running browser()?
 ##' @family Nonmem
-##' @export
 
 NMtransInput <- function(file,useRDS=TRUE,dir.data,quiet=FALSE,debug=F){
 

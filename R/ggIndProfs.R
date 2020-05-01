@@ -131,16 +131,21 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
 
 ### Section end: Dummy variables, only not to get NOTE's in pacakge checks
 
-
+    data <- copy(as.data.table(data))
     
 ##### check arguments
     if(!is.data.frame(data)) stop("data has to be a data.frame.")
     if(!x%in%colnames(data)) {stop(paste(x,"not found in data (see x argument)."))}
     ## if data does not contain an EVID column, it is assumed to be only observations
-    if(!"EVID"%in%colnames(data)) x[,"EVID"] <- 0
+
+    evid.missing <- FALSE
+    if(!"EVID"%in%colnames(data)) {
+        data[,EVID:=0]
+        evid.missing <- TRUE
+    }
 
     if(!is.null(dv)) {
-        if(!dv%in%names(data)) stop("dv not found in data.")
+        if(!dv%in%colnames(data)) stop("dv not found in data.")
 ### as long as we haven't implemented skipping plotting of dv we need this.
         if(all(is.na(as.data.frame(data)[,dv]))) stop("dv column in data contains no observations. This is not supported.")
     }
@@ -187,11 +192,9 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
     }
 
 
-    DTdata <- data.table(data)
-    
+    DTdata <- data
     ## add reset info in separate column
-    DTdata$reset <- NA
-    ##    data$reset[data$EVID%in%c(3,4)] <- data[,get(x)][data$EVID%in%c(3,4)]
+    DTdata[,reset:=NA_real_]
     DTdata[EVID%in%c(3,4),reset:=get(x)]
     
     
@@ -410,8 +413,12 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
 
         if(plot.doses){
             
-            ## if(is.null(par.prof)){
-            p <- p+geom_segment(mapping = aes_string(x = x, xend = x, y = 0, yend = "amt2",colour=par.prof),data=subset(tmp2,EVID%in%c(1,4)))
+            if(evid.missing){
+                data.amt <- tmp2
+            } else{
+                data.amt=subset(tmp2,EVID%in%c(1,4))
+            }
+            p <- p+geom_segment(mapping = aes_string(x = x, xend = x, y = 0, yend = "amt2",colour=par.prof),data=data.amt)
             ## } else {
             ##     p <- p+geom_segment(mapping = aes_string(x = x, xend = x, y = 0, yend = "amt2",colour=as.name(par.prof)),data=subset(tmp2,EVID%in%c(1,4)))
             ## }

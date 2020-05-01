@@ -1,22 +1,26 @@
 ##' Get predefined canvas sizes
 ##'
-##' @param canvas Can either be a character with one of the values "standard",
-##'     "wide", "A4", "xeqy","wide-screen" or it can be a list with elements
-##'     width and height with single values (unit is inches).
+##' @param canvas Can either be a character with one of the values
+##'     "standard", "wide", "A4", "square","wide-screen" or it can be a
+##'     list with elements width and height with single values (unit
+##'     is inches).
+##' @param scale A scale to apply to both directions of the canvas
+##'     size. This can be useful in combination with the pre-defined
+##'     canvas sizes.
 ##' @export
 
 ### a function that looks up the canvas size
-canvasSize <- function(canvas){
+canvasSize <- function(canvas,scale=1){
     possible.canvases <- list(
         standard=list(width=12,height=9),
         wide=list(width=16,height=9),
         A4=list(width=9,height=12),
-        xeqy=list(width=9,height=9),
+        square=list(width=9,height=9),
         "wide-screen"=list(width=31,height=15)
     )
     
     ## size of plot
-    ## A "screen" version is needed that will save graohics nice to read on screen. Could be like 1.4*standard.
+    ## A "screen" version is needed that will save graphics nice to read on screen. Could be like 1.4*standard.
     if(is.list(canvas) ){ if (all(c(!is.null(canvas$height),!is.null(canvas$width)))) {
                               ## todo: width and height must be numerics of length one 
                               return(canvas)
@@ -33,6 +37,6 @@ canvasSize <- function(canvas){
                                     )
         size <- possible.canvases[[size.matched]]
     }
-    
+    size <- lapply(size,function(x)x*scale)
     return(size)
 }

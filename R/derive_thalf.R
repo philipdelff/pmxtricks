@@ -19,12 +19,6 @@
 thalf_1a2c <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=F,debug=F){
     if(debug)browser()
 
-#### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
-
-    atempROW <- NULL
-
-### Section end: Dummy variables, only not to get NOTE's in pacakge checks
-
     
     varnames <- c(cl,ka,v2,q,v3)
     varsInPars <- varnames%in%names(pars)
@@ -43,6 +37,42 @@ thalf_1a2c <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=F,d
         thalves.u <- log(2)/-sort(eigen(Asys)$values)
         thalves.u
     })
+
+    ths2 <- t(thalves)
+    
+    if(transform){
+        colnames(ths2) <- paste("th",1:ncol(ths2),sep="")
+        ths2 <- cbind(pars,ths2)
+    }
+
+    return(ths2)
+}
+
+
+thalf_1a2c_dt <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=F,debug=F){
+    if(debug) browser()
+
+    
+    varnames <- c(cl,ka,v2,q,v3)
+    varsInPars <- varnames%in%names(pars)
+    if(any(!varsInPars)){stop(paste("These variables are not in pars:",paste(varnames[!varsInPars],collaps=", ")))}
+
+    setnames(pars,old=varnames,new=c("cl","ka","v2","q","v3"))
+    
+    rowcol <- tmpcol(pars)
+    pars[,(rowcol):=1:.N]
+    pars[,{
+        Asys <- matrix(c(-ka,0,0,
+                                ka,-(cl+q)/v2,q/v3,
+                                0,q/v2,-q/v3),nrow=3,byrow=TRUE)
+            
+        thalves.u <- log(2)/-sort(eigen(Asys)$values)
+        list(thalf=thalves.u)
+    }
+         ,by=rowcol]
+    
+
+
 
     ths2 <- t(thalves)
     

@@ -3,7 +3,7 @@
 ##' @param file The file to recover
 ##' @param debug start by running browser()?
 ##' @family Nonmem
-##' @export
+
 
 NMundoReplace <- function(file,debug=F){
     if(debug) browser()

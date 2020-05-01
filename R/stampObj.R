@@ -10,8 +10,6 @@
 ##'     Description="PK data for ph1 trials in project".
 ##' @seealso objInfo
 ##' @family DataWrangling
-##' @export
-
 
 stampObj <- function(data,script,...){
     attr(data,"objInfo") <-

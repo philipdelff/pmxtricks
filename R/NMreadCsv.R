@@ -8,7 +8,7 @@
 ##'     how to read the data that was exported for nonmem.
 ##' @importFrom utils read.csv
 ##' @family Nonmem
-##' @export
+
 NMreadCsv <- function(file,na.strings=".",header=TRUE,stringsAsFactors=FALSE,...){
     read.csv(file=file,na.strings=na.strings,header=header,stringsAsFactors=stringsAsFactors,...)
 }

@@ -8,8 +8,6 @@
 ##' @param debug start by running browser()?
 ##' @family DataWrangling
 ##' @import data.table
-##' @export
-
 
 
 findVars <- function(data,cols.id=NULL,debug=F){
