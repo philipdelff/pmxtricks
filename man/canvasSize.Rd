@@ -4,13 +4,27 @@
 \alias{canvasSize}
 \title{Get predefined canvas sizes}
 \usage{
-canvasSize(canvas)
+canvasSize(canvas, scale = 1)
 }
 \arguments{
-\item{canvas}{Can either be a character with one of the values "standard",
-"wide", "A4", "xeqy","wide-screen" or it can be a list with elements
-width and height with single values (unit is inches).}
+\item{canvas}{Can either be a character with one of the values
+"standard", "wide", "A4", "square","wide-screen" or it can be a
+list with elements width and height with single values (unit
+is inches).}
+
+\item{scale}{A scale to apply to both directions of the canvas
+size. This can be useful in combination with the pre-defined
+canvas sizes.}
 }
 \description{
 Get predefined canvas sizes
 }
+\seealso{
+Other Plotting: \code{\link{NMplotBOV}},
+  \code{\link{NMplotBSV}}, \code{\link{NMplotGOF}},
+  \code{\link{extractLegend}}, \code{\link{ggIndProfs}},
+  \code{\link{ggWater}}, \code{\link{ggstamp}},
+  \code{\link{ggwrite}}, \code{\link{theme_pp_facet}},
+  \code{\link{theme_pp}}
+}
+\concept{Plotting}

@@ -32,6 +32,7 @@ None. Sources the specified file into the global environment.
 Get file from remote library and inport it into project if it does not exist. Then source it.
 }
 \seealso{
-Other FileSystem: \code{\link{filePathSimple}}
+Other FileSystem: \code{\link{filePathSimple}},
+  \code{\link{pmxtricks_filepath}}
 }
 \concept{FileSystem}

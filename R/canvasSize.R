@@ -8,6 +8,7 @@
 ##'     size. This can be useful in combination with the pre-defined
 ##'     canvas sizes.
 ##' @export
+##' @family Plotting
 
 ### a function that looks up the canvas size
 canvasSize <- function(canvas,scale=1){

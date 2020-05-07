@@ -13,7 +13,7 @@
 ##'                                nrow=1),
 ##'                                mylegend, nrow=2,heights=c(10, 1))
 ##' }
-##' @family plotting
+##' @family Plotting
 ##' @importFrom ggplot2 ggplot_gtable ggplot_build
 ##' @export
 

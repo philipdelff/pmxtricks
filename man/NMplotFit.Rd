@@ -9,7 +9,7 @@ NMplotFit(data, geom.dv = "p", geom.pred = "", geom.ipred = "",
   col.grp, type.mean = "arithmetic", col.id = "ID",
   col.time = "TIME", col.ntim = "NOMTIME", col.dv = "DV",
   col.ipred = c("IPRED", "IPRE"), col.pred = "PRED", log.y = F,
-  debug = F)
+  args.plot.mean = NULL, filter.rows, debug = F)
 }
 \arguments{
 \item{data}{The dataset to plot.}

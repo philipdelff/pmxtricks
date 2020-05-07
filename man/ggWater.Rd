@@ -26,6 +26,7 @@ ff <- qplot(1:10, 11:20) + pmxtricks:::ggWater()
 \seealso{
 Other Plotting: \code{\link{NMplotBOV}},
   \code{\link{NMplotBSV}}, \code{\link{NMplotGOF}},
+  \code{\link{canvasSize}}, \code{\link{extractLegend}},
   \code{\link{ggIndProfs}}, \code{\link{ggstamp}},
   \code{\link{ggwrite}}, \code{\link{theme_pp_facet}},
   \code{\link{theme_pp}}

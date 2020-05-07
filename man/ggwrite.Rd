@@ -59,6 +59,7 @@ ggwrite(p1,stamp=stamp,canvas="wide",file="myplot1.png",save=writeOutput)
 \seealso{
 Other Plotting: \code{\link{NMplotBOV}},
   \code{\link{NMplotBSV}}, \code{\link{NMplotGOF}},
+  \code{\link{canvasSize}}, \code{\link{extractLegend}},
   \code{\link{ggIndProfs}}, \code{\link{ggWater}},
   \code{\link{ggstamp}}, \code{\link{theme_pp_facet}},
   \code{\link{theme_pp}}

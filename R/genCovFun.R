@@ -25,7 +25,7 @@
 ##' \dontrun{
 ##' text0 <- NMgetSection(file="run1.lst",section="PK",return="text",keepName=FALSE,cleanSpaces=FALSE)
 ##' 
-##' NMR0 <- NMcode2R(text0)
+##' NMR0 <- NMdata::NMcode2R(text0)
 ##' ## get rid of some text that has nothing to do with covariates
 ##' NMR1 <- NMR0[-c(1:21)]
 ##' NMR2 <- NMR1[1:25]
@@ -43,9 +43,7 @@
 ##' cat(fun1text)
 ##' }
 
-
-## dont export from pmxtricks. Needs a little more testing. Maybe to be moved to pmxsim package?
-
+##' @export
 
 ##### changelog
 ## 2019-10-08 philipdelff: changed cbind of covs and pars to mergeCheck by

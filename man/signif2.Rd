@@ -34,13 +34,10 @@ signif2(3205,-1)
 }
 }
 \seealso{
-Other DataWrangling: \code{\link{NMaddColumns}},
-  \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
-  \code{\link{NMscanDataDF}}, \code{\link{NMscanData}},
-  \code{\link{compareNames}}, \code{\link{factor2}},
-  \code{\link{findCovs_df}}, \code{\link{findCovs}},
-  \code{\link{findVars}}, \code{\link{mergeCheck}},
-  \code{\link{newNames}}, \code{\link{objInfo}},
+Other DataWrangling: \code{\link{NMcompAllRes}},
+  \code{\link{NMscanDataDF}}, \code{\link{compareNames}},
+  \code{\link{factor2}}, \code{\link{findCovs_df}},
+  \code{\link{mergeCheck}}, \code{\link{newNames}},
   \code{\link{rbindIntersect}}, \code{\link{rbindUnion}},
   \code{\link{roundDF}}, \code{\link{roundResp0}},
   \code{\link{selectVars}}, \code{\link{stampObj}},

@@ -48,21 +48,16 @@
 ##' @details This function is planned to get a more general name and
 ##'     then be called by NMgetSection.
 ##' @family Nonmem
-##' @examples
-##' NMgetSection(NMdata_filepath("examples/nonmem/run001.lst"),section="DATA")
-## This is exported from NMdata but kept in pmxtricks as an internal. Please
-## align to the one in NMdata.
-
 
 
 NMextractText <- function(file, lines, text, section, char.section,char.end=char.section, return="text", keepEmpty=FALSE, keepName=TRUE, keepComments=TRUE, asOne=TRUE, simplify=TRUE, cleanSpaces=FALSE, type="mod", linesep="\n", debug=F){
 
     if(debug) browser()
 
-    if(sum(c(!missing(file)&&!is.null(file),
+    if(sum(!missing(file)&&!is.null(file),
            !missing(lines)&&!is.null(lines),
            !missing(text)&&!is.null(text)
-           ))!=1) stop("Exactly one of file, lines, or text must be supplied")
+           )!=1) stop("Exactly one of file, lines, or text must be supplied")
     if(!missing(file)&&!is.null(file)) {
         if(!file.exists(file)) stop("When using the file argument, file has to point to an existing file.")
         lines <- readLines(file)
@@ -117,7 +112,6 @@ NMextractText <- function(file, lines, text, section, char.section,char.end=char
         result <- lapply(result,function(x)
             x[!grepl("^ *;",lines[x])]
             )
-        lines <- sub(pattern=";.*$",replacement="",x=lines)
     }
     
     if(return=="text"){

@@ -22,13 +22,10 @@ Use base::reorder instead. I think it does the same. factor2 is
     sometimes convenient, but it does not work within data.table.
 }
 \seealso{
-Other DataWrangling: \code{\link{NMaddColumns}},
-  \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
-  \code{\link{NMscanDataDF}}, \code{\link{NMscanData}},
-  \code{\link{compareNames}}, \code{\link{findCovs_df}},
-  \code{\link{findCovs}}, \code{\link{findVars}},
-  \code{\link{mergeCheck}}, \code{\link{newNames}},
-  \code{\link{objInfo}}, \code{\link{rbindIntersect}},
+Other DataWrangling: \code{\link{NMcompAllRes}},
+  \code{\link{NMscanDataDF}}, \code{\link{compareNames}},
+  \code{\link{findCovs_df}}, \code{\link{mergeCheck}},
+  \code{\link{newNames}}, \code{\link{rbindIntersect}},
   \code{\link{rbindUnion}}, \code{\link{roundDF}},
   \code{\link{roundResp0}}, \code{\link{selectVars}},
   \code{\link{signif2}}, \code{\link{stampObj}},

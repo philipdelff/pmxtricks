@@ -26,13 +26,10 @@ This function is a pmxtricks internal. When using data.table, use
     setnames instead which is based on the same idea as this.
 }
 \seealso{
-Other DataWrangling: \code{\link{NMaddColumns}},
-  \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
-  \code{\link{NMscanDataDF}}, \code{\link{NMscanData}},
-  \code{\link{compareNames}}, \code{\link{factor2}},
-  \code{\link{findCovs_df}}, \code{\link{findCovs}},
-  \code{\link{findVars}}, \code{\link{mergeCheck}},
-  \code{\link{objInfo}}, \code{\link{rbindIntersect}},
+Other DataWrangling: \code{\link{NMcompAllRes}},
+  \code{\link{NMscanDataDF}}, \code{\link{compareNames}},
+  \code{\link{factor2}}, \code{\link{findCovs_df}},
+  \code{\link{mergeCheck}}, \code{\link{rbindIntersect}},
   \code{\link{rbindUnion}}, \code{\link{roundDF}},
   \code{\link{roundResp0}}, \code{\link{selectVars}},
   \code{\link{signif2}}, \code{\link{stampObj}},

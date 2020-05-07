@@ -27,4 +27,12 @@ p3 <- grid.arrange(arrangeGrob(p1 + theme(legend.position="none"),
                                mylegend, nrow=2,heights=c(10, 1))
 }
 }
-\concept{plotting}
+\seealso{
+Other Plotting: \code{\link{NMplotBOV}},
+  \code{\link{NMplotBSV}}, \code{\link{NMplotGOF}},
+  \code{\link{canvasSize}}, \code{\link{ggIndProfs}},
+  \code{\link{ggWater}}, \code{\link{ggstamp}},
+  \code{\link{ggwrite}}, \code{\link{theme_pp_facet}},
+  \code{\link{theme_pp}}
+}
+\concept{Plotting}

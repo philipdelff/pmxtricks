@@ -18,6 +18,7 @@ Used to tidy up paths. Passes arguments to
     comparisson.
 }
 \seealso{
-Other FileSystem: \code{\link{getSource}}
+Other FileSystem: \code{\link{getSource}},
+  \code{\link{pmxtricks_filepath}}
 }
 \concept{FileSystem}

@@ -29,7 +29,8 @@ All parameters must be given as expressions (no quotes)
 }
 \seealso{
 Other Plotting: \code{\link{NMplotBOV}},
-  \code{\link{NMplotBSV}}, \code{\link{ggIndProfs}},
+  \code{\link{NMplotBSV}}, \code{\link{canvasSize}},
+  \code{\link{extractLegend}}, \code{\link{ggIndProfs}},
   \code{\link{ggWater}}, \code{\link{ggstamp}},
   \code{\link{ggwrite}}, \code{\link{theme_pp_facet}},
   \code{\link{theme_pp}}

@@ -13,7 +13,6 @@
 ##' df.races <- data.frame(RACE=c(1,3.1),
 ##'                        race1=c("White","Japanese"),
 ##'                        stringsAsFactors=FALSE)
-##' @export
 
 NMaddColumns <- function(data,df,by,debug=FALSE){
     if(debug) browser()

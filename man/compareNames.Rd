@@ -26,13 +26,10 @@ which of the objects they are present. It does not compare
 contents of the elements at all.
 }
 \seealso{
-Other DataWrangling: \code{\link{NMaddColumns}},
-  \code{\link{NMcompAllRes}}, \code{\link{NMorderColumns}},
-  \code{\link{NMscanDataDF}}, \code{\link{NMscanData}},
-  \code{\link{factor2}}, \code{\link{findCovs_df}},
-  \code{\link{findCovs}}, \code{\link{findVars}},
-  \code{\link{mergeCheck}}, \code{\link{newNames}},
-  \code{\link{objInfo}}, \code{\link{rbindIntersect}},
+Other DataWrangling: \code{\link{NMcompAllRes}},
+  \code{\link{NMscanDataDF}}, \code{\link{factor2}},
+  \code{\link{findCovs_df}}, \code{\link{mergeCheck}},
+  \code{\link{newNames}}, \code{\link{rbindIntersect}},
   \code{\link{rbindUnion}}, \code{\link{roundDF}},
   \code{\link{roundResp0}}, \code{\link{selectVars}},
   \code{\link{signif2}}, \code{\link{stampObj}},

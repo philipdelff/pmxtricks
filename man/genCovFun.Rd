@@ -44,7 +44,7 @@ The resulting function takes arguments theta and omega.
 }
 \examples{
 \dontrun{
-text0 <- NMgetSection(file="run1.lst",name="PK",return="text",keepName=FALSE,cleanSpaces=FALSE)
+text0 <- NMgetSection(file="run1.lst",section="PK",return="text",keepName=FALSE,cleanSpaces=FALSE)
 
 NMR0 <- NMcode2R(text0)
 ## get rid of some text that has nothing to do with covariates
@@ -63,8 +63,5 @@ fun1text <- genCovFun(NMcode0=NMR3
 
 cat(fun1text)
 }
-}
-\seealso{
-Other Simulation: \code{\link{NMcode2R}}
 }
 \concept{Simulation}

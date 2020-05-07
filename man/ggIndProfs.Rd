@@ -98,6 +98,7 @@ The resulting object can be saved with ggwrite.
 \seealso{
 Other Plotting: \code{\link{NMplotBOV}},
   \code{\link{NMplotBSV}}, \code{\link{NMplotGOF}},
+  \code{\link{canvasSize}}, \code{\link{extractLegend}},
   \code{\link{ggWater}}, \code{\link{ggstamp}},
   \code{\link{ggwrite}}, \code{\link{theme_pp_facet}},
   \code{\link{theme_pp}}
