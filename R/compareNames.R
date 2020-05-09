@@ -24,7 +24,7 @@
 
 ### End todo
 
-compareNames <- function(...,keepNames=T,testEqual=F,debug=F){
+compareNames <- function(...,keepNames=T,testEqual=F,quietIfEqual=F,debug=F){
     ## Compares the names of the contents of lists (can be
     ## data.frames). This is useful when combining datasets to get an
     ## overview of compatibility.
