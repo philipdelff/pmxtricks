@@ -4,7 +4,8 @@
 \alias{compareNames}
 \title{Compare element names in lists}
 \usage{
-compareNames(..., keepNames = T, testEqual = F, debug = F)
+compareNames(..., keepNames = T, testEqual = F, quietIfEqual = F,
+  debug = F)
 }
 \arguments{
 \item{...}{objects which element names to compare}

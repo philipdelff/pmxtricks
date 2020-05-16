@@ -24,6 +24,9 @@
 ##' @import data.table
 ##' @return a data.frame resulting from merging df1 and df2
 
+## This is exported from NMdata and only kept in pmxtricks not to depend on
+## NMdata for now. But please align with NMdata.
+
 mergeCheck <- function(df1,df2,by,debug=F,...){
     if(debug) browser()
     

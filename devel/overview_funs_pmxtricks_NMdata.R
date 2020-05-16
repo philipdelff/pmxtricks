@@ -1,3 +1,8 @@
+## working towards release of pmxtricks v0.0.10 and NMdata v0.0.2. They should
+## not export any common functions, but they should still be independent of each
+## other. Only if/when NMdata gets more established and on CRAN, pmxtricks may
+## start to depend on it.
+
 library(devtools)
 
 load_all("c:/Users/kctw748/working_copies/pmxtricks")
