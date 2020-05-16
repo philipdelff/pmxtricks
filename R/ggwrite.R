@@ -125,7 +125,7 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,paper="s
     writeObj <- function(plot,file,size,type){
 
         ## get filname extension to determine device
-        type <- NULL
+        type <- "x11"
         fnroot <- NULL
         if(!is.null(file)){
             ## type <- sub(".+\\.(.+)$","\\1",file)
