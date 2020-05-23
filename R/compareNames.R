@@ -12,6 +12,7 @@
 ##' @param testEqual Do you just want a TRUE/FALSE to whether the names of the
 ##'     two objects are the same? Default is FALSE which means to return an
 ##'     overview for interactive use.
+##' @param quietIfEqual Don't report anything if names equal.
 ##' @param debug If TRUE, browser is called to begin with.
 ##' @family DataWrangling
 ##' @export

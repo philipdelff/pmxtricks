@@ -16,12 +16,11 @@ round to a given number of digits - and respect zeros.
 }
 \seealso{
 Other DataWrangling: \code{\link{NMcompAllRes}},
-  \code{\link{NMscanDataDF}}, \code{\link{compareNames}},
-  \code{\link{factor2}}, \code{\link{findCovs_df}},
-  \code{\link{mergeCheck}}, \code{\link{newNames}},
-  \code{\link{rbindIntersect}}, \code{\link{rbindUnion}},
-  \code{\link{roundDF}}, \code{\link{selectVars}},
-  \code{\link{signif2}}, \code{\link{stampObj}},
-  \code{\link{tmpcol}}
+  \code{\link{compareNames}}, \code{\link{factor2}},
+  \code{\link{findCovs_df}}, \code{\link{mergeCheck}},
+  \code{\link{newNames}}, \code{\link{rbindIntersect}},
+  \code{\link{rbindUnion}}, \code{\link{roundDF}},
+  \code{\link{selectVars}}, \code{\link{signif2}},
+  \code{\link{stampObj}}, \code{\link{tmpcol}}
 }
 \concept{DataWrangling}

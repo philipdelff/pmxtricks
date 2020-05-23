@@ -7,12 +7,8 @@
 ##'
 ##' @param data The dataset being described (i.e. a data.frame).
 ##' @param stamp The path to the script that is creating the data.
-##' @param trial The name of the trial (character). This could be a
-##'     trial name or another character string that describes what
-##'     study this is part of (could be a meta study combining data
-##'     from different trials). If trial is not set, metaInit will look
-##'     for a column, TRIAL, in data. If all values of this variable
-##'     equal, this value will be used.
+##' @param analysis The name of the analysi (character). This could be a
+##'     trial name or any another character string.
 ##' @param header Append lines to the header of the meta data.
 ##' @param use.standard.cols The name is slightly misleading. If FALSE,
 ##'     only the header will be created. That means that unit arguments
@@ -25,8 +21,9 @@
 ##'     here. a column called amt.unit will be ignored.
 ##' @param ndos.unit If supplied, the unit for NDOS will be taken from
 ##'     here. 
-##' @param debug=F Start by calling browser().
+##' @param debug Start by calling browser()?
 ##' @return Created meta data object
+##' @importFrom utils read.csv
 ##' @family DataGen
 ##' @export
 

@@ -36,7 +36,7 @@
 ##' @param ... Additional arguments passed to NMextractText
 ##' @family Nonmem
 ##' @examples
-##' NMgetSection(NMdata_filepath("examples/nonmem/run001.lst"),section="DATA")
+##' pmxtricks:::NMgetSection(pmxtricks_filepath("examples/nonmem/run001.lst"),section="DATA")
 ##'
 ##' 
 ## This is exported from NMdata but kept in pmxtricks as an internal. Please

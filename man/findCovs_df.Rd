@@ -33,12 +33,11 @@ findCovs_df(dat,cols.id=c(),cols.drop=c("IRES","TABLE"))
 }
 \seealso{
 Other DataWrangling: \code{\link{NMcompAllRes}},
-  \code{\link{NMscanDataDF}}, \code{\link{compareNames}},
-  \code{\link{factor2}}, \code{\link{mergeCheck}},
-  \code{\link{newNames}}, \code{\link{rbindIntersect}},
-  \code{\link{rbindUnion}}, \code{\link{roundDF}},
-  \code{\link{roundResp0}}, \code{\link{selectVars}},
-  \code{\link{signif2}}, \code{\link{stampObj}},
-  \code{\link{tmpcol}}
+  \code{\link{compareNames}}, \code{\link{factor2}},
+  \code{\link{mergeCheck}}, \code{\link{newNames}},
+  \code{\link{rbindIntersect}}, \code{\link{rbindUnion}},
+  \code{\link{roundDF}}, \code{\link{roundResp0}},
+  \code{\link{selectVars}}, \code{\link{signif2}},
+  \code{\link{stampObj}}, \code{\link{tmpcol}}
 }
 \concept{DataWrangling}

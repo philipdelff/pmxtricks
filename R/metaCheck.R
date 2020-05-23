@@ -3,25 +3,21 @@
 ##' @param data The dataset being described (i.e. a data.frame).
 ##' @param meta.data The existing meta.data object (see
 ##'     \code{metaInit}).
+##' @param file.data Path to the data file.
 ##' @param match.data Check the metadata against the dataset? This is
 ##'     default and normally a main reason to run this function.
 ##' @param skip.chars Only look at numeric variables in data? Default
 ##'     is TRUE.
 ##' @param silent Print to terminal whether checks passed. If FALSE,
 ##'     this info will still be in the returned value.
-##' @param debug Debug the code. 
+##' @param debug Start by calling browser().
 ##' @return A logical variable whether all checks passed.
-##' @param debug=F Start by calling browser().
+##' @importFrom utils capture.output
 ##' @export
 ##' @family DataGen
 
-#### Todo
-### End Todo 
 
-#### Bugs
-#### End bugs
-
-metaCheck <- function(data,meta.data,fileData,match.data=TRUE,skip.chars=T,silent=F,debug=F){
+metaCheck <- function(data,meta.data,file.data,match.data=TRUE,skip.chars=T,silent=F,debug=F){
     if(debug) browser()
     if(!is.data.frame(data)){stop("data must be a data.frame")}
     data <- as.data.frame(data)
@@ -40,10 +36,10 @@ metaCheck <- function(data,meta.data,fileData,match.data=TRUE,skip.chars=T,silen
     datacols <- colnames(data)
     ## check that data file is given
 
-    if(missing(fileData)||
-       !is.character(fileData)||
-       fileData==""||
-       is.na(fileData)){
+    if(missing(file.data)||
+       !is.character(file.data)||
+       file.data==""||
+       is.na(file.data)){
         stop("meta.data does not contain NONMEM data file")
     }
     ## check that data creation script is given

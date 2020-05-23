@@ -35,12 +35,11 @@ signif2(3205,-1)
 }
 \seealso{
 Other DataWrangling: \code{\link{NMcompAllRes}},
-  \code{\link{NMscanDataDF}}, \code{\link{compareNames}},
-  \code{\link{factor2}}, \code{\link{findCovs_df}},
-  \code{\link{mergeCheck}}, \code{\link{newNames}},
-  \code{\link{rbindIntersect}}, \code{\link{rbindUnion}},
-  \code{\link{roundDF}}, \code{\link{roundResp0}},
-  \code{\link{selectVars}}, \code{\link{stampObj}},
-  \code{\link{tmpcol}}
+  \code{\link{compareNames}}, \code{\link{factor2}},
+  \code{\link{findCovs_df}}, \code{\link{mergeCheck}},
+  \code{\link{newNames}}, \code{\link{rbindIntersect}},
+  \code{\link{rbindUnion}}, \code{\link{roundDF}},
+  \code{\link{roundResp0}}, \code{\link{selectVars}},
+  \code{\link{stampObj}}, \code{\link{tmpcol}}
 }
 \concept{DataWrangling}

@@ -45,11 +45,18 @@ plotting of means.}
 
 \item{col.dv}{name of column containing observations.}
 
-\item{col.ipred}{Name of column containing individual predictions. Default is searching for IPRED, then IPRE.}
+\item{col.ipred}{Name of column containing individual predictions. Default
+is searching for IPRED, then IPRE.}
 
 \item{col.pred}{Name of column containing population predictions.}
 
 \item{log.y}{Use logarithmic scale for y-axis?}
+
+\item{args.plot.mean}{List of arguments to be passed to geoms applied to
+mean-type data, like mean(PRED) etc.}
+
+\item{filter.rows}{Default is to only plot EVID==0 records. Set to FALSE, if
+this filtering is not wantered.}
 
 \item{debug}{debug Start by calling browser()?}
 }

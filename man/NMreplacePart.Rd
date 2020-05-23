@@ -40,7 +40,7 @@ The new file will be written with unix-style line endings.
 }
 \examples{
 newlines <- "$EST POSTHOC INTERACTION METHOD=1 NOABORT PRINT=5 MAXEVAL=9999 SIG=3"
-NMreplacePart(path=NMdata_filepath("examples/nonmem/run001.mod"),
+NMreplacePart(path=pmxtricks_filepath("examples/nonmem/run001.mod"),
 section="EST", newlines=newlines)
 }
 \seealso{

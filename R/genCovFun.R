@@ -23,7 +23,8 @@
 ##' @family Simulation
 ##' @examples
 ##' \dontrun{
-##' text0 <- NMdata::NMgetSection(file="run1.lst",section="PK",return="text",keepName=FALSE,cleanSpaces=FALSE)
+##' text0 <- NMdata::NMgetSection(file="run1.lst",section="PK",return="text",
+##' keepName=FALSE,cleanSpaces=FALSE)
 ##' 
 ##' NMR0 <- NMcode2R(text0)
 ##' ## get rid of some text that has nothing to do with covariates

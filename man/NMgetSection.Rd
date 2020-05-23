@@ -59,7 +59,7 @@ model file. Look NMextractText for more general functionality
 suitable for the results part too.
 }
 \examples{
-NMgetSection(NMdata_filepath("examples/nonmem/run001.lst"),section="DATA")
+pmxtricks:::NMgetSection(pmxtricks_filepath("examples/nonmem/run001.lst"),section="DATA")
 
 
 }

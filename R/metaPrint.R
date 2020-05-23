@@ -4,6 +4,7 @@
 ##' @param meta.data The existing meta.data object (see \code{metaInit}).
 ##' @param file Path to text file to write to. If not provided,
 ##'     meta.data is printed to screen.
+##' @param file.data Path to the data file.
 ##' @param match.data Reorder meta.data to match data? If this function call
 ##'     is used for saving metadata right after saving the data file, this option
 ##'     should be used to make sure that the metadata file will match the dataset
@@ -11,22 +12,13 @@
 ##' @param silent If silent, the metadata is not printed to the screen.
 ##' @param test Nice for seeing what the meta data will look like. Problems
 ##'     will yield warnings, not errors.
+##' @param debug Start by calling browser()?
 ##' @return The meta data object printed as formatted text
 ##' @export
 ##' @family DataGen
-##' @author PPDA
 
-###### Change log ######
-## PPDA: introduced match.data argument. When TRUE, metadata is sorted
-## to match the order of the data.
 
-####### End change log
-
-####### TODO #########
-##
-#### END TODO ####
-
-metaPrint <- function(data,meta.data,file=NULL,fileData,match.data=T,silent=!is.null(file),test=F,debug=F){
+metaPrint <- function(data,meta.data,file=NULL,file.data,match.data=T,silent=!is.null(file),test=F,debug=F){
     if(debug) browser()
 
     datacols <- colnames(data)
@@ -37,13 +29,13 @@ metaPrint <- function(data,meta.data,file=NULL,fileData,match.data=T,silent=!is.
     }
     
     if(test){
-        checkResult <- metaCheck(data,meta.data,fileData=fileData,match.data=T,silent=T)
+        checkResult <- metaCheck(data,meta.data,file.data=file.data,match.data=T,silent=T)
     } else {
-        stopifnot(metaCheck(data,meta.data,fileData=fileData,match.data=T,silent=T))
+        stopifnot(metaCheck(data,meta.data,file.data=file.data,match.data=T,silent=T))
     }
 
     MetaFile.header.lines <- c(
-        ifelse(missing(fileData),NULL,paste("Meta data for NONMEM data file:",fileData)),
+        ifelse(missing(file.data),NULL,paste("Meta data for NONMEM data file:",file.data)),
         paste("Data file created by script:",meta.data$meta$DataCreateScript),
         paste("Data file created for trial:",meta.data$meta$Trial),
         paste("This file was created:",Sys.time())

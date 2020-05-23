@@ -24,10 +24,15 @@
 ##' @param col.ntim name of column of nominal time used for calculation and
 ##'     plotting of means.
 ##' @param col.dv name of column containing observations.
-##' @param col.ipred Name of column containing individual predictions. Default is searching for IPRED, then IPRE.
+##' @param col.ipred Name of column containing individual predictions. Default
+##'     is searching for IPRED, then IPRE.
 ##' @param col.pred Name of column containing population predictions.
 ##' @param debug debug Start by calling browser()?
 ##' @param log.y Use logarithmic scale for y-axis?
+##' @param args.plot.mean List of arguments to be passed to geoms applied to
+##'     mean-type data, like mean(PRED) etc.
+##' @param filter.rows Default is to only plot EVID==0 records. Set to FALSE, if
+##'     this filtering is not wantered.
 ##' @import data.table
 ##' @import ggplot2
 ##' @examples

@@ -49,7 +49,7 @@
 ##'     then be called by NMgetSection.
 ##' @family Nonmem
 ##' @examples
-##' NMgetSection(NMdata_filepath("examples/nonmem/run001.lst"),section="DATA")
+##' pmxtricks:::NMgetSection(pmxtricks_filepath("examples/nonmem/run001.lst"),section="DATA")
 ## This is exported from NMdata but kept in pmxtricks as an internal. Please
 ## align to the one in NMdata.
 

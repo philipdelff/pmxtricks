@@ -4,7 +4,7 @@
 ##' @param ... passed to NMcompRes which will pass them to NMscanData
 ##' @param debug start by calling browser()?
 ##' @family DataWrangling
-##' @export
+
 
 
 ## look for lst files
@@ -43,8 +43,10 @@ NMcompAllRes <- function(dir,...,debug=F){
 ##' @param file a nonmem control stream or output (normally, .mod or .lst).
 ##' @param return If TRUE, resulting data structure is invisibly returned. You may want to disable this if the rds is the goal itself. Disabling can save reading the rds if there is nothing to do.
 ##' @param ... passed to NMcompRes which will pass them to NMscanData
-##' @export
 
+## With NMscanData implemented in data.table, I don't think this function should
+## be exported. Remember the risk that it is not up to date which has not been
+## mitigated by hash checks.
 
 NMcompRes <- function(file,return=TRUE,...){
    
