@@ -45,8 +45,7 @@ section="EST", newlines=newlines)
 }
 \seealso{
 Other Nonmem: \code{\link{NMextractText}},
-  \code{\link{NMgetSection}}, \code{\link{NMreadRun}},
-  \code{\link{NMreadTabDF}}, \code{\link{NMrunLog}},
+  \code{\link{NMgetSection}}, \code{\link{NMreadTabDF}},
   \code{\link{NMundoReplace}}, \code{\link{extFormat}},
   \code{\link{sumofork}}
 }

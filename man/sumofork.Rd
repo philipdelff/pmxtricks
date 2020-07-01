@@ -25,9 +25,8 @@ This is a fork of nonmem2R::sumo with very little
 }
 \seealso{
 Other Nonmem: \code{\link{NMextractText}},
-  \code{\link{NMgetSection}}, \code{\link{NMreadRun}},
-  \code{\link{NMreadTabDF}}, \code{\link{NMreplacePart}},
-  \code{\link{NMrunLog}}, \code{\link{NMundoReplace}},
+  \code{\link{NMgetSection}}, \code{\link{NMreadTabDF}},
+  \code{\link{NMreplacePart}}, \code{\link{NMundoReplace}},
   \code{\link{extFormat}}
 }
 \concept{Nonmem}
