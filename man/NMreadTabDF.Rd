@@ -28,7 +28,6 @@ Read a table file from NONMEM
 \seealso{
 Other Nonmem: \code{\link{NMextractText}},
   \code{\link{NMgetSection}}, \code{\link{NMreplacePart}},
-  \code{\link{NMundoReplace}}, \code{\link{extFormat}},
-  \code{\link{sumofork}}
+  \code{\link{NMundoReplace}}
 }
 \concept{Nonmem}

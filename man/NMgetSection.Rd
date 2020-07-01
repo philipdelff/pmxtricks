@@ -66,7 +66,6 @@ pmxtricks:::NMgetSection(pmxtricks_filepath("examples/nonmem/run001.lst"),sectio
 \seealso{
 Other Nonmem: \code{\link{NMextractText}},
   \code{\link{NMreadTabDF}}, \code{\link{NMreplacePart}},
-  \code{\link{NMundoReplace}}, \code{\link{extFormat}},
-  \code{\link{sumofork}}
+  \code{\link{NMundoReplace}}
 }
 \concept{Nonmem}

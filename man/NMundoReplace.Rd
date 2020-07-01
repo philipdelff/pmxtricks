@@ -19,7 +19,6 @@ simply overwrite input.txt with contents of backup_input.txt
 \seealso{
 Other Nonmem: \code{\link{NMextractText}},
   \code{\link{NMgetSection}}, \code{\link{NMreadTabDF}},
-  \code{\link{NMreplacePart}}, \code{\link{extFormat}},
-  \code{\link{sumofork}}
+  \code{\link{NMreplacePart}}
 }
 \concept{Nonmem}
