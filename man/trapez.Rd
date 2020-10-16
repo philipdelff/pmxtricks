@@ -24,8 +24,12 @@ This is a numerical integration of y with respect to
     x by the trapezoidal method on linear scale.
 }
 \seealso{
-Other Calc: \code{\link{CV}}, \code{\link{geomean}},
-  \code{\link{means}}, \code{\link{thalf_1a1c}},
-  \code{\link{thalf_1a2c}}, \code{\link{thalf_trans_1c}}
+Other Calc: 
+\code{\link{CV}()},
+\code{\link{geomean}()},
+\code{\link{means}()},
+\code{\link{thalf_1a1c}()},
+\code{\link{thalf_1a2c}()},
+\code{\link{thalf_trans_1c}()}
 }
 \concept{Calc}

@@ -4,8 +4,14 @@
 \alias{getSource}
 \title{Get and source an R script.}
 \usage{
-getSource(file, dir.central = NULL, dir.local, overwrite = FALSE,
-  source.directly = FALSE, silent = F)
+getSource(
+  file,
+  dir.central = NULL,
+  dir.local,
+  overwrite = FALSE,
+  source.directly = FALSE,
+  silent = F
+)
 }
 \arguments{
 \item{file}{File name of wanted file}
@@ -32,7 +38,8 @@ None. Sources the specified file into the global environment.
 Get file from remote library and inport it into project if it does not exist. Then source it.
 }
 \seealso{
-Other FileSystem: \code{\link{filePathSimple}},
-  \code{\link{pmxtricks_filepath}}
+Other FileSystem: 
+\code{\link{filePathSimple}()},
+\code{\link{pmxtricks_filepath}()}
 }
 \concept{FileSystem}

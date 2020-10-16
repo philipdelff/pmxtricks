@@ -4,8 +4,16 @@
 \alias{NMreplacePart}
 \title{replace ($)sections of a nonmem control stream}
 \usage{
-NMreplacePart(path, section, newlines, newpath, backup = T,
-  blank.append = T, test = F, debug = F)
+NMreplacePart(
+  path,
+  section,
+  newlines,
+  newpath,
+  backup = T,
+  blank.append = T,
+  test = F,
+  debug = F
+)
 }
 \arguments{
 \item{path}{The run to edit. If a directory is given, the file is assumed to
@@ -44,8 +52,10 @@ NMreplacePart(path=pmxtricks_filepath("examples/nonmem/run001.mod"),
 section="EST", newlines=newlines)
 }
 \seealso{
-Other Nonmem: \code{\link{NMextractText}},
-  \code{\link{NMgetSection}}, \code{\link{NMreadTabDF}},
-  \code{\link{NMundoReplace}}
+Other Nonmem: 
+\code{\link{NMextractText}()},
+\code{\link{NMgetSection}()},
+\code{\link{NMreadTabDF}()},
+\code{\link{NMundoReplace}()}
 }
 \concept{Nonmem}

@@ -43,6 +43,7 @@ NMcompAllRes <- function(dir,...,debug=F){
 ##' @param file a nonmem control stream or output (normally, .mod or .lst).
 ##' @param return If TRUE, resulting data structure is invisibly returned. You may want to disable this if the rds is the goal itself. Disabling can save reading the rds if there is nothing to do.
 ##' @param ... passed to NMcompRes which will pass them to NMscanData
+##' @importFrom NMdata NMscanData
 
 ## With NMscanData implemented in data.table, I don't think this function should
 ## be exported. Remember the risk that it is not up to date which has not been
@@ -62,7 +63,7 @@ NMcompRes <- function(file,return=TRUE,...){
     wrote <- TRUE
   }
   
-  if(return) {
+    if(return) {
     if(!wrote){
       data <- readRDS(file.rds)
     }

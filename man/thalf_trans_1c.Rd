@@ -21,8 +21,12 @@ thalf_trans_1c(pars, cl = "CL", ka = "KA1", vc = "VC", debug = F)
 Thalf for 1st order models, single-depot abs through any number of transit compartments.
 }
 \seealso{
-Other Calc: \code{\link{CV}}, \code{\link{geomean}},
-  \code{\link{means}}, \code{\link{thalf_1a1c}},
-  \code{\link{thalf_1a2c}}, \code{\link{trapez}}
+Other Calc: 
+\code{\link{CV}()},
+\code{\link{geomean}()},
+\code{\link{means}()},
+\code{\link{thalf_1a1c}()},
+\code{\link{thalf_1a2c}()},
+\code{\link{trapez}()}
 }
 \concept{Calc}

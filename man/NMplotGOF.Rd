@@ -4,8 +4,7 @@
 \alias{NMplotGOF}
 \title{A standard panel of residual plots}
 \usage{
-NMplotGOF(data, res = CWRES, ipre = IPRED, time = TIME,
-  arrange = T, debug = F)
+NMplotGOF(data, res = CWRES, ipre = IPRED, time = TIME, arrange = T, debug = F)
 }
 \arguments{
 \item{data}{is all rows from the Nonmem output. Only the EVID==0 subset will
@@ -28,11 +27,16 @@ A standard panel of residual plots
 All parameters must be given as expressions (no quotes)
 }
 \seealso{
-Other Plotting: \code{\link{NMplotBOV}},
-  \code{\link{NMplotBSV}}, \code{\link{canvasSize}},
-  \code{\link{extractLegend}}, \code{\link{ggIndProfs}},
-  \code{\link{ggWater}}, \code{\link{ggstamp}},
-  \code{\link{ggwrite}}, \code{\link{theme_pp_facet}},
-  \code{\link{theme_pp}}
+Other Plotting: 
+\code{\link{NMplotBOV}()},
+\code{\link{NMplotBSV}()},
+\code{\link{canvasSize}()},
+\code{\link{extractLegend}()},
+\code{\link{ggIndProfs}()},
+\code{\link{ggWater}()},
+\code{\link{ggstamp}()},
+\code{\link{ggwrite}()},
+\code{\link{theme_pp_facet}()},
+\code{\link{theme_pp}()}
 }
 \concept{Plotting}

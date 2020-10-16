@@ -4,8 +4,7 @@
 \alias{readPsnVpc}
 \title{read vpc output from psn}
 \usage{
-readPsnVpc(vpc.results = NULL, npc.results = NULL, verbose = FALSE,
-  ...)
+readPsnVpc(vpc.results = NULL, npc.results = NULL, verbose = FALSE, ...)
 }
 \arguments{
 \item{vpc.results}{The name of the results file from running the PsN command vcp. Often this

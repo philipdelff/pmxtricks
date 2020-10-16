@@ -5,9 +5,17 @@
 \title{Generate distribution plots of between-occasion variability terms from
 Nonmem}
 \usage{
-NMplotBSV(data, regex.eta = "^ETABSV", col.id = "ID", covs.num,
-  covs.char, fun.file = identity, save = FALSE, stamp = NULL,
-  debug = F)
+NMplotBSV(
+  data,
+  regex.eta = "^ETABSV",
+  col.id = "ID",
+  covs.num,
+  covs.char,
+  fun.file = identity,
+  save = FALSE,
+  stamp = NULL,
+  debug = F
+)
 }
 \arguments{
 \item{data}{A dataset - will be converted to data.frame so data.table is OK.}
@@ -38,11 +46,16 @@ Generate distribution plots of between-occasion variability terms from
 Nonmem
 }
 \seealso{
-Other Plotting: \code{\link{NMplotBOV}},
-  \code{\link{NMplotGOF}}, \code{\link{canvasSize}},
-  \code{\link{extractLegend}}, \code{\link{ggIndProfs}},
-  \code{\link{ggWater}}, \code{\link{ggstamp}},
-  \code{\link{ggwrite}}, \code{\link{theme_pp_facet}},
-  \code{\link{theme_pp}}
+Other Plotting: 
+\code{\link{NMplotBOV}()},
+\code{\link{NMplotGOF}()},
+\code{\link{canvasSize}()},
+\code{\link{extractLegend}()},
+\code{\link{ggIndProfs}()},
+\code{\link{ggWater}()},
+\code{\link{ggstamp}()},
+\code{\link{ggwrite}()},
+\code{\link{theme_pp_facet}()},
+\code{\link{theme_pp}()}
 }
 \concept{Plotting}

@@ -17,11 +17,16 @@ defaults.}
 a version of theme_pp suited for facet'ed plots
 }
 \seealso{
-Other Plotting: \code{\link{NMplotBOV}},
-  \code{\link{NMplotBSV}}, \code{\link{NMplotGOF}},
-  \code{\link{canvasSize}}, \code{\link{extractLegend}},
-  \code{\link{ggIndProfs}}, \code{\link{ggWater}},
-  \code{\link{ggstamp}}, \code{\link{ggwrite}},
-  \code{\link{theme_pp}}
+Other Plotting: 
+\code{\link{NMplotBOV}()},
+\code{\link{NMplotBSV}()},
+\code{\link{NMplotGOF}()},
+\code{\link{canvasSize}()},
+\code{\link{extractLegend}()},
+\code{\link{ggIndProfs}()},
+\code{\link{ggWater}()},
+\code{\link{ggstamp}()},
+\code{\link{ggwrite}()},
+\code{\link{theme_pp}()}
 }
 \concept{Plotting}

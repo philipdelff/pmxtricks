@@ -80,12 +80,7 @@ mergeCheck <- function(df1,df2,by,debug=F,...){
 
             stop("Merge added and/or removed rows.")
         }
-        ## if(nrow(df3)!=nrow(df1)){
-        ##  cat(paste0("nrow(",name.df1,"):"),nrow(df1),"\n")
-        ##  cat(paste0("nrow(",name.df2,"):"),nrow(df2),"\n")
-        ##  cat(paste0("nrow(",name.df3,"):"),nrow(df3),"\n")
-        ##  stop("merge changed dimensions")        
-        ## }
+
         df3 <- setorderv(df3,rowcol)
         df3[,(rowcol):=NULL]
     }

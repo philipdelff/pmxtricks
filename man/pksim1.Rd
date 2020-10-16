@@ -4,7 +4,8 @@
 \name{pksim1}
 \alias{pksim1}
 \title{A very simple simulated PK dataset}
-\format{A data.table with 76 rows, 6 columns. 4 subjects, 19 observations each.
+\format{
+A data.table with 76 rows, 6 columns. 4 subjects, 19 observations each.
 \describe{
 \item{ROW}{A row identifier}
 \item{ID}{Subject ID.}
@@ -13,7 +14,8 @@
 \item{CMT}{Compartment identifier. 2 for central compartment.}
 \item{DV}{Observation value.}
 \item{MDV}{Is observation missing?}
-}}
+}
+}
 \source{
 simulated
 }

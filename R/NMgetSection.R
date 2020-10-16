@@ -37,10 +37,7 @@
 ##' @family Nonmem
 ##' @examples
 ##' pmxtricks:::NMgetSection(pmxtricks_filepath("examples/nonmem/run001.lst"),section="DATA")
-##'
-##' 
-## This is exported from NMdata but kept in pmxtricks as an internal. Please
-## align to the one in NMdata.
+
 
 NMgetSection <- function(file=NULL, lines=NULL, text=NULL, section, return="text", keepEmpty=FALSE, keepName=TRUE, keepComments=TRUE, asOne=TRUE, simplify=TRUE, cleanSpaces=FALSE, debug=F, ...){
 

@@ -5,9 +5,19 @@
 \title{Generate distribution plots of between-occasion variability terms from
 Nonmem}
 \usage{
-NMplotBOV(data, regex.eta = "^ETABOV", col.id = "ID", covs.num.iov,
-  covs.char.iov, var.occ = "OCC", var.occ.char = var.occ,
-  fun.file = identity, save = F, stamp = NULL, debug = F)
+NMplotBOV(
+  data,
+  regex.eta = "^ETABOV",
+  col.id = "ID",
+  covs.num.iov,
+  covs.char.iov,
+  var.occ = "OCC",
+  var.occ.char = var.occ,
+  fun.file = identity,
+  save = F,
+  stamp = NULL,
+  debug = F
+)
 }
 \arguments{
 \item{data}{A dataset - will be converted to data.frame so data.table is OK.}
@@ -45,11 +55,16 @@ Generate distribution plots of between-occasion variability terms from
 Nonmem
 }
 \seealso{
-Other Plotting: \code{\link{NMplotBSV}},
-  \code{\link{NMplotGOF}}, \code{\link{canvasSize}},
-  \code{\link{extractLegend}}, \code{\link{ggIndProfs}},
-  \code{\link{ggWater}}, \code{\link{ggstamp}},
-  \code{\link{ggwrite}}, \code{\link{theme_pp_facet}},
-  \code{\link{theme_pp}}
+Other Plotting: 
+\code{\link{NMplotBSV}()},
+\code{\link{NMplotGOF}()},
+\code{\link{canvasSize}()},
+\code{\link{extractLegend}()},
+\code{\link{ggIndProfs}()},
+\code{\link{ggWater}()},
+\code{\link{ggstamp}()},
+\code{\link{ggwrite}()},
+\code{\link{theme_pp_facet}()},
+\code{\link{theme_pp}()}
 }
 \concept{Plotting}

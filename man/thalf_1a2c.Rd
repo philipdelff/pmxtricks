@@ -4,8 +4,16 @@
 \alias{thalf_1a2c}
 \title{Thalf for 1 absorption depot, 2 compartments}
 \usage{
-thalf_1a2c(pars, cl = "CL", ka = "KA1", v2 = "V2", q = "Q",
-  v3 = "V3", transform = F, debug = F)
+thalf_1a2c(
+  pars,
+  cl = "CL",
+  ka = "KA1",
+  v2 = "V2",
+  q = "Q",
+  v3 = "V3",
+  transform = F,
+  debug = F
+)
 }
 \arguments{
 \item{pars}{A parameter table. Thalf will be calculated for all rows.}
@@ -28,8 +36,12 @@ thalf_1a2c(pars, cl = "CL", ka = "KA1", v2 = "V2", q = "Q",
 Can take multiple parameter sets and return a data.frame of halftimes.
 }
 \seealso{
-Other Calc: \code{\link{CV}}, \code{\link{geomean}},
-  \code{\link{means}}, \code{\link{thalf_1a1c}},
-  \code{\link{thalf_trans_1c}}, \code{\link{trapez}}
+Other Calc: 
+\code{\link{CV}()},
+\code{\link{geomean}()},
+\code{\link{means}()},
+\code{\link{thalf_1a1c}()},
+\code{\link{thalf_trans_1c}()},
+\code{\link{trapez}()}
 }
 \concept{Calc}

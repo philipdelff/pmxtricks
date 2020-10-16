@@ -4,11 +4,24 @@
 \alias{NMextractText}
 \title{NMgetSection generalized with support for lst results}
 \usage{
-NMextractText(file, lines, text, section, char.section,
-  char.end = char.section, return = "text", keepEmpty = FALSE,
-  keepName = TRUE, keepComments = TRUE, asOne = TRUE,
-  simplify = TRUE, cleanSpaces = FALSE, type = "mod",
-  linesep = "\\n", debug = F)
+NMextractText(
+  file,
+  lines,
+  text,
+  section,
+  char.section,
+  char.end = char.section,
+  return = "text",
+  keepEmpty = FALSE,
+  keepName = TRUE,
+  keepComments = TRUE,
+  asOne = TRUE,
+  simplify = TRUE,
+  cleanSpaces = FALSE,
+  type = "mod",
+  linesep = "\\n",
+  debug = F
+)
 }
 \arguments{
 \item{file}{A file to read from. Normally a .mod or .lst. See
@@ -81,8 +94,10 @@ This function is planned to get a more general name and
 pmxtricks:::NMgetSection(pmxtricks_filepath("examples/nonmem/run001.lst"),section="DATA")
 }
 \seealso{
-Other Nonmem: \code{\link{NMgetSection}},
-  \code{\link{NMreadTabDF}}, \code{\link{NMreplacePart}},
-  \code{\link{NMundoReplace}}
+Other Nonmem: 
+\code{\link{NMgetSection}()},
+\code{\link{NMreadTabDF}()},
+\code{\link{NMreplacePart}()},
+\code{\link{NMundoReplace}()}
 }
 \concept{Nonmem}

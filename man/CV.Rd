@@ -20,8 +20,12 @@ This function is intended to be used on data. For a log-normal
     THETA[1]*EXP(OMEGA[1]) Nonmem parameter, do CV=sqrt(exp(OMEGA[1,1])-1).
 }
 \seealso{
-Other Calc: \code{\link{geomean}}, \code{\link{means}},
-  \code{\link{thalf_1a1c}}, \code{\link{thalf_1a2c}},
-  \code{\link{thalf_trans_1c}}, \code{\link{trapez}}
+Other Calc: 
+\code{\link{geomean}()},
+\code{\link{means}()},
+\code{\link{thalf_1a1c}()},
+\code{\link{thalf_1a2c}()},
+\code{\link{thalf_trans_1c}()},
+\code{\link{trapez}()}
 }
 \concept{Calc}

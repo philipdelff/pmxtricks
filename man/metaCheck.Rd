@@ -4,8 +4,15 @@
 \alias{metaCheck}
 \title{Check consistency of a meta data object.}
 \usage{
-metaCheck(data, meta.data, file.data, match.data = TRUE,
-  skip.chars = T, silent = F, debug = F)
+metaCheck(
+  data,
+  meta.data,
+  file.data,
+  match.data = TRUE,
+  skip.chars = T,
+  silent = F,
+  debug = F
+)
 }
 \arguments{
 \item{data}{The dataset being described (i.e. a data.frame).}
@@ -33,7 +40,8 @@ A logical variable whether all checks passed.
 Check consistency of a meta data object.
 }
 \seealso{
-Other DataGen: \code{\link{metaInit}},
-  \code{\link{metaPrint}}
+Other DataGen: 
+\code{\link{metaInit}()},
+\code{\link{metaPrint}()}
 }
 \concept{DataGen}

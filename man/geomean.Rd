@@ -4,8 +4,14 @@
 \alias{geomean}
 \title{calculate geometric mean.}
 \usage{
-geomean(x, z.rm = FALSE, ci = FALSE, dist.ci = "t", p.ci = 0.95,
-  colnames = c("est", "ll", "ul"))
+geomean(
+  x,
+  z.rm = FALSE,
+  ci = FALSE,
+  dist.ci = "t",
+  p.ci = 0.95,
+  colnames = c("est", "ll", "ul")
+)
 }
 \arguments{
 \item{x}{vector to calculate the geometric mean of}
@@ -24,8 +30,12 @@ geomean(x, z.rm = FALSE, ci = FALSE, dist.ci = "t", p.ci = 0.95,
 calculate geometric mean.
 }
 \seealso{
-Other Calc: \code{\link{CV}}, \code{\link{means}},
-  \code{\link{thalf_1a1c}}, \code{\link{thalf_1a2c}},
-  \code{\link{thalf_trans_1c}}, \code{\link{trapez}}
+Other Calc: 
+\code{\link{CV}()},
+\code{\link{means}()},
+\code{\link{thalf_1a1c}()},
+\code{\link{thalf_1a2c}()},
+\code{\link{thalf_trans_1c}()},
+\code{\link{trapez}()}
 }
 \concept{Calc}

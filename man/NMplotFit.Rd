@@ -4,12 +4,27 @@
 \alias{NMplotFit}
 \title{Get one plot of observations, predictions, and means vs time}
 \usage{
-NMplotFit(data, geom.dv = "p", geom.pred = "", geom.ipred = "",
-  geom.dvmean = "pc", geom.predmean = "l", geom.ipredmean = "",
-  col.grp, type.mean = "arithmetic", col.id = "ID",
-  col.time = "TIME", col.ntim = "NOMTIME", col.dv = "DV",
-  col.ipred = c("IPRED", "IPRE"), col.pred = "PRED", log.y = F,
-  args.plot.mean = NULL, filter.rows, debug = F)
+NMplotFit(
+  data,
+  geom.dv = "p",
+  geom.pred = "",
+  geom.ipred = "",
+  geom.dvmean = "pc",
+  geom.predmean = "l",
+  geom.ipredmean = "",
+  col.grp,
+  type.mean = "arithmetic",
+  col.id = "ID",
+  col.time = "TIME",
+  col.ntim = "NOMTIME",
+  col.dv = "DV",
+  col.ipred = c("IPRED", "IPRE"),
+  col.pred = "PRED",
+  log.y = F,
+  args.plot.mean = NULL,
+  filter.rows,
+  debug = F
+)
 }
 \arguments{
 \item{data}{The dataset to plot.}

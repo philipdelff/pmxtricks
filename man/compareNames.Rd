@@ -4,8 +4,7 @@
 \alias{compareNames}
 \title{Compare element names in lists}
 \usage{
-compareNames(..., keepNames = T, testEqual = F, quietIfEqual = F,
-  debug = F)
+compareNames(..., keepNames = T, testEqual = F, quietIfEqual = F, debug = F)
 }
 \arguments{
 \item{...}{objects which element names to compare}
@@ -29,12 +28,17 @@ which of the objects they are present. It does not compare
 contents of the elements at all.
 }
 \seealso{
-Other DataWrangling: \code{\link{NMcompAllRes}},
-  \code{\link{factor2}}, \code{\link{findCovs_df}},
-  \code{\link{mergeCheck}}, \code{\link{newNames}},
-  \code{\link{rbindIntersect}}, \code{\link{rbindUnion}},
-  \code{\link{roundDF}}, \code{\link{roundResp0}},
-  \code{\link{selectVars}}, \code{\link{signif2}},
-  \code{\link{stampObj}}, \code{\link{tmpcol}}
+Other DataWrangling: 
+\code{\link{factor2}()},
+\code{\link{findCovs_df}()},
+\code{\link{mergeCheck}()},
+\code{\link{newNames}()},
+\code{\link{rbindIntersect}()},
+\code{\link{rbindUnion}()},
+\code{\link{roundDF}()},
+\code{\link{roundResp0}()},
+\code{\link{selectVars}()},
+\code{\link{signif2}()},
+\code{\link{stampObj}()}
 }
 \concept{DataWrangling}

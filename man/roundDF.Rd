@@ -24,12 +24,17 @@ df1 <- data.frame(obs=letters[1:3],x1=rnorm(3),x2=c(1.24/1e4,1.1334e6,1.1),x3=1:
 roundDF(df1,digits=3)
 }
 \seealso{
-Other DataWrangling: \code{\link{NMcompAllRes}},
-  \code{\link{compareNames}}, \code{\link{factor2}},
-  \code{\link{findCovs_df}}, \code{\link{mergeCheck}},
-  \code{\link{newNames}}, \code{\link{rbindIntersect}},
-  \code{\link{rbindUnion}}, \code{\link{roundResp0}},
-  \code{\link{selectVars}}, \code{\link{signif2}},
-  \code{\link{stampObj}}, \code{\link{tmpcol}}
+Other DataWrangling: 
+\code{\link{compareNames}()},
+\code{\link{factor2}()},
+\code{\link{findCovs_df}()},
+\code{\link{mergeCheck}()},
+\code{\link{newNames}()},
+\code{\link{rbindIntersect}()},
+\code{\link{rbindUnion}()},
+\code{\link{roundResp0}()},
+\code{\link{selectVars}()},
+\code{\link{signif2}()},
+\code{\link{stampObj}()}
 }
 \concept{DataWrangling}

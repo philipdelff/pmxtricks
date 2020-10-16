@@ -4,9 +4,18 @@
 \alias{means}
 \title{calculate arithmetic or geometric mean and confidence intervals}
 \usage{
-means(x, type = "arithmetic", na.rm = FALSE, z.rm = FALSE,
-  ci = FALSE, dist.ci = "t", p.ci = 0.95, colnames = c("est", "ll",
-  "ul"), format = "df", debug = F)
+means(
+  x,
+  type = "arithmetic",
+  na.rm = FALSE,
+  z.rm = FALSE,
+  ci = FALSE,
+  dist.ci = "t",
+  p.ci = 0.95,
+  colnames = c("est", "ll", "ul"),
+  format = "df",
+  debug = F
+)
 }
 \arguments{
 \item{x}{vector to calculate the geometric mean of}
@@ -33,8 +42,12 @@ means(x, type = "arithmetic", na.rm = FALSE, z.rm = FALSE,
 calculate arithmetic or geometric mean and confidence intervals
 }
 \seealso{
-Other Calc: \code{\link{CV}}, \code{\link{geomean}},
-  \code{\link{thalf_1a1c}}, \code{\link{thalf_1a2c}},
-  \code{\link{thalf_trans_1c}}, \code{\link{trapez}}
+Other Calc: 
+\code{\link{CV}()},
+\code{\link{geomean}()},
+\code{\link{thalf_1a1c}()},
+\code{\link{thalf_1a2c}()},
+\code{\link{thalf_trans_1c}()},
+\code{\link{trapez}()}
 }
 \concept{Calc}

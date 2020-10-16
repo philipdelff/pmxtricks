@@ -4,8 +4,16 @@
 \alias{metaPrint}
 \title{Print a meta.data object}
 \usage{
-metaPrint(data, meta.data, file = NULL, file.data, match.data = T,
-  silent = !is.null(file), test = F, debug = F)
+metaPrint(
+  data,
+  meta.data,
+  file = NULL,
+  file.data,
+  match.data = T,
+  silent = !is.null(file),
+  test = F,
+  debug = F
+)
 }
 \arguments{
 \item{data}{The dataset being described (i.e. a data.frame).}
@@ -36,7 +44,8 @@ The meta data object printed as formatted text
 Print a meta.data object
 }
 \seealso{
-Other DataGen: \code{\link{metaCheck}},
-  \code{\link{metaInit}}
+Other DataGen: 
+\code{\link{metaCheck}()},
+\code{\link{metaInit}()}
 }
 \concept{DataGen}

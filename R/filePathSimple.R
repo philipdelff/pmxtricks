@@ -1,18 +1,17 @@
-##' Tidy paths
+##' Clean and standardize file system paths
 ##'
-##' @description Used to tidy up paths. Passes arguments to
+##' @description Use this to tidy up paths. Combines pieces of a path like
 ##'     file.path(). The function is intended to return a canonical
 ##'     path format, i.e. paths that can be compared by simple string
-##'     comparisson.
+##'     comparisson. Redundant /'s removed. normalizePath is used to
+##'     possibly shorten path.
 ##' @param ... additional arguments passed to file.path().
-##' @param debug start by running browser()?
+##' @return A (character) file path
 ##' @family FileSystem
-##' @export
 
  
 
-filePathSimple <- function(...,debug=F){
-    if(debug) browser()
+filePathSimple <- function(...){
     
     fpath <- file.path(...)
     ## get rid of heading and tailing white spaces

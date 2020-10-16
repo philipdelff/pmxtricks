@@ -22,12 +22,17 @@ z <- data.frame(a=4:5,b=letters[4:5],d=c(NA,5))
 rbindIntersect(x,y,z)
 }
 \seealso{
-Other DataWrangling: \code{\link{NMcompAllRes}},
-  \code{\link{compareNames}}, \code{\link{factor2}},
-  \code{\link{findCovs_df}}, \code{\link{mergeCheck}},
-  \code{\link{newNames}}, \code{\link{rbindUnion}},
-  \code{\link{roundDF}}, \code{\link{roundResp0}},
-  \code{\link{selectVars}}, \code{\link{signif2}},
-  \code{\link{stampObj}}, \code{\link{tmpcol}}
+Other DataWrangling: 
+\code{\link{compareNames}()},
+\code{\link{factor2}()},
+\code{\link{findCovs_df}()},
+\code{\link{mergeCheck}()},
+\code{\link{newNames}()},
+\code{\link{rbindUnion}()},
+\code{\link{roundDF}()},
+\code{\link{roundResp0}()},
+\code{\link{selectVars}()},
+\code{\link{signif2}()},
+\code{\link{stampObj}()}
 }
 \concept{DataWrangling}

@@ -16,7 +16,8 @@ get a file or dir from a the pmxtricks package
 a light wrapper around system.file
 }
 \seealso{
-Other FileSystem: \code{\link{filePathSimple}},
-  \code{\link{getSource}}
+Other FileSystem: 
+\code{\link{filePathSimple}()},
+\code{\link{getSource}()}
 }
 \concept{FileSystem}

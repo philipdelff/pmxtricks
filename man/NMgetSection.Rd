@@ -4,10 +4,21 @@
 \alias{NMgetSection}
 \title{extract sections of Nonmem control streams}
 \usage{
-NMgetSection(file = NULL, lines = NULL, text = NULL, section,
-  return = "text", keepEmpty = FALSE, keepName = TRUE,
-  keepComments = TRUE, asOne = TRUE, simplify = TRUE,
-  cleanSpaces = FALSE, debug = F, ...)
+NMgetSection(
+  file = NULL,
+  lines = NULL,
+  text = NULL,
+  section,
+  return = "text",
+  keepEmpty = FALSE,
+  keepName = TRUE,
+  keepComments = TRUE,
+  asOne = TRUE,
+  simplify = TRUE,
+  cleanSpaces = FALSE,
+  debug = F,
+  ...
+)
 }
 \arguments{
 \item{file}{A file to read from. Normally a .mod or .lst. See
@@ -60,12 +71,12 @@ suitable for the results part too.
 }
 \examples{
 pmxtricks:::NMgetSection(pmxtricks_filepath("examples/nonmem/run001.lst"),section="DATA")
-
-
 }
 \seealso{
-Other Nonmem: \code{\link{NMextractText}},
-  \code{\link{NMreadTabDF}}, \code{\link{NMreplacePart}},
-  \code{\link{NMundoReplace}}
+Other Nonmem: 
+\code{\link{NMextractText}()},
+\code{\link{NMreadTabDF}()},
+\code{\link{NMreplacePart}()},
+\code{\link{NMundoReplace}()}
 }
 \concept{Nonmem}

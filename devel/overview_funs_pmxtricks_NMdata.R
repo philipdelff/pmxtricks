@@ -5,17 +5,18 @@
 
 library(devtools)
 
-load_all("c:/Users/kctw748/working_copies/pmxtricks")
-load_all("c:/Users/kctw748/working_copies/NMdata")
+path.wcs <- "c:/Users/delff/working_copies"
+load_all(file.path(path.wcs,"pmxtricks"))
+load_all(file.path(path.wcs,"NMdata"))
 
-help(package=pmxtricks)
+help(package="pmxtricks")
 
 ## lsf.str("package:pmxtricks")
 
 
 
 ### overview of functions by family
-dir.r <- file.path("c:/Users/kctw748/working_copies/pmxtricks/R")
+dir.r <- file.path(path.wcs,"pmxtricks/R")
 scripts.pmx <- list.files(dir.r)
 
 fams <- lapply(scripts.pmx,function(s){
@@ -34,7 +35,7 @@ funs.pmx <- sub("\\.R$","",scripts.pmx)
 funs.pmx
 
 ### nmdata functions
-dir.r <- file.path("c:/Users/kctw748/working_copies/NMdata/R")
+dir.r <- file.path(path.wcs,"NMdata/R")
 scripts.nmdata <- list.files(dir.r)
 
 overviewScripts <- function(scripts,debug=FALSE){
@@ -60,11 +61,11 @@ overviewScripts <- function(scripts,debug=FALSE){
 
 }
 
-dir.r <- file.path("c:/Users/kctw748/working_copies/NMdata/R")
+dir.r <- file.path(path.wcs,"NMdata/R")
 funs.nmd <- overviewScripts(file.path(dir.r,scripts.nmdata))
 funs.nmd[,pkg:="NMdata"]
 
-dir.r <- file.path("c:/Users/kctw748/working_copies/pmxtricks/R")
+dir.r <- file.path(path.wcs,"pmxtricks/R")
 funs.pmx <- overviewScripts(file.path(dir.r,scripts.pmx))
 funs.pmx[,pkg:="pmxtricks"]
 

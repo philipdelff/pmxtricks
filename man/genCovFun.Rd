@@ -4,8 +4,16 @@
 \alias{genCovFun}
 \title{create R function that generates param values based on covariates}
 \usage{
-genCovFun(NMcode0, pars0, covs0, theta0, omega0, name.fun, verbose = F,
-  debug = F)
+genCovFun(
+  NMcode0,
+  pars0,
+  covs0,
+  theta0,
+  omega0,
+  name.fun,
+  verbose = F,
+  debug = F
+)
 }
 \arguments{
 \item{NMcode0}{Nonmem code that translates THETA and OMEGA into PK/PD
@@ -64,5 +72,9 @@ fun1text <- genCovFun(NMcode0=NMR3
 
 cat(fun1text)
 }
+}
+\seealso{
+Other Simulation: 
+\code{\link{NMcode2R}()}
 }
 \concept{Simulation}

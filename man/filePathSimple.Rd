@@ -2,23 +2,26 @@
 % Please edit documentation in R/filePathSimple.R
 \name{filePathSimple}
 \alias{filePathSimple}
-\title{Tidy paths}
+\title{Clean and standardize file system paths}
 \usage{
-filePathSimple(..., debug = F)
+filePathSimple(...)
 }
 \arguments{
 \item{...}{additional arguments passed to file.path().}
-
-\item{debug}{start by running browser()?}
+}
+\value{
+A (character) file path
 }
 \description{
-Used to tidy up paths. Passes arguments to
+Use this to tidy up paths. Combines pieces of a path like
     file.path(). The function is intended to return a canonical
     path format, i.e. paths that can be compared by simple string
-    comparisson.
+    comparisson. Redundant /'s removed. normalizePath is used to
+    possibly shorten path.
 }
 \seealso{
-Other FileSystem: \code{\link{getSource}},
-  \code{\link{pmxtricks_filepath}}
+Other FileSystem: 
+\code{\link{getSource}()},
+\code{\link{pmxtricks_filepath}()}
 }
 \concept{FileSystem}

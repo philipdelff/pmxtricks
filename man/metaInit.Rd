@@ -4,9 +4,18 @@
 \alias{metaInit}
 \title{Initialise a metadata object based}
 \usage{
-metaInit(data, stamp, analysis = NULL, header = NULL,
-  use.standard.cols = T, time.unit = "h", dv.unit = NULL,
-  amt.unit = NULL, ndos.unit = NULL, debug = F)
+metaInit(
+  data,
+  stamp,
+  analysis = NULL,
+  header = NULL,
+  use.standard.cols = T,
+  time.unit = "h",
+  dv.unit = NULL,
+  amt.unit = NULL,
+  ndos.unit = NULL,
+  debug = F
+)
 }
 \arguments{
 \item{data}{The dataset being described (i.e. a data.frame).}
@@ -46,7 +55,8 @@ about variables in a dataset plus some more information such as
 what dataset is being described, what study it is part of etc.
 }
 \seealso{
-Other DataGen: \code{\link{metaCheck}},
-  \code{\link{metaPrint}}
+Other DataGen: 
+\code{\link{metaCheck}()},
+\code{\link{metaPrint}()}
 }
 \concept{DataGen}

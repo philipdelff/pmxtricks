@@ -4,12 +4,32 @@
 \alias{ggIndProfs}
 \title{Plot individual profiles and doses based on NM style dataset}
 \usage{
-ggIndProfs(data, run, x = "TIME", dv = "DV", pred = "PRED",
-  ipred = c("IPRED", "IPRE"), grp, amt, id = "ID", xlab = NULL,
-  ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F,
-  NPerSheet = 12, LLOQ = NULL, use.evid2, facet = id,
-  par.prof = NULL, x.inc, grp.label = grp, labels = TRUE,
-  debug = F, debug.sheet)
+ggIndProfs(
+  data,
+  run,
+  x = "TIME",
+  dv = "DV",
+  pred = "PRED",
+  ipred = c("IPRED", "IPRE"),
+  grp,
+  amt,
+  id = "ID",
+  xlab = NULL,
+  ylab = NULL,
+  ylab2 = NULL,
+  scales = "fixed",
+  logy = F,
+  NPerSheet = 12,
+  LLOQ = NULL,
+  use.evid2,
+  facet = id,
+  par.prof = NULL,
+  x.inc,
+  grp.label = grp,
+  labels = TRUE,
+  debug = F,
+  debug.sheet
+)
 }
 \arguments{
 \item{data}{The dataset to plot.}
@@ -96,11 +116,16 @@ The resulting plot object has been limited on x axis by
 The resulting object can be saved with ggwrite.
 }
 \seealso{
-Other Plotting: \code{\link{NMplotBOV}},
-  \code{\link{NMplotBSV}}, \code{\link{NMplotGOF}},
-  \code{\link{canvasSize}}, \code{\link{extractLegend}},
-  \code{\link{ggWater}}, \code{\link{ggstamp}},
-  \code{\link{ggwrite}}, \code{\link{theme_pp_facet}},
-  \code{\link{theme_pp}}
+Other Plotting: 
+\code{\link{NMplotBOV}()},
+\code{\link{NMplotBSV}()},
+\code{\link{NMplotGOF}()},
+\code{\link{canvasSize}()},
+\code{\link{extractLegend}()},
+\code{\link{ggWater}()},
+\code{\link{ggstamp}()},
+\code{\link{ggwrite}()},
+\code{\link{theme_pp_facet}()},
+\code{\link{theme_pp}()}
 }
 \concept{Plotting}

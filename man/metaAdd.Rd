@@ -4,9 +4,18 @@
 \alias{metaAdd}
 \title{Add meta data to an existing meta data object}
 \usage{
-metaAdd(data, meta.data, variable = NULL, text = NULL, header = NULL,
-  var.char = NULL, var.unit = NULL, values = NULL, unit = NA,
-  debug = F)
+metaAdd(
+  data,
+  meta.data,
+  variable = NULL,
+  text = NULL,
+  header = NULL,
+  var.char = NULL,
+  var.unit = NULL,
+  values = NULL,
+  unit = NA,
+  debug = F
+)
 }
 \arguments{
 \item{data}{The dataset being described (i.e. a data.frame).}
