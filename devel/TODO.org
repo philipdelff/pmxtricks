@@ -9,14 +9,8 @@
     CLOSED: [2019-02-07 Thu 15:36]
     Used to be: exportPattern("^[[:alpha:]]+")
 ** Bugs
-*** NMscanData
-**** DONE If col.row is not supplied, the function fails
-     CLOSED: [2019-12-12 Thu 09:57]
-***** DONE As of now, It must report an error since col.row is always necessary.
-      CLOSED: [2019-01-24 Thu 18:39]
-***** DONE Ideally, it just treats output tables if tab.row not found
-      CLOSED: [2019-12-12 Thu 09:57]
-*** TODO theme_pp doesn't run
+*** DONE theme_pp doesn't run
+    CLOSED: [2020-11-02 Mon 11:31]
 *** NMreadRun
 **** WAITING No. of parameters 
 extload sometimes fails to get FIX info creating problems for
@@ -50,6 +44,8 @@ NMaddColumns
 *** DONE Individual profile plots
     CLOSED: [2019-12-12 Thu 09:57]
 *** TODO Check nonmem data set
+**** duplicate column names
+**** If col.row included, col.row increasing, unique
 **** Checks/analyses to include
 **** NA TIME
 **** actual time since first dose vs Nominal time since first dose
@@ -64,6 +60,8 @@ NMaddColumns
 **** positive AMT for !EVID%in%c(1,4)
 **** NA EVID, EVID in 1:4
 **** negative time (for nonmem)
+**** zero doses (will fail in nonmem)
+**** TIME increasing for subjects between EVID 3 or 4
 *** TODO Meta data functions
 ** Documentation
 *** TODO Tests
@@ -194,3 +192,9 @@ intentional.
 **** DONE scale parameter
      CLOSED: [2020-04-13 Mon 16:53]
 scale all dimensions by the parameter value in end of function.
+*** ggwrite
+**** TODO Naming of multiple plots 
+For list objects, optionally name the plots (when onefile=F) by the
+element names of the list. Could also use an additional argument to
+provide the name suffixes, but using element names reduces need for
+checks of length, class etc.

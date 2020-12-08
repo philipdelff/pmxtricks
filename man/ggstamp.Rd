@@ -19,8 +19,12 @@ the plot with a stamp
 }
 \description{
 This function is used to stamp ggplot type plots with datetime and
-script name. User must provide the script name. Notice that ggplot
-2.2.1 or newer is required.
+script name. User must provide the script name.
+}
+\details{
+The stamp is adding using the caption label. If a caption
+    is already in the plot, the stamp will be added in a new
+    line. ggplot 2.2.1 or newer is required.
 }
 \examples{
 library(ggplot2)

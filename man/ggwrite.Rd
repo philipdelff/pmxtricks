@@ -2,51 +2,60 @@
 % Please edit documentation in R/ggwrite.R
 \name{ggwrite}
 \alias{ggwrite}
-\title{Export plots created with ggplot (and more) to files (png or pdf) - or show them on screen.}
+\title{Export plots created with ggplot (and more) or tables to files
+(png or pdf) - or show them on screen.}
 \usage{
 ggwrite(
   plot,
   file,
   stamp,
   canvas = "standard",
-  onefile = F,
+  onefile = FALSE,
   res = 200,
   paper = "special",
-  save = T,
+  save = TRUE,
   show = !save,
+  useNames = FALSE,
   debug = F
 )
 }
 \arguments{
-\item{plot}{A plot object or a list of plots. Normally generated with ggplot
-or qplot. But it can also be from grid.arrange or arrangeGrob with class
-gtable. That is experimental though. Not sure exactly what classes are
-supported.}
+\item{plot}{A plot object or a list of plots. Normally generated
+with ggplot or qplot. But it can also be from grid.arrange or
+arrangeGrob with class gtable. That is experimental
+though. Not sure exactly what classes are supported.}
 
-\item{file}{A file to export to. Must end in .png or .pdf. If plot is a
-list, see onefile. If missing, plot is shown on screen.}
+\item{file}{A file to export to. Must end in .png or .pdf. If plot
+is a list, see onefile. If missing, plot is shown on screen.}
 
-\item{stamp}{This should normally be the path to your script. Requires
-ggplot >=2.2.1.}
+\item{stamp}{This should normally be the path to your
+script. Requires ggplot >=2.2.1.}
 
-\item{canvas}{Either a list of height and width or a shortname of predefined
-canvas size. See ?canvasSize.}
+\item{canvas}{Either a list of height and width or a shortname of
+predefined canvas size. See ?canvasSize.}
 
-\item{onefile}{Only applicable if plot is a list. If plot is a list and
-onefile=T, all plots will be put in a pdf (file must end in pdf) with
-one plot per page. If plot is a list and onefile=F, numbered files will
-be created - one per list element.}
+\item{onefile}{Only applicable if plot is a list. If plot is a
+list and onefile=T, all plots will be put in a pdf (file must
+end in pdf) with one plot per page. If plot is a list and
+onefile=F, numbered files will be created - one per list
+element.}
 
 \item{res}{Resolution. Passed to png.}
 
 \item{paper}{Only used with pdf device. See ?pdf.}
 
-\item{save}{Save the plot to the given file or just show? Defaults to
-TRUE. Hint, if you use an "exportFlag", use save=exportFlag.}
+\item{save}{Save the plot to the given file or just show? Defaults
+to TRUE. Hint, if you use an "exportFlag", use
+save=exportFlag.}
 
-\item{show}{Print the plot to the screen? Defaults to the opposite of
-save. Hint, combining save and show in knitr can give you both a high
-quality plot in your pdf and a png optimized for powerpoint.}
+\item{show}{Print the plot to the screen? Defaults to the opposite
+of save. Hint, combining save and show in knitr can give you
+both a high quality plot in your pdf and a png optimized for
+powerpoint.}
+
+\item{useNames}{If length(plot)>1 use names(plot) in the file
+names? Default is to use 1:length(plot). Only used if save is
+TRUE, and length(plot)>1.}
 
 \item{debug}{If TRUE, browser is called to begin with.}
 }
@@ -54,7 +63,8 @@ quality plot in your pdf and a png optimized for powerpoint.}
 Nothing.
 }
 \description{
-Export plots created with ggplot (and more) to files (png or pdf) - or show them on screen.
+Export plots created with ggplot (and more) or tables to files
+(png or pdf) - or show them on screen.
 }
 \examples{
 library(ggplot2)
@@ -64,6 +74,11 @@ p1 <- ggplot(pksim1,aes(TIME,DV,colour=ID))+geom_point()
 ggwrite(p1)  ## view plot on screen
 stamp <- "note"
 ggwrite(p1,stamp=stamp,canvas="wide",file="myplot1.png",save=writeOutput)
+## save a data.frame as an image
+library(gridExtra)
+tab1 <- pksim1[,.N,by=.(ID,EVID,CMT)]
+tg1 <- tableGrob(tab1)
+ggwrite(tg1,stamp=stamp,file="mytab1.png",save=writeOutput)
 }
 \seealso{
 Other Plotting: 

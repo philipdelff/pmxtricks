@@ -1,8 +1,7 @@
 ##' Always stamp your plots with script name
 ##'
 ##' This function is used to stamp ggplot type plots with datetime and
-##' script name. User must provide the script name. Notice that ggplot
-##' 2.2.1 or newer is required.
+##' script name. User must provide the script name. 
 ##'
 ##' @param plot The plot to be stamped.
 ##' @param stamp the script name. Date and time will be added
@@ -10,6 +9,9 @@
 ##' @param time The timestamp to be included.
 ##'
 ##' @return the plot with a stamp
+##' @details The stamp is adding using the caption label. If a caption
+##'     is already in the plot, the stamp will be added in a new
+##'     line. ggplot 2.2.1 or newer is required.
 ##' @import ggplot2
 ##' @import grid
 ##' @importFrom gridExtra arrangeGrob
@@ -61,8 +63,8 @@ ggstamp <- function(plot, stamp = "no stamp",time=Sys.time()) {
         if(is.na(otype)) stop("Dont know how to stamp this object type.")
         
         date.txt <- format(time, "%d-%b-%Y %H:%M")
-        caption <- paste(date.txt,stamp)
-
+        caption.stamp <- paste(date.txt,stamp)
+        caption=paste(c(plot$label$caption,caption.stamp),collapse="\n")
         
         plot.stamped <- switch(otype,
                                ggplot={if(sum(unlist(packageVersion("ggplot2")[1,])*c(1000)^c(2:0))<2002001){

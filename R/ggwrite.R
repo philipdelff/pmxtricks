@@ -1,26 +1,33 @@
-##' Export plots created with ggplot (and more) to files (png or pdf) - or show them on screen.
+##' Export plots created with ggplot (and more) or tables to files
+##' (png or pdf) - or show them on screen.
 ##'
-##' @param plot A plot object or a list of plots. Normally generated with ggplot
-##'     or qplot. But it can also be from grid.arrange or arrangeGrob with class
-##'     gtable. That is experimental though. Not sure exactly what classes are
-##'     supported.
-##' @param file A file to export to. Must end in .png or .pdf. If plot is a
-##'     list, see onefile. If missing, plot is shown on screen.
-##' @param stamp This should normally be the path to your script. Requires
-##'     ggplot >=2.2.1.
-##' @param canvas Either a list of height and width or a shortname of predefined
-##'     canvas size. See ?canvasSize.
-##' @param onefile Only applicable if plot is a list. If plot is a list and
-##'     onefile=T, all plots will be put in a pdf (file must end in pdf) with
-##'     one plot per page. If plot is a list and onefile=F, numbered files will
-##'     be created - one per list element.
+##' @param plot A plot object or a list of plots. Normally generated
+##'     with ggplot or qplot. But it can also be from grid.arrange or
+##'     arrangeGrob with class gtable. That is experimental
+##'     though. Not sure exactly what classes are supported.
+##' @param file A file to export to. Must end in .png or .pdf. If plot
+##'     is a list, see onefile. If missing, plot is shown on screen.
+##' @param stamp This should normally be the path to your
+##'     script. Requires ggplot >=2.2.1.
+##' @param canvas Either a list of height and width or a shortname of
+##'     predefined canvas size. See ?canvasSize.
+##' @param onefile Only applicable if plot is a list. If plot is a
+##'     list and onefile=T, all plots will be put in a pdf (file must
+##'     end in pdf) with one plot per page. If plot is a list and
+##'     onefile=F, numbered files will be created - one per list
+##'     element.
 ##' @param res Resolution. Passed to png.
-##' @param save Save the plot to the given file or just show? Defaults to
-##'     TRUE. Hint, if you use an "exportFlag", use save=exportFlag.
-##' @param show Print the plot to the screen? Defaults to the opposite of
-##'     save. Hint, combining save and show in knitr can give you both a high
-##'     quality plot in your pdf and a png optimized for powerpoint.
+##' @param save Save the plot to the given file or just show? Defaults
+##'     to TRUE. Hint, if you use an "exportFlag", use
+##'     save=exportFlag.
+##' @param show Print the plot to the screen? Defaults to the opposite
+##'     of save. Hint, combining save and show in knitr can give you
+##'     both a high quality plot in your pdf and a png optimized for
+##'     powerpoint.
 ##' @param paper Only used with pdf device. See ?pdf.
+##' @param useNames If length(plot)>1 use names(plot) in the file
+##'     names? Default is to use 1:length(plot). Only used if save is
+##'     TRUE, and length(plot)>1.
 ##' @param debug If TRUE, browser is called to begin with.
 ##' @export
 ##' @return Nothing.
@@ -32,21 +39,22 @@
 ##' ggwrite(p1)  ## view plot on screen
 ##' stamp <- "note"
 ##' ggwrite(p1,stamp=stamp,canvas="wide",file="myplot1.png",save=writeOutput)
+##' ## save a data.frame as an image
+##' library(gridExtra)
+##' tab1 <- pksim1[,.N,by=.(ID,EVID,CMT)]
+##' tg1 <- tableGrob(tab1)
+##' ggwrite(tg1,stamp=stamp,file="mytab1.png",save=writeOutput)
 ##' @family Plotting
 ##' @import grDevices
 ##' @import grid
 
-
-### TODO
-## a "show" argument is missing. Like "save" this should determine if the plot
-## is printed to screen. Ideally, save and show should work independently, so
-## that you can do either, both, or none, depending on these two args.
-#### end TODO
-
-ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,paper="special",save=T,show=!save,debug=F){
+ggwrite <- function(plot, file, stamp, canvas="standard",
+                    onefile=FALSE, res=200, paper="special",
+                    save=TRUE, show=!save, useNames=FALSE, debug=F){
     
     if(debug) browser()
 
+    if(useNames && length(plot)==1) warning("useNames is ignored because plot is of length 1.")
 
 ###### functions to be used internally
 ### print1 does the actual printing to the device. Because if the plot is a
@@ -149,6 +157,7 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,paper="s
                 ## cat("Number of plots: ",Nplots)
                 Nplots.log10 <- round(log10(Nplots))
                 fname.num <- function(fnroot,type,I) paste(fnroot,"_",sprintf(fmt=paste("%0",Nplots.log10+1,"d",sep=""),I),".",type,sep="")
+                fname.char <- function(fnroot,type,name) paste(fnroot,"_",name,".",type,sep="")
                 if (type=="x11"){
                     write1(plot[[1]],type="x11")
                     if(Nplots>2){
@@ -160,7 +169,11 @@ ggwrite <- function(plot,file,stamp,canvas="standard",onefile=F,res=200,paper="s
                         })
                     }
                 } else {
-                    silent <- lapply(1:Nplots,function(I)write1(plot=plot[[I]],type=type,fn=fname.num(fnroot,type,I),size=size))
+                    if(useNames){
+                        silent <- lapply(1:Nplots,function(I)write1(plot=plot[[I]],type=type,fn=fname.char(fnroot,type,name=names(plot)[I]),size=size))
+                    } else{
+                        silent <- lapply(1:Nplots,function(I)write1(plot=plot[[I]],type=type,fn=fname.num(fnroot,type,I),size=size))
+                    }
                 }
             }
         } else {

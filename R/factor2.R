@@ -7,7 +7,11 @@
 ##' @param debug start by calling browser()?
 ##' @import data.table
 ##' @family DataWrangling
-## Don't export - use reorder instead
+
+## Don't export - use reorder instead. reorder adds a scores attribute
+## which is annoying. But I don't think factor2 can be used inside
+## data.tables which makes it even more annoying. Maybe just create a
+## wrapper that removes the scores attribute after running reorder?
 
 factor2 <- function(x,by=x,debug=F){
     if(debug) browser()
