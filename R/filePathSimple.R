@@ -8,7 +8,7 @@
 ##' @param ... additional arguments passed to file.path().
 ##' @return A (character) file path
 ##' @family FileSystem
-
+##' @export
  
 
 filePathSimple <- function(...){

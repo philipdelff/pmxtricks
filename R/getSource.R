@@ -11,7 +11,7 @@
 ##'     bypasses the whole concept of the function but it is useful when
 ##'     developing while using a function. Especially if your debugger in the
 ##'     editor is linking to a file that you will edit while debugging. It gives
-##'     a warning because it is not allowed in final code.
+##'     a warning because it is not recommended in final code.
 ##' @param silent Disables printning. Mainly used in testing.
 ##' @family FileSystem
 ##' @return None. Sources the specified file into the global environment.
