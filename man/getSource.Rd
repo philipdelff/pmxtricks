@@ -27,7 +27,7 @@ already imported files. Default is getwd().}
 bypasses the whole concept of the function but it is useful when
 developing while using a function. Especially if your debugger in the
 editor is linking to a file that you will edit while debugging. It gives
-a warning because it is not allowed in final code.}
+a warning because it is not recommended in final code.}
 
 \item{silent}{Disables printning. Mainly used in testing.}
 }
