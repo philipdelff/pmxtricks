@@ -17,7 +17,6 @@
 ##' @import ggplot2
 ##' @import data.table
 ##' @import stats
-##' @importFrom tidyr gather_
 ##' @importFrom GGally ggpairs
 ##' @family Plotting
 ##' @export
@@ -33,10 +32,10 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
 
 #### Section start: dummy variables, only not to get NOTE's in pacakge checks ####
 
-value  <- NULL
-..density..  <- NULL
-predicted <- NULL
-val.cov <- NULL
+    value  <- NULL
+    ..density..  <- NULL
+    predicted <- NULL
+    val.cov <- NULL
 
 ### Section end: dummy variables, only not to get NOTE's in pacakge checks
 
@@ -63,15 +62,15 @@ val.cov <- NULL
     etas.l <- NULL
     
     if(length(names.etas.var)){
-##        etas <- pkpars[,c("ID", names.etas.var,covs.num,covs.char)]
-        etas <- pkpars[,c("ID", names.etas.var,covs.num,covs.char),with=F]
+        ##        etas <- pkpars[,c("ID", names.etas.var,covs.num,covs.char)]
+        etas <- unique(pkpars[,c("ID", names.etas.var,covs.num,covs.char),with=F])
         
 ### etas against each other. Notice, all etas, even those = 0.
 
         points.and.smooth <- function(data, mapping, method="lm", ...){
             p <- ggplot(data = data, mapping = mapping) + 
                 geom_point() + 
-                geom_smooth(method=method, ...)
+                geom_smooth(method=method, formula=y~x, ...)
             p
         }
 
@@ -85,7 +84,7 @@ val.cov <- NULL
         etas.l <- melt(etas,id.vars=c(col.id,covs.num,covs.char),measure.vars=names.etas.var,value.name="value",variable.name="param")
         ##
         ## compare.names(etas,pkpars)
-        etas.l <- mergeCheck(etas.l,pkpars,by=c(col.id,covs.num,covs.char))
+     #   etas.l <- mergeCheck(etas.l,pkpars,by=c(col.id,covs.num,covs.char),allow.cartesian=TRUE)
         
         ## g1 <- ggplot(etas.l,aes(value))+
         ##     geom_histogram()+
@@ -111,10 +110,10 @@ val.cov <- NULL
         DT.dat <- as.data.table(dat)
         normaldens <-
             DT.dat[,list(
-            predicted=grid,
-            density=dnorm(grid, mean(value), sd(value))
-        ),
-        by="param"]
+                predicted=grid,
+                density=dnorm(grid, mean(value), sd(value))
+            ),
+            by="param"]
         
         gh2 <- ggplot(data = dat,aes(x = value)) + 
             geom_histogram(aes(y = ..density..)) + 
@@ -135,56 +134,59 @@ val.cov <- NULL
         
         ## IIV random effects vs covariates
         if(!is.null(covs.num)){
-        if(!all(covs.num%in%names(pkpars))){
-            covs.num.drop <- setdiff(covs.num,names(pkpars))
-            warning(paste0("The following numerical parameters were not found:\n",paste(covs.num.drop,collapse=", ")))
-            covs.num <- setdiff(covs.num,covs.num.drop)
-        }
-        
-        ## use only covariates that vary
-        ## covs.num <- names(which(
-        ##     sapply(pkpars[,covs.num,drop=F],function(x)length(unique(x)))  > 1
-        ## ))
-        covs.num <- colnames(findVars(pkpars[,covs.num,with=F]))
-        
-##        etas.l2.n <- mergeCheck(etas.l,unique(pkpars[c(col.id,covs.num)]),by=col.id)
-##        etas.l2.n <- etas.l2.n[,c(col.id,"param","value",covs.num)]
-        etas.l2.n <- etas.l[,c(col.id,"param","value",covs.num)]
+            if(!all(covs.num%in%names(pkpars))){
+                covs.num.drop <- setdiff(covs.num,names(pkpars))
+                warning(paste0("The following numerical parameters were not found:\n",paste(covs.num.drop,collapse=", ")))
+                covs.num <- setdiff(covs.num,covs.num.drop)
+            }
+            
+            ## use only covariates that vary
+            ## covs.num <- names(which(
+            ##     sapply(pkpars[,covs.num,drop=F],function(x)length(unique(x)))  > 1
+            ## ))
+            covs.num <- colnames(findVars(pkpars[,covs.num,with=F]))
+            
+            ##        etas.l2.n <- mergeCheck(etas.l,unique(pkpars[c(col.id,covs.num)]),by=col.id)
+            ##        etas.l2.n <- etas.l2.n[,c(col.id,"param","value",covs.num)]
+            etas.l2.n <- etas.l[,c(col.id,"param","value",covs.num),with=FALSE]
 
-        if(length(names(etas.l2.n)[!names(etas.l2.n)%in%c("ID","param","value")])){
-        etas.covs.n <- gather_(etas.l2.n,"cov","val.cov",names(etas.l2.n)[!names(etas.l2.n)%in%c("ID","param","value")])
+            if(
+                length(setdiff(colnames(etas.l2.n),c("ID","param","value")))>0
+            ){
+                etas.covs.n <- melt.data.table(etas.l2.n,variable.name="cov",value.name="val.cov",measure.vars=names(etas.l2.n)[!names(etas.l2.n)%in%c("ID","param","value")])
 ### I dont understand why this is needed. This should just be a numeric covariate like any other, I guess?
-        ## if(any(grepl("^ETA",covs.num))){
-        ##     p.iiv.covsn.eta <- ggplot(subset(etas.covs.n,grepl("^ETA",cov)),aes(val.cov,value))+geom_point()+
-        ##         geom_smooth(method="lm")+
-        ##         facet_grid(param~cov,scales="free")
-        ##     gsave(p.iiv.covsn.eta,file=file.runplot(name.run,"iiv_covs_etas.png"),save=write.output,stamp=stamp)
-        ## }
-        p.iiv.covsn <- ggplot(subset(etas.covs.n,!grepl(regex.eta,cov)),aes(val.cov,value))+
-            geom_point()+
-            geom_smooth(method="lm")+
-            facet_grid(param~cov,scales="free")
-        ggwrite(p.iiv.covsn,file=fun.file("iiv_covs_n.png"),save=save,stamp=stamp)
-        all.output[["iiv.covsn"]] <- p.iiv.covsn
-        }
+                ## if(any(grepl("^ETA",covs.num))){
+                ##     p.iiv.covsn.eta <- ggplot(subset(etas.covs.n,grepl("^ETA",cov)),aes(val.cov,value))+geom_point()+
+                ##         geom_smooth(method="lm")+
+                ##         facet_grid(param~cov,scales="free")
+                ##     gsave(p.iiv.covsn.eta,file=file.runplot(name.run,"iiv_covs_etas.png"),save=write.output,stamp=stamp)
+                ## }
+                p.iiv.covsn <- ggplot(subset(etas.covs.n,!grepl(regex.eta,cov)),aes(val.cov,value))+
+                    geom_point()+
+                    geom_smooth(method="lm")+
+                    facet_grid(param~cov,scales="free")
+                ggwrite(p.iiv.covsn,file=fun.file("iiv_covs_n.png"),save=save,stamp=stamp)
+                all.output[["iiv.covsn"]] <- p.iiv.covsn
+            }
         }
         if(!is.null(covs.char)){
-         
+            
             
             ## etas.l2.c <- mergeCheck(etas.l,unique(pkpars[,c(col.id,covs.char),drop=F]),by=col.id)
             ## etas.l2.c <- etas.l2.c[,c(col.id,"param","value",covs.char)]
-               etas.l2.c <- etas.l[,c(col.id,"param","value",covs.char),with=F]
+            etas.l2.c <- etas.l[,c(col.id,variable,"param","value",covs.char),with=F]
 
 #### gather_ does not respect factor levels. Using data.table for this melt/gather.
             ## etas.covs.c <- gather_(etas.l2.c,"cov","val.cov",names(etas.l2.c)[!names(etas.l2.c)%in%c("ID","param","value")])
             
             ## p.iiv.covsc <- ggplot(etas.covs.c,aes(colour=val.cov,value))+geom_density()+facet_grid(param~cov,scales="free")
             ## p.iiv.covsc <- by(etas.covs.c,etas.covs.c$cov,function(data)ggplot(data,aes(colour=val.cov,value))+geom_density()+facet_grid(param~cov,scales="free"))
-##            p.iiv.covsc <- ggplot(etas.covs.c,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)
+            ##            p.iiv.covsc <- ggplot(etas.covs.c,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)
             ## all.output[["iiv.covsc"]] <- p.iiv.covsc
-  
+            
             DT <- data.table(etas.l2.c)
 
+            warning("Please double-check the plotting aginst charcter covariates. dose is hard-coded which looks like a bug.")
             DT2 <- melt(DT,measure.vars="dose",id.vars=c("ID","param","value"),value.name="val.cov",value.factor=T)
             p.iiv.covsc.dt <- ggplot(DT2,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)
             ggwrite(p.iiv.covsc.dt,file=fun.file("iiv_covs_c.png"),save=save,stamp=stamp)
