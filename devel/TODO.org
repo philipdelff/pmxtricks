@@ -44,7 +44,9 @@ NMaddColumns
 *** DONE Individual profile plots
     CLOSED: [2019-12-12 Thu 09:57]
 *** TODO Check nonmem data set
-**** duplicate column names
+**** column names
+***** duplicate column names
+***** . not allowed in column names
 **** If col.row included, col.row increasing, unique
 **** Checks/analyses to include
 **** NA TIME
@@ -62,6 +64,8 @@ NMaddColumns
 **** negative time (for nonmem)
 **** zero doses (will fail in nonmem)
 **** TIME increasing for subjects between EVID 3 or 4
+**** tests of text file
+***** A field can't contain more than 24 characters
 *** TODO Meta data functions
 ** Documentation
 *** TODO Tests
