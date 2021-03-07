@@ -163,7 +163,7 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
                 ## }
                 p.iiv.covsn <- ggplot(subset(etas.covs.n,!grepl(regex.eta,cov)),aes(val.cov,value))+
                     geom_point()+
-                    geom_smooth(method="lm")+
+                    geom_smooth(method="lm", formula=y~x)+
                     facet_grid(param~cov,scales="free")
                 ggwrite(p.iiv.covsn,file=fun.file("iiv_covs_n.png"),save=save,stamp=stamp)
                 all.output[["iiv.covsn"]] <- p.iiv.covsn
