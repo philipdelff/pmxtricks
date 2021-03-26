@@ -154,13 +154,7 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
                 length(setdiff(colnames(etas.l2.n),c("ID","param","value")))>0
             ){
                 etas.covs.n <- melt.data.table(etas.l2.n,variable.name="cov",value.name="val.cov",measure.vars=names(etas.l2.n)[!names(etas.l2.n)%in%c("ID","param","value")])
-### I dont understand why this is needed. This should just be a numeric covariate like any other, I guess?
-                ## if(any(grepl("^ETA",covs.num))){
-                ##     p.iiv.covsn.eta <- ggplot(subset(etas.covs.n,grepl("^ETA",cov)),aes(val.cov,value))+geom_point()+
-                ##         geom_smooth(method="lm")+
-                ##         facet_grid(param~cov,scales="free")
-                ##     gsave(p.iiv.covsn.eta,file=file.runplot(name.run,"iiv_covs_etas.png"),save=write.output,stamp=stamp)
-                ## }
+
                 p.iiv.covsn <- ggplot(subset(etas.covs.n,!grepl(regex.eta,cov)),aes(val.cov,value))+
                     geom_point()+
                     geom_smooth(method="lm", formula=y~x)+

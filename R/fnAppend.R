@@ -1,6 +1,6 @@
-## paste something before file name extension. If it's a number, we can pad some zeros if wanted.
+## paste something before file name extension. If it's a number, we can pad some zeros if wanted. An underscore will be separating fn and x.
 
-fnAppend <- function(fn,x,pad0=0){
+fnAppend <- function(fn,x,pad0=0,sep="_"){
     
     if(!is.numeric(x)&&!is.character(x)) stop("x must be numeric or character.")
 
@@ -13,6 +13,6 @@ fnAppend <- function(fn,x,pad0=0){
         string <- x
     }
 
-    paste(fnroot,"_",string,".",fnext,sep="")
+    paste0(fnroot,sep,string,".",fnext)
 
 }
