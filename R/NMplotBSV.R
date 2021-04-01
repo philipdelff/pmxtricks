@@ -21,7 +21,7 @@
 ##' @family Plotting
 ##' @export
 
-NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fun.file=identity,save=FALSE,stamp=NULL,debug=F){
+NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fun.file=identity,save=FALSE,stamp=NULL,return.data=FALSE,debug=F){
 
     if(debug) {browser()}
     
@@ -84,7 +84,7 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
         etas.l <- melt(etas,id.vars=c(col.id,covs.num,covs.char),measure.vars=names.etas.var,value.name="value",variable.name="param")
         ##
         ## compare.names(etas,pkpars)
-     #   etas.l <- mergeCheck(etas.l,pkpars,by=c(col.id,covs.num,covs.char),allow.cartesian=TRUE)
+                                        #   etas.l <- mergeCheck(etas.l,pkpars,by=c(col.id,covs.num,covs.char),allow.cartesian=TRUE)
         
         ## g1 <- ggplot(etas.l,aes(value))+
         ##     geom_histogram()+
@@ -146,8 +146,6 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
             ## ))
             covs.num <- colnames(findVars(pkpars[,covs.num,with=F]))
             
-            ##        etas.l2.n <- mergeCheck(etas.l,unique(pkpars[c(col.id,covs.num)]),by=col.id)
-            ##        etas.l2.n <- etas.l2.n[,c(col.id,"param","value",covs.num)]
             etas.l2.n <- etas.l[,c(col.id,"param","value",covs.num),with=FALSE]
 
             if(
@@ -165,23 +163,11 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
         }
         if(!is.null(covs.char)){
             
-            
-            ## etas.l2.c <- mergeCheck(etas.l,unique(pkpars[,c(col.id,covs.char),drop=F]),by=col.id)
-            ## etas.l2.c <- etas.l2.c[,c(col.id,"param","value",covs.char)]
-            etas.l2.c <- etas.l[,c(col.id,variable,"param","value",covs.char),with=F]
+            etas.l2.c <- etas.l[,c(col.id,"param","value",covs.char),with=F]
 
-#### gather_ does not respect factor levels. Using data.table for this melt/gather.
-            ## etas.covs.c <- gather_(etas.l2.c,"cov","val.cov",names(etas.l2.c)[!names(etas.l2.c)%in%c("ID","param","value")])
-            
-            ## p.iiv.covsc <- ggplot(etas.covs.c,aes(colour=val.cov,value))+geom_density()+facet_grid(param~cov,scales="free")
-            ## p.iiv.covsc <- by(etas.covs.c,etas.covs.c$cov,function(data)ggplot(data,aes(colour=val.cov,value))+geom_density()+facet_grid(param~cov,scales="free"))
-            ##            p.iiv.covsc <- ggplot(etas.covs.c,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)
-            ## all.output[["iiv.covsc"]] <- p.iiv.covsc
-            
             DT <- data.table(etas.l2.c)
 
-            warning("Please double-check the plotting aginst charcter covariates. dose is hard-coded which looks like a bug.")
-            DT2 <- melt(DT,measure.vars="dose",id.vars=c("ID","param","value"),value.name="val.cov",value.factor=T)
+            DT2 <- melt(DT,measure.vars=covs.char,id.vars=c("ID","param","value"),value.name="val.cov",value.factor=T)
             p.iiv.covsc.dt <- ggplot(DT2,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)
             ggwrite(p.iiv.covsc.dt,file=fun.file("iiv_covs_c.png"),save=save,stamp=stamp)
             all.output[["iiv.covsc"]] <- p.iiv.covsc.dt
@@ -189,7 +175,9 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
     } else {
         message("No IIV random effects found in parameter table.")
     }
-    all.output[["etas"]] <- etas
-    all.output[["etas.l"]] <- etas.l
+    if(return.data){
+        all.output[["etas"]] <- etas
+        all.output[["etas.l"]] <- etas.l
+    }
     all.output
 }
