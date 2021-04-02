@@ -202,3 +202,5 @@ For list objects, optionally name the plots (when onefile=F) by the
 element names of the list. Could also use an additional argument to
 provide the name suffixes, but using element names reduces need for
 checks of length, class etc.
+*** NMplotBSV
+**** TODO Default regex should match all ETA's
