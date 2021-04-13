@@ -38,6 +38,7 @@
 ##' @examples
 ##' pmxtricks:::NMgetSection(pmxtricks_filepath("examples/nonmem/run001.lst"),section="DATA")
 
+### Don't export this. It available as NMdata::NMreadSection
 
 NMgetSection <- function(file=NULL, lines=NULL, text=NULL, section, return="text", keepEmpty=FALSE, keepName=TRUE, keepComments=TRUE, asOne=TRUE, simplify=TRUE, cleanSpaces=FALSE, debug=F, ...){
 

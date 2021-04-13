@@ -1,18 +1,23 @@
-##' Generate distribution plots of between-occasion variability terms from
-##' Nonmem
-##' @param data A dataset - will be converted to data.frame so data.table is OK.
-##' @param regex.eta A regular expression defining the naming of the ETA's of
-##'     interest.
-##' @param col.id The name of the id column in data. Default is ID like Nonmem.
-##' @param covs.num Names of columns containing numerical covariates to plot
-##'     the random effects against.
-##' @param covs.char Names of columns containing categorical covariates to
-##'     plot the random effects against.
-##' @param fun.file If saving plots, this function can be used to translate the
-##'     file names. The inputs given to the function argument are
-##'     "iov_pairs.png" and "iov_covs_n.png".
+##' Generate distribution plots of between-occasion variability terms
+##' from Nonmem
+##' @param data A dataset - will be converted to data.frame so
+##'     data.table is OK.
+##' @param regex.eta A regular expression defining the naming of the
+##'     ETA's of interest.
+##' @param col.id The name of the id column in data. Default is ID
+##'     like Nonmem.
+##' @param covs.num Names of columns containing numerical covariates
+##'     to plot the random effects against.
+##' @param covs.char Names of columns containing categorical
+##'     covariates to plot the random effects against.
+##' @param fun.file If saving plots, this function can be used to
+##'     translate the file names. The inputs given to the function
+##'     argument are "iov_pairs.png" and "iov_covs_n.png".
 ##' @param save Save the generated plots?
 ##' @param stamp If saving the plots, a stamp to add. See ggstamp.
+##' @param return.data If TRUE, the identified ETA's together with
+##'     subject id and covariates will be returned in both wide and
+##'     long format. If FALSE, you just get the plots.
 ##' @param debug Start by running browser()?
 ##' @import ggplot2
 ##' @import data.table
@@ -84,7 +89,7 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
         etas.l <- melt(etas,id.vars=c(col.id,covs.num,covs.char),measure.vars=names.etas.var,value.name="value",variable.name="param")
         ##
         ## compare.names(etas,pkpars)
-                                        #   etas.l <- mergeCheck(etas.l,pkpars,by=c(col.id,covs.num,covs.char),allow.cartesian=TRUE)
+        ##   etas.l <- mergeCheck(etas.l,pkpars,by=c(col.id,covs.num,covs.char),allow.cartesian=TRUE)
         
         ## g1 <- ggplot(etas.l,aes(value))+
         ##     geom_histogram()+
@@ -100,12 +105,6 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
         dat <- etas.l.actual
 
         grid <- with(dat, seq(min(value), max(value), length = 100))
-        ## normaldens <- ddply(dat, "param", function(df) {
-        ##     data.frame( 
-        ##         predicted = grid,
-        ##         density = dnorm(grid, mean(df[,"value"]), sd(df[,"value"]))
-        ##     )
-        ## })
 
         DT.dat <- as.data.table(dat)
         normaldens <-

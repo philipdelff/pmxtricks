@@ -26,6 +26,8 @@
 ### End todo
 
 compareNames <- function(...,keepNames=T,testEqual=F,quietIfEqual=F,debug=F){
+    warning("compareNames is deprecated. Use NMdata::compareCols.")
+
     ## Compares the names of the contents of lists (can be
     ## data.frames). This is useful when combining datasets to get an
     ## overview of compatibility.
