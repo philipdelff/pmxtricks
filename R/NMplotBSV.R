@@ -26,7 +26,7 @@
 ##' @family Plotting
 ##' @export
 
-NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fun.file=identity,save=FALSE,stamp=NULL,return.data=FALSE,debug=F){
+NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.file=identity,save=FALSE,stamp=NULL,return.data=FALSE,debug=F){
 
     if(debug) {browser()}
     
@@ -61,7 +61,12 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
     ## names.etas.var <- names(which(
     ##     sapply(pkpars[,names.etas,with=F],function(x)length(unique(x)))  > 1
     ## ))
-    names.etas.var <- colnames(findVars(pkpars[,names.etas,with=F]))
+    names.etas.var <- colnames(
+        findCovs(
+            findVars(pkpars[,c(col.id,names.etas),with=F])
+           ,cols.id=col.id)
+    )
+    names.etas.var <- setdiff(names.etas.var,col.id)
 
     etas <- NULL
     etas.l <- NULL
@@ -167,16 +172,25 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
             DT <- data.table(etas.l2.c)
 
             DT2 <- melt(DT,measure.vars=covs.char,id.vars=c("ID","param","value"),value.name="val.cov",value.factor=T)
-            p.iiv.covsc.dt <- ggplot(DT2,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)
-            ggwrite(p.iiv.covsc.dt,file=fun.file("iiv_covs_c.png"),save=save,stamp=stamp)
-            all.output[["iiv.covsc"]] <- p.iiv.covsc.dt
+            
+            ## p.iiv.covsc.dt <- ggplot(DT2,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)
+            sets <- split(DT2,by="variable")
+            p.iiv.covsc.dt <- lapply(sets,function(dat){
+                ggplot(dat,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)+
+                    rotate_x_text(45)+labs(x="",y="")
+            })
+            ggwrite(p.iiv.covsc.dt,file=fun.file("iiv_covs_c.png"),useNames=TRUE,save=save,stamp=stamp)
+            all.output[["iiv.covc"]] <- p.iiv.covsc.dt
         }
     } else {
         message("No IIV random effects found in parameter table.")
     }
+    ## if there are no plots to return, we return NULL (instead of a list of length 0).
+    if(length(all.output)==0&&!return.data){return(NULL)}
     if(return.data){
         all.output[["etas"]] <- etas
         all.output[["etas.l"]] <- etas.l
     }
+
     all.output
 }

@@ -9,12 +9,13 @@
 ##' @details All parameters must be given as expressions (no quotes)
 ##' @family Plotting
 ##' @importFrom rlang enquo 
-##' @importFrom gridExtra arrangeGrob
+##' @importFrom egg ggarrange
+
 
 ##### Don't export yet. Needs to be elaborated a bit.
 
 
-NMplotGOF <- function(data,res=CWRES,ipre=IPRED,time=TIME,arrange=T,debug=F){
+NMplotGOF <- function(data,res=CWRES,ipre=IPRED,time=TIME,colour=NULL,arrange=T,title,debug=F){
     
     if(debug) browser()
 
@@ -38,19 +39,40 @@ NMplotGOF <- function(data,res=CWRES,ipre=IPRED,time=TIME,arrange=T,debug=F){
     ##    }
     ipre=enquo(ipre)
     time=enquo(time)
+    colour=enquo(colour)
     
     data <- subset(data,EVID==0)
 
     
-    p1 <- ggplot(data,aes(PRED,!!res))+geom_point()+geom_smooth(colour=2)
-    p2 <- ggplot(data,aes(!!ipre,!!res))+geom_point()+geom_smooth(colour=2)
-    p3 <- ggplot(data,aes(!!ipre,IWRES))+geom_point()+geom_smooth(colour=2)
-    p4 <- ggplot(data,aes(!!time,CWRES))+geom_point()+geom_smooth(colour=2)
+    pred.res <- ggplot(data,aes(PRED,!!res,colour=!!colour))+geom_point()+geom_smooth(method="loess",formula=y~x,se=FALSE)
+    ipre.res <- ggplot(data,aes(!!ipre,!!res,colour=!!colour))+geom_point()+geom_smooth(method="loess",formula=y~x,se=FALSE)
+    ipre.iwres <- ggplot(data,aes(!!ipre,IWRES,colour=!!colour))+geom_point()+geom_smooth(method="loess",formula=y~x,se=FALSE)
+    time.cwres <- ggplot(data,aes(!!time,CWRES,colour=!!colour))+geom_point()+geom_smooth(method="loess",formula=y~x,se=FALSE)
+    time.iwres <- ggplot(data,aes(!!time,CWRES,colour=!!colour))+geom_point()+geom_smooth(method="loess",formula=y~x,se=FALSE)
+    time.res <- ggplot(data,aes(!!time,RES,colour=!!colour))+geom_point()+geom_smooth(method="loess",formula=y~x,se=FALSE)
     
     if(arrange){
-        all.ps <- arrangeGrob(p1,p2,p3,p4,ncol=2)
+        ## egg::ggarrange
+        if(missing(title)) title <- ""
+        all.ps <- ggarrange(pred.res,
+                            ipre.res,
+                            ipre.iwres,
+                            time.cwres
+                           ,time.iwres
+                           ,time.res
+                           ,nrow=2
+                           ,top=title)
+        
+        ##        if(!missing(title)) all.ps <- all.ps+labs(subtitle=title)
     } else {
-        all.ps <- list(p1,p2,p3,p4)
+        all.ps <- list(pred.res=pred.res
+                      ,ipre.res=ipre.res,
+                       ipre.iwres=ipre.iwres,
+                       time.cwres=time.cwres,
+                       time.iwres=time.iwres,
+                       time.res=time.res
+                       )
+        if(!missing(title)) all.ps <- lapply(all.ps,labs(subtitle=title))
     }
     all.ps
 }
