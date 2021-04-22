@@ -12,27 +12,30 @@
 
 ### 2019-12-11: this has stopped working, and I don't understand why. On the todo, but until then, not exported.
 
-ggWater <- function(text="Not validated",scale=1,rot=0){
+ggWater <- function(text="Not validated",scale=1,rot=30,col="grey",alpha=.5){
     
-    watermarkGrob <- function(text = "Not validated",scale=1,rot=0){
-        g1 <- grob(lab=text, scale=scale,rot=rot,cl="watermark")
-        return(g1)
-    }
+    ## watermarkGrob <- function(text = "Not validated",scale=1,rot=0){
+    ##     g1 <- grob(lab=text, scale=scale,rot=rot,cl="watermark")
+    ##     return(g1)
+    ## }
     
-    ## custom draw method to
-    ## calculate expansion factor on-the-fly
-    drawDetails.watermark <- function(x, ...){
-        ##    browser()
-        cex <- x$scale*2/3*convertUnit(unit(1,"npc"), "mm", valueOnly=TRUE) /
-            (convertUnit(unit(1,"grobwidth", textGrob(x$lab)), "mm",valueOnly=TRUE))
+    ## ## custom draw method to
+    ## ## calculate expansion factor on-the-fly
+    ## drawDetails.watermark <- function(x, ...){
+    ##     ##    browser()
+    ##     cex <- x$scale*2/3*convertUnit(unit(1,"npc"), "mm", valueOnly=TRUE) /
+    ##         (convertUnit(unit(1,"grobwidth", textGrob(x$lab)), "mm",valueOnly=TRUE))
 
-        tgrob1 <- grid.text(x$lab,  rot=x$rot, gp=gpar(cex = cex, col="gray",
-                                                       fontface = "bold", alpha = .5))
-        return(tgrob1)
-    }
+    ##     tgrob1 <- grid.text(x$lab,  rot=x$rot, gp=gpar(cex = cex, col="gray",
+    ##                                                    fontface = "bold", alpha = .5))
+    ##     return(tgrob1)
+    ## }
     
+    ## ##    annotation_custom(watermarkGrob(text,scale=scale,rot=rot))
+    ## annotation_custom(grob=watermarkGrob(text,scale=scale,rot=rot),xmin=-Inf, ymin=-Inf, xmax=Inf, ymax=Inf)
 
-    ##    annotation_custom(watermarkGrob(text,scale=scale,rot=rot))
-    annotation_custom(grob=watermarkGrob(text,scale=scale,rot=rot),xmin=-Inf, ymin=-Inf, xmax=Inf, ymax=Inf)
+    
+    annotation_custom(textGrob(text, gp = gpar(fontsize = 80*scale,col=col,alpha=alpha),rot=rot),xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf)
+
 
 }

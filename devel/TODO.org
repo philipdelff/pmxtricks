@@ -171,12 +171,14 @@ pop: grp
      CLOSED: [2019-12-12 Thu 15:10]
 If recoverRows, do
 ***** take the not used lines from input data
-***** What to do about id-level and occ-level variables?
+***** [#B] What to do about id-level and occ-level variables?
 They could differ from output, should they be overwritten then? I
 really don't think so. But $id and $row are made before this, right? A
 simple approach would be to do nothing but just rbind. We can then add
 some tests and some warnings.
 *** trapez
+**** TODO Check for equal lengths of x and y
+**** TODO Check if at least 2 observations (before looking for NAs)
 **** DONE strategy for cumulative auc
      CLOSED: [2019-10-24 Thu 14:18]
 One shorter than x and y. 

@@ -18,7 +18,7 @@ trapez <- function(x, y, cum=FALSE, na.rm = FALSE){
         ## warning("y or x contains NA with na.rm=F - returning NA\n")
         return(NA)	
     }
-    
+
 
     ## Remove any missing values and issue warning if removing values
     if(na.rm) {
