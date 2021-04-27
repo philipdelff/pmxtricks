@@ -4,7 +4,16 @@
 \alias{NMplotGOF}
 \title{A standard panel of residual plots}
 \usage{
-NMplotGOF(data, res = CWRES, ipre = IPRED, time = TIME, arrange = T, debug = F)
+NMplotGOF(
+  data,
+  res = CWRES,
+  ipre = IPRED,
+  time = TIME,
+  colour = NULL,
+  arrange = T,
+  title,
+  debug = F
+)
 }
 \arguments{
 \item{data}{is all rows from the Nonmem output. Only the EVID==0 subset will

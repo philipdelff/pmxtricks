@@ -37,7 +37,6 @@ signif2(3205,-1)
 Other DataWrangling: 
 \code{\link{compareNames}()},
 \code{\link{factor2}()},
-\code{\link{findCovs_df}()},
 \code{\link{mergeCheck}()},
 \code{\link{newNames}()},
 \code{\link{rbindIntersect}()},

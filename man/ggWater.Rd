@@ -4,7 +4,7 @@
 \alias{ggWater}
 \title{Add watermarks to ggplots}
 \usage{
-ggWater(text = "Not validated", scale = 1, rot = 0)
+ggWater(text = "Not validated", scale = 1, rot = 30, col = "grey", alpha = 0.5)
 }
 \arguments{
 \item{text}{What should be written on the plot}

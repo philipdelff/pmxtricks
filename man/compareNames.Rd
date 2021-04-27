@@ -30,7 +30,6 @@ contents of the elements at all.
 \seealso{
 Other DataWrangling: 
 \code{\link{factor2}()},
-\code{\link{findCovs_df}()},
 \code{\link{mergeCheck}()},
 \code{\link{newNames}()},
 \code{\link{rbindIntersect}()},

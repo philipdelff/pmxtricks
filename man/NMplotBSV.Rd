@@ -7,7 +7,7 @@ from Nonmem}
 \usage{
 NMplotBSV(
   data,
-  regex.eta = "^ETABSV",
+  regex.eta = "^ETA",
   col.id = "ID",
   covs.num,
   covs.char,
