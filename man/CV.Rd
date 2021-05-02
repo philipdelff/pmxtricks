@@ -21,7 +21,6 @@ This function is intended to be used on data. For a log-normal
 }
 \seealso{
 Other Calc: 
-\code{\link{geomean}()},
 \code{\link{means}()},
 \code{\link{thalf_1a1c}()},
 \code{\link{thalf_1a2c}()},

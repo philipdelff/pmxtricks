@@ -24,7 +24,6 @@ Use base::reorder instead. I think it does the same. factor2 is
 \seealso{
 Other DataWrangling: 
 \code{\link{compareNames}()},
-\code{\link{findCovs_df}()},
 \code{\link{mergeCheck}()},
 \code{\link{newNames}()},
 \code{\link{rbindIntersect}()},

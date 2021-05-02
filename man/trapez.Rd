@@ -26,7 +26,6 @@ This is a numerical integration of y with respect to
 \seealso{
 Other Calc: 
 \code{\link{CV}()},
-\code{\link{geomean}()},
 \code{\link{means}()},
 \code{\link{thalf_1a1c}()},
 \code{\link{thalf_1a2c}()},
