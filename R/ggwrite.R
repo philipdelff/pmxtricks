@@ -50,7 +50,7 @@
 
 ggwrite <- function(plot, file, stamp, canvas="standard",
                     onefile=FALSE, res=200, paper="special",
-                    save=TRUE, show=!save, useNames=FALSE, debug=F){
+                    save=TRUE, show=!save, useNames=FALSE, quiet=FALSE, debug=F){
     
     if(debug) browser()
 
@@ -184,6 +184,7 @@ ggwrite <- function(plot, file, stamp, canvas="standard",
     
     if(save){
         writeObj(plot,file=file,size=size)
+        if(!quiet) message("Written to",file)
     }
     if(show){
         writeObj(plot,file=NULL,size=size)
