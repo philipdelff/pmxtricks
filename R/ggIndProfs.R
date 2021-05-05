@@ -104,7 +104,7 @@
 
 
 
-ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp, amt , id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, par.prof=NULL, x.inc,grp.label = grp, labels=TRUE, debug = F, debug.sheet){
+ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp, amt , id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, par.prof=NULL, x.inc,grp.label = grp, labels=TRUE, nullIfEmpty=FALSE, debug = FALSE, debug.sheet){
     if(debug) browser()
 
 
@@ -132,6 +132,16 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
 ### Section end: Dummy variables, only not to get NOTE's in pacakge checks
 
     data <- copy(as.data.table(data))
+
+    if(nrow(data)==0) {
+
+        if(nullIfEmpty) {
+            message("Data is empty. Returning NULL")
+            return (NULL)
+        } else {
+            stop("Data is empty.")
+        }
+    }
     
 ##### check arguments
     if(!is.data.frame(data)) stop("data has to be a data.frame.")

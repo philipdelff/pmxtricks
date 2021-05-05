@@ -184,7 +184,7 @@ ggwrite <- function(plot, file, stamp, canvas="standard",
     
     if(save){
         writeObj(plot,file=file,size=size)
-        if(!quiet) message("Written to",file)
+        if(!quiet) message("Written to ",file)
     }
     if(show){
         writeObj(plot,file=NULL,size=size)

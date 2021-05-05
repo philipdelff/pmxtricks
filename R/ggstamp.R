@@ -33,15 +33,16 @@
 #### End todo
 
 
-ggstamp <- function(plot, stamp = "no stamp",time=Sys.time()) {
+ggstamp <- function(plot, stamp = "no stamp",file,time=Sys.time()) {
 ### Captions are only available in ggplot 2.2.1
 
-### Stamps
+### A list of plots is supported so we will run everything with lapply
     plot.was.list <- T
     if(!( length(class(plot))==1 && class(plot)=="list" )) {
         plot.was.list <- F
         plot <- list(plot)
     }
+    if(missing(file)) file <- NULL
 
     stamp1 <- function(plot){
 ### determine method to use. otype is object type
@@ -64,7 +65,7 @@ ggstamp <- function(plot, stamp = "no stamp",time=Sys.time()) {
         
         date.txt <- format(time, "%d-%b-%Y %H:%M")
         caption.stamp <- paste(date.txt,stamp)
-        caption=paste(c(plot$label$caption,caption.stamp),collapse="\n")
+        caption=paste(c(plot$label$caption,caption.stamp,file),collapse="\n")
         
         plot.stamped <- switch(otype,
                                ggplot={if(sum(unlist(packageVersion("ggplot2")[1,])*c(1000)^c(2:0))<2002001){
