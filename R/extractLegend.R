@@ -1,9 +1,16 @@
+
 ##' Extract the legend from a ggplot
-##' @description You often want this to share a legend between multiple plots that do not also share axes (i.e. you can't use faceting).
+##' @description You often want this to share a legend between
+##'     multiple plots that do not also share axes (i.e. you can't use
+##'     faceting).
 ##' @param plot A plot made with ggplot.
-##' @details There is (probably much better) functionality in the package ggpubr to use common legend for multiple plots. However, ggpubr depends on latest R version so it can give trouble.
-##' The code was taken from https://stackoverflow.com/questions/13649473/add-a-common-legend-for-combined-ggplots which has a ref to
-##' https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
+##' @details There is the (probably much better) ggpubr::ggarrange
+##'     (not to be confused with egg::ggarrange) to use common legend
+##'     for multiple plots. However, ggpubr depends on latest R
+##'     version so it can give trouble.  The code was taken from
+##'     https://stackoverflow.com/questions/13649473/add-a-common-legend-for-combined-ggplots
+##'     which has a ref to
+##'     https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
 ##' @examples 
 ##' ## This example is not done yet. But it shows the idea
 ##'\dontrun{

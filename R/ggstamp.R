@@ -6,12 +6,18 @@
 ##' @param plot The plot to be stamped.
 ##' @param stamp the script name. Date and time will be added
 ##'     automatically.
+##' @param file An optional output filename to be included in the stamp.
 ##' @param time The timestamp to be included.
 ##'
 ##' @return the plot with a stamp
 ##' @details The stamp is adding using the caption label. If a caption
 ##'     is already in the plot, the stamp will be added in a new
-##'     line. ggplot 2.2.1 or newer is required.
+##'     line.
+##' 
+##' The caption is derived as
+##' caption=paste(c(plot$label$caption,stamp,paste(date.txt,file)),collapse="\\n")
+##'
+##' ggplot 2.2.1 or newer is required.
 ##' @import ggplot2
 ##' @import grid
 ##' @importFrom gridExtra arrangeGrob
@@ -28,12 +34,7 @@
 ##' @export
 
 
-#### Todo
-## 2018-10-11 ppda: date format should be changed. Output depends on locale. 
-#### End todo
-
-
-ggstamp <- function(plot, stamp = "no stamp",file,time=Sys.time()) {
+ggstamp <- function(plot, stamp = "no stamp", file, time=Sys.time()) {
 ### Captions are only available in ggplot 2.2.1
 
 ### A list of plots is supported so we will run everything with lapply
@@ -43,6 +44,7 @@ ggstamp <- function(plot, stamp = "no stamp",file,time=Sys.time()) {
         plot <- list(plot)
     }
     if(missing(file)) file <- NULL
+    if(!is.null(file)) file <- basename(file)
 
     stamp1 <- function(plot){
 ### determine method to use. otype is object type
@@ -64,8 +66,8 @@ ggstamp <- function(plot, stamp = "no stamp",file,time=Sys.time()) {
         if(is.na(otype)) stop("Dont know how to stamp this object type.")
         
         date.txt <- format(time, "%d-%b-%Y %H:%M")
-        caption.stamp <- paste(date.txt,stamp)
-        caption=paste(c(plot$label$caption,caption.stamp,file),collapse="\n")
+        caption.stamp <- paste(date.txt,file)
+        caption=paste(c(plot$label$caption,stamp,caption.stamp),collapse="\n")
         
         plot.stamped <- switch(otype,
                                ggplot={if(sum(unlist(packageVersion("ggplot2")[1,])*c(1000)^c(2:0))<2002001){

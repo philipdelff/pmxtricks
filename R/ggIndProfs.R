@@ -44,6 +44,13 @@
 ##'     above the plots (using facet_wrap()). Set this to FALSE to
 ##'     remove these labels in order to have more space for the plots
 ##'     themselves.
+##' @param nullIfEmpty By default, submitting an empty data set in the
+##'     data argument will give an error. However, sometimes this may
+##'     be annoying. An example is a wrapper that runs over multiple
+##'     models splitting into subsets of data. Some models may not
+##'     contain all data, and then ggIndProfs would fail. If you want
+##'     it to return NULL and not an error in this case, use
+##'     nullIfEmpty=TRUE.
 ##' @param debug Start by calling debug()?
 ##' @param debug.sheet If something goes wrong when plotting, this may
 ##'     be the debug method to use. Pass an integer to call browser()
@@ -104,7 +111,7 @@
 
 
 
-ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp, amt , id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, par.prof=NULL, x.inc,grp.label = grp, labels=TRUE, nullIfEmpty=FALSE, debug = FALSE, debug.sheet){
+ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp, amt , id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, par.prof=NULL, x.inc, grp.label = grp, labels=TRUE, nullIfEmpty=FALSE, debug = FALSE, debug.sheet){
     if(debug) browser()
 
 

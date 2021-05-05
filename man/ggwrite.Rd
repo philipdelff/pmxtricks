@@ -16,6 +16,7 @@ ggwrite(
   save = TRUE,
   show = !save,
   useNames = FALSE,
+  quiet = FALSE,
   debug = F
 )
 }
@@ -56,6 +57,8 @@ powerpoint.}
 \item{useNames}{If length(plot)>1 use names(plot) in the file
 names? Default is to use 1:length(plot). Only used if save is
 TRUE, and length(plot)>1.}
+
+\item{quiet}{Default is false but use TRUE to suppress messages about what was saved.}
 
 \item{debug}{If TRUE, browser is called to begin with.}
 }

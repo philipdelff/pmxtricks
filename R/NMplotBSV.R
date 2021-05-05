@@ -177,7 +177,9 @@ NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.f
             sets <- split(DT2,by="variable")
             p.iiv.covsc.dt <- lapply(sets,function(dat){
                 ggplot(dat,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)+
-                    rotate_x_text(45)+labs(x="",y="")
+                    ### this would bring in ggpubr as dependency. Maybe just call in scripts where needed?
+                    ## rotate_x_text(45)+
+                    labs(x="",y="")
             })
             ggwrite(p.iiv.covsc.dt,file=fun.file("iiv_covs_c.png"),useNames=TRUE,save=save,stamp=stamp)
             all.output[["iiv.covc"]] <- p.iiv.covsc.dt

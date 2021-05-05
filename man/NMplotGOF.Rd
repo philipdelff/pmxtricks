@@ -16,8 +16,8 @@ NMplotGOF(
 )
 }
 \arguments{
-\item{data}{is all rows from the Nonmem output. Only the EVID==0 subset will
-be used.}
+\item{data}{is all rows from the Nonmem output. Only the EVID==0
+subset will be used.}
 
 \item{res}{The individual residuals (how to derive them from data)}
 
@@ -25,7 +25,13 @@ be used.}
 
 \item{time}{Time variable (normally TIME or NOMTIME or TAPD)}
 
-\item{arrange}{If true, the plots will be arranged with arrangeGrob. If not, they will be returned as individual plots in a list.}
+\item{colour}{expression for colour mapping}
+
+\item{arrange}{If true, the plots will be arranged with
+arrangeGrob. If not, they will be returned as individual plots
+in a list.}
+
+\item{title}{An optional character title for the plots.}
 
 \item{debug}{Start by runing bowser?}
 }

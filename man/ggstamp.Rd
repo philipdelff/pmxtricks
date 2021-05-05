@@ -4,13 +4,15 @@
 \alias{ggstamp}
 \title{Always stamp your plots with script name}
 \usage{
-ggstamp(plot, stamp = "no stamp", time = Sys.time())
+ggstamp(plot, stamp = "no stamp", file, time = Sys.time())
 }
 \arguments{
 \item{plot}{The plot to be stamped.}
 
 \item{stamp}{the script name. Date and time will be added
 automatically.}
+
+\item{file}{An optional output filename to be included in the stamp.}
 
 \item{time}{The timestamp to be included.}
 }
@@ -24,7 +26,12 @@ script name. User must provide the script name.
 \details{
 The stamp is adding using the caption label. If a caption
     is already in the plot, the stamp will be added in a new
-    line. ggplot 2.2.1 or newer is required.
+    line.
+
+The caption is derived as
+caption=paste(c(plot$label$caption,stamp,paste(date.txt,file)),collapse="\\n")
+
+ggplot 2.2.1 or newer is required.
 }
 \examples{
 library(ggplot2)

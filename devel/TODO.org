@@ -71,7 +71,9 @@ NMaddColumns
 *** TODO Tests
 ** Improvements
 *** ggstamp
-**** TODO [#A] Add file name 
+**** DONE Add file name
+     CLOSED: [2021-05-05 Wed 14:11]
+**** TODO date format should be changed. Output depends on locale. 
 *** NMreadTab
 **** TODO Option to use colnames for all subtables?
 With the current implementation, this would make processing much slower.
@@ -177,3 +179,7 @@ provide the name suffixes, but using element names reduces need for
 checks of length, class etc.
 *** NMplotBSV
 **** TODO Default regex should match all ETA's
+
+     #### Todo
+## 2018-10-11 
+#### End todo

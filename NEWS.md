@@ -1,3 +1,7 @@
+# pmxtricks 0.0.14
+stamps from ggstamp and ggwrite now include the basename of the output file name. 
+
+
 # pmxtricks 0.0.12
 When saving the elements in a list, ggwrite can now name the saved files by the
 names of the list elements. The default is still to enumerate the files.

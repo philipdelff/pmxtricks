@@ -28,6 +28,7 @@
 ##' @param useNames If length(plot)>1 use names(plot) in the file
 ##'     names? Default is to use 1:length(plot). Only used if save is
 ##'     TRUE, and length(plot)>1.
+##' @param quiet Default is false but use TRUE to suppress messages about what was saved.
 ##' @param debug If TRUE, browser is called to begin with.
 ##' @export
 ##' @return Nothing.
@@ -61,8 +62,9 @@ ggwrite <- function(plot, file, stamp, canvas="standard",
 ### table it must be written with draw.grid, and if not by print.
     print1 <- function(plot){
         if("gtable"%in%class(plot)) {
-            message("plot is of class gtable. Using grid::grid.draw.")
-            grid::grid.draw(plot)
+            ## message("plot is of class gtable. Using grid::grid.draw.")
+            ## grid::grid.draw
+            grid.draw(plot)
         } else {
             if(!is.null(plot)){
                 print(plot)
@@ -75,7 +77,7 @@ ggwrite <- function(plot, file, stamp, canvas="standard",
     write1 <- function(plot,fn=NULL,type,onefile=F,size){  
         
         if(!is.null(stamp)){
-            plot <- ggstamp(plot,stamp)
+            plot <- ggstamp(plot,stamp,file=file)
         }
         
         if(!is.null(fn)){
@@ -110,6 +112,7 @@ ggwrite <- function(plot, file, stamp, canvas="standard",
         file <- NULL
         if(onefile) onefile <- TRUE
     }
+    if(is.null(file)) save <- FALSE
     if(missing(stamp)) stamp <- NULL
     ## If file is an empty string or null is the same.
     if(!missing(file)&&!is.null(file)){
@@ -184,7 +187,7 @@ ggwrite <- function(plot, file, stamp, canvas="standard",
     
     if(save){
         writeObj(plot,file=file,size=size)
-        if(!quiet) message("Written to ",file)
+        if(!quiet&&!is.null(file)) message("Written to ",file)
     }
     if(show){
         writeObj(plot,file=NULL,size=size)
