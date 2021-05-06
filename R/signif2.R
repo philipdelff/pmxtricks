@@ -22,14 +22,14 @@
 ##' }
 ##' @export
 
-signif2 <- function(x,digits=1){
+signif2 <- function(x,digits=1,...){
 
     stopifnot(is.numeric(x))
     if(!(is.numeric(digits)&&length(digits)==1&&as.integer(digits)==digits&&digits>0)){
         stop("digits must be an integer>0")
     }
 
-    res <- formatC(signif(x,digits=digits), digits=digits,format="fg", flag="#")
+    res <- formatC(signif(x,digits=digits), digits=digits,format="fg", flag="#",...)
     sub("\\.$","",res)
 }
 
