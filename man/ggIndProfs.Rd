@@ -126,7 +126,6 @@ The resulting object can be saved with ggwrite.
 }
 \seealso{
 Other Plotting: 
-\code{\link{NMplotBOV}()},
 \code{\link{NMplotBSV}()},
 \code{\link{NMplotGOF}()},
 \code{\link{canvasSize}()},

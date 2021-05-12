@@ -43,7 +43,6 @@ All parameters must be given as expressions (no quotes)
 }
 \seealso{
 Other Plotting: 
-\code{\link{NMplotBOV}()},
 \code{\link{NMplotBSV}()},
 \code{\link{canvasSize}()},
 \code{\link{extractLegend}()},

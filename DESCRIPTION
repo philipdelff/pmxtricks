@@ -1,7 +1,7 @@
 Package: pmxtricks
 Type: Package
 Title: Every-day pharmacometrics helper functions
-Version: 0.0.13.902
+Version: 0.0.13.903
 Author: Philip Delff <philip@delff.dk>
 Maintainer: Philip Delff <philip@delff.dk>
 Description: Tools mainly for pharmacometrics related tasks. 
@@ -9,14 +9,14 @@ License: MIT + file LICENSE
 RoxygenNote: 7.1.1
 Depends: R (>= 3.2.2)
 Imports: data.table,
- egg,
  ggplot2, 
  grDevices,
  grid,
+ NMdata,
  scales,
  stats,
  GGally,
- tidyr,
+ patchwork,
  utils,
  rlang,
  gridExtra

@@ -22,6 +22,7 @@
 ##' @import ggplot2
 ##' @import data.table
 ##' @import stats
+##' @importFrom NMdata findCovs findVars
 ##' @importFrom GGally ggpairs
 ##' @family Plotting
 ##' @export

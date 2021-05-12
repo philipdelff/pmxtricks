@@ -54,7 +54,6 @@ from Nonmem
 }
 \seealso{
 Other Plotting: 
-\code{\link{NMplotBOV}()},
 \code{\link{NMplotGOF}()},
 \code{\link{canvasSize}()},
 \code{\link{extractLegend}()},

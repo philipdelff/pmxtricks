@@ -35,7 +35,6 @@ p3 <- grid.arrange(arrangeGrob(p1 + theme(legend.position="none"),
 }
 \seealso{
 Other Plotting: 
-\code{\link{NMplotBOV}()},
 \code{\link{NMplotBSV}()},
 \code{\link{NMplotGOF}()},
 \code{\link{canvasSize}()},

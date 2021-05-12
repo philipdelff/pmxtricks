@@ -85,7 +85,6 @@ ggwrite(tg1,stamp=stamp,file="mytab1.png",save=writeOutput)
 }
 \seealso{
 Other Plotting: 
-\code{\link{NMplotBOV}()},
 \code{\link{NMplotBSV}()},
 \code{\link{NMplotGOF}()},
 \code{\link{canvasSize}()},

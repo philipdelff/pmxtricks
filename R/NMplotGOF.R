@@ -14,7 +14,8 @@
 ##' @details All parameters must be given as expressions (no quotes)
 ##' @family Plotting
 ##' @importFrom rlang enquo
-##' @importFrom egg ggarrange
+##' @import patchwork
+## @importFrom egg ggarrange
 
 
 ##### Don't export yet. Needs to be elaborated a bit.
@@ -59,16 +60,24 @@ NMplotGOF <- function(data,res=CWRES,ipre=IPRED,time=TIME,colour=NULL,arrange=T,
     if(arrange){
         ## egg::ggarrange
         if(missing(title)) title <- ""
-        all.ps <- ggarrange(pred.res,
-                            ipre.res,
-                            ipre.iwres,
-                            time.cwres
-                           ,time.iwres
-                           ,time.res
-                           ,nrow=2
-                           ,top=title)
-        
-        ##        if(!missing(title)) all.ps <- all.ps+labs(subtitle=title)
+        ## all.ps <- ggarrange(pred.res,
+        ##                     ipre.res,
+        ##                     ipre.iwres,
+        ##                     time.cwres
+        ##                    ,time.iwres
+        ##                    ,time.res
+        ##                    ,nrow=2
+        ##                    ,top=title)
+        ## based on patchwork
+        all.ps <- pred.res +
+            ipre.res +
+            ipre.iwres +
+            time.cwres +
+            time.iwres +
+            time.res +
+            plot_layout(nrow = 2) +
+            plot_annotation(title = title)
+
     } else {
         all.ps <- list(pred.res=pred.res
                       ,ipre.res=ipre.res,
