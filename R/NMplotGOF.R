@@ -2,90 +2,86 @@
 ##' 
 ##' @param data is all rows from the Nonmem output. Only the EVID==0
 ##'     subset will be used.
-##' @param res The individual residuals (how to derive them from data)
-##' @param ipre expression for individual predictions
+##' @param res Name of column with the individual residuals 
+##' @param ipre column for individual predictions
 ##' @param time Time variable (normally TIME or NOMTIME or TAPD)
-##' @param colour expression for colour mapping
 ##' @param title An optional character title for the plots.
-##' @param arrange If true, the plots will be arranged with
-##'     arrangeGrob. If not, they will be returned as individual plots
+##' @param arrange If TRUE, the plots will be arranged with
+##'     wrap_plots. If not, they will be returned as individual plots
 ##'     in a list.
 ##' @param debug Start by runing bowser?
+##' @param ... passed to aes_string. Example colour="dose".
 ##' @details All parameters must be given as expressions (no quotes)
 ##' @family Plotting
-##' @importFrom rlang enquo
 ##' @import patchwork
-## @importFrom egg ggarrange
 
 
 ##### Don't export yet. Needs to be elaborated a bit.
 
 
-NMplotGOF <- function(data,res=CWRES,ipre=IPRED,time=TIME,colour=NULL,arrange=T,title,debug=F){
+### support for better labels needed
+
+
+NMplotGOF <- function(data,res="RES",pred="PRED",ipre="IPRED",ires="IRES",iwres="IWRES",time="TIME",tspd="TSPD",cwres="CWRES",arrange=TRUE,title,smooth=TRUE,debug=F,...){
     
     if(debug) browser()
 
-
-#### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
-
-    CWRES <- NULL
-    IPRED <- NULL
-    TIME <- NULL
-    EVID <- NULL
-    PRED <- NULL
-    IWRES <- NULL
-
-###  Section end: Dummy variables, only not to get NOTE's in pacakge checks
-
-    
-    ##    if(is.character(res)){
-    ##        res=sym(res)
-    ##    } else {
-    res=enquo(res)
-    ##    }
-    ipre=enquo(ipre)
-    time=enquo(time)
-    colour=enquo(colour)
-    
     data <- subset(data,EVID==0)
-
+    cnames.data <- colnames(data)
     
-    pred.res <- ggplot(data,aes(PRED,!!res,colour=!!colour))+geom_point()+geom_smooth(method="loess",formula=y~x,se=FALSE)
-    ipre.res <- ggplot(data,aes(!!ipre,!!res,colour=!!colour))+geom_point()+geom_smooth(method="loess",formula=y~x,se=FALSE)
-    ipre.iwres <- ggplot(data,aes(!!ipre,IWRES,colour=!!colour))+geom_point()+geom_smooth(method="loess",formula=y~x,se=FALSE)
-    time.cwres <- ggplot(data,aes(!!time,CWRES,colour=!!colour))+geom_point()+geom_smooth(method="loess",formula=y~x,se=FALSE)
-    time.iwres <- ggplot(data,aes(!!time,CWRES,colour=!!colour))+geom_point()+geom_smooth(method="loess",formula=y~x,se=FALSE)
-    time.res <- ggplot(data,aes(!!time,RES,colour=!!colour))+geom_point()+geom_smooth(method="loess",formula=y~x,se=FALSE)
+    p1 <- ggplot(data)+
+        geom_point(aes_string(...))
+    if(smooth){
+        p1 <- p1 + geom_smooth(aes_string(...),method="loess",formula=y~x,se=FALSE)
+    }
+
+    update.plot <- function(plot,x,y){
+        if( is.null(x) || is.null(y) || any(!c(x,y)%in%cnames.data)){
+            return(NULL)
+        } else {
+            plot + aes_string(x=x,y=y)
+        }
+    }
+    plots <- list()
+    
+### PRED/RES plots
+    plots$res.pred <- update.plot(p1,pred,res)
+    plots$res.time <- update.plot(p1,time,res)
+    plots$res.tspd <- update.plot(p1,tspd,res)
+
+### IPRED/IRES plots
+    plots$ires.ipre <- update.plot(p1,ipre,ires)
+    plots$ires.time <- update.plot(p1,time,ires)
+    plots$ires.tspd <- update.plot(p1,tspd,ires)
+
+### IWRES
+    plots$iwres.ipre <- update.plot(p1,ipre,iwres)
+    plots$iwres.time <- update.plot(p1,time,iwres)
+    plots$iwres.tspd <- update.plot(p1,tspd,iwres)
+
+### CWRES
+    plots$cwres.ipre <- update.plot(p1,ipre,cwres)
+    plots$cwres.time <- update.plot(p1,time,cwres)
+    plots$cwres.tspd <- update.plot(p1,tspd,cwres)
+
     
     if(arrange){
-        ## egg::ggarrange
         if(missing(title)) title <- ""
-        ## all.ps <- ggarrange(pred.res,
-        ##                     ipre.res,
-        ##                     ipre.iwres,
-        ##                     time.cwres
-        ##                    ,time.iwres
-        ##                    ,time.res
-        ##                    ,nrow=2
-        ##                    ,top=title)
-        ## based on patchwork
-        all.ps <- pred.res +
-            ipre.res +
-            ipre.iwres +
-            time.cwres +
-            time.iwres +
-            time.res +
-            plot_layout(nrow = 2) +
+
+        ## all.ps <- Reduce(`+`,plots)
+        all.ps <- wrap_plots(plots)
+        
+        nrow <- sum(c(pred,time,tspd)%in%cnames.data)
+        
+        all.ps <- all.ps +
+            plot_layout(nrow = nrow,byrow=FALSE,guides = 'collect') +
             plot_annotation(title = title)
+        
 
     } else {
-        all.ps <- list(pred.res=pred.res
-                      ,ipre.res=ipre.res,
-                       ipre.iwres=ipre.iwres,
-                       time.cwres=time.cwres,
-                       time.iwres=time.iwres,
-                       time.res=time.res
-                       )
+
+        all.ps <- plots
+        
         if(!missing(title)) all.ps <- lapply(all.ps,labs(subtitle=title))
     }
     all.ps
