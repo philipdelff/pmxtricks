@@ -74,12 +74,8 @@ NMaddColumns
 **** DONE Add file name
      CLOSED: [2021-05-05 Wed 14:11]
 **** TODO date format should be changed. Output depends on locale. 
-*** NMreadTab
-**** TODO Option to use colnames for all subtables?
-With the current implementation, this would make processing much slower.
-**** DONE Use fread rather than readLines
-     CLOSED: [2019-12-12 Thu 09:59]
-Enourmous performance gain for large tables. Especially for VPC's this is necessary. 
+*** ggIndProfs
+**** TODO Add support for II, ADDL
 *** NMrunLog
 **** TODO Add convergence info
 **** TODO Add Covariance step info

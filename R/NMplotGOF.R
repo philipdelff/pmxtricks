@@ -2,7 +2,7 @@
 ##' 
 ##' @param data is all rows from the Nonmem output. Only the EVID==0
 ##'     subset will be used.
-##' @param res Name of column with the individual residuals 
+##' @param res Name of column with the individual residuals
 ##' @param ipre column for individual predictions
 ##' @param time Time variable (normally TIME or NOMTIME or TAPD)
 ##' @param title An optional character title for the plots.
@@ -11,7 +11,14 @@
 ##'     in a list.
 ##' @param debug Start by runing bowser?
 ##' @param ... passed to aes_string. Example colour="dose".
-##' @details All parameters must be given as expressions (no quotes)
+##' @details This function was rewritten in May 2021. Now all
+##'     arguments are character strings (standard evaluation). The
+##'     legends should be collected if you use either R<4.0 or a fully
+##'     updated version of patchwork. If you get multiple labels
+##'     wasting precious screen space, the reason is likely this:
+##'     https://github.com/thomasp85/patchwork/issues/170 This will
+##'     not be fixed in pmxtricks because it will be sorted out as the
+##'     update of patchwork propagates to the repositories.
 ##' @family Plotting
 ##' @import patchwork
 
