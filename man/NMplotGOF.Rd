@@ -6,40 +6,53 @@
 \usage{
 NMplotGOF(
   data,
-  res = CWRES,
-  ipre = IPRED,
-  time = TIME,
-  colour = NULL,
-  arrange = T,
+  res = "RES",
+  pred = "PRED",
+  ipre = "IPRED",
+  ires = "IRES",
+  iwres = "IWRES",
+  time = "TIME",
+  tspd = "TSPD",
+  cwres = "CWRES",
+  arrange = TRUE,
   title,
-  debug = F
+  smooth = TRUE,
+  debug = F,
+  ...
 )
 }
 \arguments{
 \item{data}{is all rows from the Nonmem output. Only the EVID==0
 subset will be used.}
 
-\item{res}{The individual residuals (how to derive them from data)}
+\item{res}{Name of column with the individual residuals}
 
-\item{ipre}{expression for individual predictions}
+\item{ipre}{column for individual predictions}
 
 \item{time}{Time variable (normally TIME or NOMTIME or TAPD)}
 
-\item{colour}{expression for colour mapping}
-
-\item{arrange}{If true, the plots will be arranged with
-arrangeGrob. If not, they will be returned as individual plots
+\item{arrange}{If TRUE, the plots will be arranged with
+wrap_plots. If not, they will be returned as individual plots
 in a list.}
 
 \item{title}{An optional character title for the plots.}
 
 \item{debug}{Start by runing bowser?}
+
+\item{...}{passed to aes_string. Example colour="dose".}
 }
 \description{
 A standard panel of residual plots
 }
 \details{
-All parameters must be given as expressions (no quotes)
+This function was rewritten in May 2021. Now all
+    arguments are character strings (standard evaluation). The
+    legends should be collected if you use either R<4.0 or a fully
+    updated version of patchwork. If you get multiple labels
+    wasting precious screen space, the reason is likely this:
+    https://github.com/thomasp85/patchwork/issues/170 This will
+    not be fixed in pmxtricks because it will be sorted out as the
+    update of patchwork propagates to the repositories.
 }
 \seealso{
 Other Plotting: 
