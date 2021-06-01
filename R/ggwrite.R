@@ -152,6 +152,7 @@ ggwrite <- function(plot, file, stamp, canvas="standard",
                     warning("onefile can only be used with pdf device. Will not be used.")
                     onefile <- FALSE
                 }
+                
                 write1(plot,fn=file,type=type,onefile=onefile,size=size)
             } else {
                 
@@ -164,7 +165,7 @@ ggwrite <- function(plot, file, stamp, canvas="standard",
                 if (type=="x11"){
                     write1(plot[[1]],type="x11")
                     if(Nplots>2){
-                        lapply(2:Nplots,function(I){
+                        silent <- lapply(2:Nplots,function(I){
                             ## debug
                             ## cat("opening x11 device")
                             ## x11()

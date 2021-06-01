@@ -14,7 +14,7 @@ NMasNumeric <- function(x) {
 
 NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL){
     
-
+    
     
     data <- copy(as.data.table(data))
     tmprow <- tmpcol(data)
@@ -22,7 +22,9 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL){
 
     
     ## if fun does not return TRUE, we have a finding.
-    listEvents <- function(col,name,fun,colname=col,dat=data,events=NULL,invert=FALSE){
+    listEvents <- function(col,name,fun,colname=col,dat=data,events=NULL,invert=FALSE,debug=F){
+        if(debug) browser()
+
         if(invert){
             row <- dat[fun(get(col))==TRUE,get(tmprow)]
         } else {
@@ -50,16 +52,17 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL){
             cols.num <- c(cols.num,col)
         } else {
             findings <- rbind(findings,
-                              data.table(check="Column not found",column=col))
+                              data.table(check="Column not found",column=col),
+                              fill=TRUE)
         }
     }
-### check for missing in TIME, EVID, ID
-    newfinds <- rbindlist( lapply(cols.num,listEvents,name="is NA",fun=is.na,invert=TRUE) )
+### check for missing in cols.num
+    newfinds <- rbindlist( lapply(cols.num,listEvents,name="is NA",fun=is.na,invert=TRUE,debug=F) )
     findings <- rbind(findings,
                       newfinds
                      ,fill=TRUE)
 
-### check for  non-numeric in TIME, EVID, ID
+### check for  non-numeric in cols.num
     newfinds <- rbindlist( lapply(cols.num,listEvents,name="Not numeric",fun=NMisNumeric) )
     findings <- rbind(findings,
                       newfinds
@@ -101,6 +104,7 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL){
         invisible(findings)
     } else {
         print(findings[,.N,by=.(column,check)],row.names=FALSE)
+##        cat("\n")
         return(findings)
     }
     
