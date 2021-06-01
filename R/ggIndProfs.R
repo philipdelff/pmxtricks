@@ -34,16 +34,20 @@
 ##'     horizontal line in plots).
 ##' @param x.inc Values that must be included in the span of the
 ##'     x-axis. This can be multiple values, like c(5,1000).
-##' @param grp.label Column to use for labeling the sheets (while
+##' @param grp.label Column to use for labeling the _sheets_ (when
 ##'     sorting by grp). A typical example is that grp is numeric (say
 ##'     dose including 80 and 280) while grp.label is a character
 ##'     (including 80 mg and 280 mg). In order to sort correctly, you
 ##'     must use the numeric variable for grp. But in order to get
 ##'     nice labels, use the character variable for labels.
-##' @param labels The default is to include the subject id's in labels
-##'     above the plots (using facet_wrap()). Set this to FALSE to
-##'     remove these labels in order to have more space for the plots
-##'     themselves.
+##' @param labels The default is to include the "strip" when faceting
+##'     - i.e. the boxed text above each plot in a facet. These text
+##'     boxes can take a lot of space if you want to plot many
+##'     subjects together. Set to "facet" (default) to let this be
+##'     controlled by the faceting, use labels="none" to remove, or
+##'     use labels="bottom-left", "top-left", "top-right", or
+##'     "bottom-right" to not use the strip, but include the same text
+##'     in a corner.
 ##' @param nullIfEmpty By default, submitting an empty data set in the
 ##'     data argument will give an error. However, sometimes this may
 ##'     be annoying. An example is a wrapper that runs over multiple
@@ -111,9 +115,8 @@
 
 
 
-ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp, amt , id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, par.prof=NULL, x.inc, grp.label = grp, labels=TRUE, nullIfEmpty=FALSE, debug = FALSE, debug.sheet){
+ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp, amt , id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, par.prof=NULL, x.inc, grp.label = grp, labels="facet", nullIfEmpty=FALSE, debug = FALSE, debug.sheet){
     if(debug) browser()
-
 
 #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
 
@@ -161,6 +164,12 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
         evid.missing <- TRUE
     }
 
+    
+    if(!labels%in%c("facet","none","bottom-left","top-left","top-right","bottom-right")) {
+        stop("labels must be one of \"facet\",\"none\",\"bottom-left\",\"top-left\",\"top-right\",\"bottom-right\".")
+    }
+
+    
     if(!is.null(dv)) {
         if(!dv%in%colnames(data)) stop("dv not found in data.")
 ### as long as we haven't implemented skipping plotting of dv we need this.
@@ -548,13 +557,34 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
         message(paste0(unique(tmp2$sheet),": ", ptitle, " created." ))
         ##            cat("s.dv.dos is",s.dv.dos,"\n")
 
-        if(!labels){
+        if(labels!="facet"){
             p <- p+theme(
                        strip.background = element_blank(),
                        strip.text.x = element_blank())
         }
-        p
+        if(labels%in%c("bottom-left","top-left","top-right","bottom-right")){
+            if(labels=="bottom-left") {
+                lab.x=-Inf
+                lab.y=-Inf
+            }
+            if(labels=="top-left") {
+                lab.x=-Inf
+                lab.y=Inf
+            }
+            if(labels=="top-right") {
+                lab.x=Inf
+                lab.y=Inf
+            }
+            if(labels=="bottom-right") {
+                lab.x=Inf
+                lab.y=-Inf
+            }
+            p <- p+geom_text( x=lab.x, y = lab.y, aes_(label = as.name(facet)), vjust=1, hjust=1,show.legend=FALSE)
+            
+        }
         
+        if(is.null(get(par.prof))) p <- p+guides(color=FALSE)
+        p
     }
     
     
