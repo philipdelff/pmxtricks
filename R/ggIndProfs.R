@@ -22,6 +22,7 @@
 ##'     contains a column called EVID, and this column has at least
 ##'     one value equalling 2.
 ##' @param facet splits plots in pages
+##' @param ncol.facet The number of columns used in facet_wrap.
 ##' @param par.prof Distinguish multiple profiles in dataset.
 ##' @param xlab label for x-axis.
 ##' @param ylab label for y-axis.
@@ -114,7 +115,7 @@
 
 
 
-ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp, amt , id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, par.prof=NULL, x.inc, grp.label = grp, labels="facet", nullIfEmpty=FALSE, debug = FALSE, debug.sheet){
+ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp, amt , id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, ncol.facet=3, par.prof=NULL, x.inc, grp.label = grp, labels="facet", nullIfEmpty=FALSE, debug = FALSE, debug.sheet){
     if(debug) browser()
 
 #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
@@ -522,7 +523,7 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
         }
         
         if (!is.null(facet)){
-            p <- p + facet_wrap(reformulate(facet), ncol = 3,scales = scales)
+            p <- p + facet_wrap(reformulate(facet), ncol = ncol.facet,scales = scales)
         }
         ##            p <- p + scale_colour_manual(values = c("red", "black"))
         p <- p + theme(legend.position = "bottom",legend.title=element_blank(),legend.box="horizontal")
