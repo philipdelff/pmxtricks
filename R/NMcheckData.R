@@ -7,9 +7,6 @@
 
 ## run flagsAssign to summarize all findings
 
-NMasNumeric <- function(x) {
-    as.numeric(as.character(x))
-}
 
 
 NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL){
@@ -18,10 +15,14 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL){
     
     data <- copy(as.data.table(data))
     tmprow <- tmpcol(data)
-    data[,(tmprow):=1:.N]
+    data[,(tmprow):=.I]
 
+    NMasNumeric <- function(x) {
+        as.numeric(as.character(x))
+    }
     
     ## if fun does not return TRUE, we have a finding.
+    ## column is to be used for the condition, colname is the column name reported to user.
     listEvents <- function(col,name,fun,colname=col,dat=data,events=NULL,invert=FALSE,debug=F){
         if(debug) browser()
 
@@ -43,7 +44,7 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL){
 
     cols.num <- c("TIME","EVID","ID","CMT")
 
-    ### Others that must be numeric?
+### Others that must be numeric?
     ## if MDV is found, add it here
     ## if MDV not found, record that without a row number
     cols.num.if.avail <- c("MDV",col.flagn)
@@ -68,19 +69,25 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL){
                       newfinds
                      ,fill=TRUE)
     
-##### I think we should now do NMasNumeric on TIME,EVID,ID
+##### overwrite cols.num with NMasNumeric of cols.num
     data[,(cols.num):=lapply(.SD,NMasNumeric),.SDcols=cols.num]
 
 ### CMT must be a positive integer
+    findings <- listEvents("CMT","CMT not a positive integer",fun=function(x)x>0&x%%1==0,events=findings)
 
+### TIME must be positive
+    findings <- listEvents("TIME","Negative time",fun=function(x)x>=0,events=findings)
     
 ### DV should be NA for dosing records
     findings <- listEvents("DV","DV not NA in dosing recs",fun=is.na,events=findings,dat=data[EVID%in%c(1,4)])
     
 ### Requirements to DV for EVID==2 and EVID==3?
-    
-### MDV should perfectly reflect is.na(DV)
 
+### MDV should perfectly reflect is.na(DV)
+    if("MDV"%in%colnames(data)){
+        data[,MDVDV:=MDV==as.numeric(is.na(DV))]
+        findings <- listEvents("MDV","MDV does not match DV",colname="MDV",fun=function(x)x==TRUE,events=findings)
+    }
     
 ### EVID must be in c(0,1,2,3,4)
     findings <- listEvents("EVID","EVID in 0:4",function(x) x%in%c(0:4),events=findings)
@@ -104,7 +111,7 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL){
         invisible(findings)
     } else {
         print(findings[,.N,by=.(column,check)],row.names=FALSE)
-##        cat("\n")
+        ##        cat("\n")
         return(findings)
     }
     

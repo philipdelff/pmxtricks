@@ -49,12 +49,14 @@ NMaddColumns
 ***** . not allowed in column names
 **** If col.row included, col.row increasing, unique
 **** Checks/analyses to include
-**** NA TIME
+**** DONE NA TIME
+     CLOSED: [2021-06-07 Mon 22:33]
 **** actual time since first dose vs Nominal time since first dose
 **** actual time since last dose vs Nominal time since nominal dose
 **** all subjects have doses?
 **** All subjects have observations?
 **** Negative actual time (since first or previous dose) when corresponding nominal time is neg
+**** Negative TIME
 **** negative doses
 **** negative dose times
 **** negative concentrations
@@ -63,7 +65,8 @@ NMaddColumns
 **** NA EVID, EVID in 1:4
 **** negative time (for nonmem)
 **** zero doses (will fail in nonmem)
-**** TIME increasing for subjects between EVID 3 or 4
+**** DONE TIME increasing for subjects between EVID 3 or 4
+     CLOSED: [2021-06-07 Mon 22:35]
 **** tests of text file
 ***** A field can't contain more than 24 characters
 *** TODO Meta data functions
