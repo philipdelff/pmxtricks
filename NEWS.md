@@ -1,3 +1,8 @@
+# pmxtricks 0.0.15
+ggwrite argument stamp renamed to script in order to align with other functions and NMdata
+
+Bugfix in file name stamping of lists of plots
+
 # pmxtricks 0.0.14
 stamps from ggstamp and ggwrite now include the basename of the output file name. 
 

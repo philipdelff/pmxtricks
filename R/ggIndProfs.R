@@ -582,7 +582,7 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
             
         }
         
-        if(is.null(get(par.prof))) p <- p+guides(color=FALSE)
+        if(is.null(par.prof)) p <- p+guides(color=FALSE)
         p
     }
 
