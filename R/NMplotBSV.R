@@ -1,27 +1,33 @@
-##' Generate distribution plots of between-occasion variability terms from
-##' Nonmem
-##' @param data A dataset - will be converted to data.frame so data.table is OK.
-##' @param regex.eta A regular expression defining the naming of the ETA's of
-##'     interest.
-##' @param col.id The name of the id column in data. Default is ID like Nonmem.
-##' @param covs.num Names of columns containing numerical covariates to plot
-##'     the random effects against.
-##' @param covs.char Names of columns containing categorical covariates to
-##'     plot the random effects against.
-##' @param fun.file If saving plots, this function can be used to translate the
-##'     file names. The inputs given to the function argument are
-##'     "iov_pairs.png" and "iov_covs_n.png".
+##' Generate distribution plots of between-occasion variability terms
+##' from Nonmem
+##' @param data A dataset - will be converted to data.frame so
+##'     data.table is OK.
+##' @param regex.eta A regular expression defining the naming of the
+##'     ETA's of interest.
+##' @param col.id The name of the id column in data. Default is ID
+##'     like Nonmem.
+##' @param covs.num Names of columns containing numerical covariates
+##'     to plot the random effects against.
+##' @param covs.char Names of columns containing categorical
+##'     covariates to plot the random effects against.
+##' @param fun.file If saving plots, this function can be used to
+##'     translate the file names. The inputs given to the function
+##'     argument are "iov_pairs.png" and "iov_covs_n.png".
 ##' @param save Save the generated plots?
 ##' @param stamp If saving the plots, a stamp to add. See ggstamp.
+##' @param return.data If TRUE, the identified ETA's together with
+##'     subject id and covariates will be returned in both wide and
+##'     long format. If FALSE, you just get the plots.
 ##' @param debug Start by running browser()?
 ##' @import ggplot2
 ##' @import data.table
 ##' @import stats
+##' @importFrom NMdata findCovs findVars
 ##' @importFrom GGally ggpairs
 ##' @family Plotting
 ##' @export
 
-NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fun.file=identity,save=FALSE,stamp=NULL,debug=F){
+NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.file=identity,save=FALSE,stamp=NULL,return.data=FALSE,debug=F){
 
     if(debug) {browser()}
     
@@ -56,7 +62,12 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
     ## names.etas.var <- names(which(
     ##     sapply(pkpars[,names.etas,with=F],function(x)length(unique(x)))  > 1
     ## ))
-    names.etas.var <- colnames(findVars(pkpars[,names.etas,with=F]))
+    names.etas.var <- colnames(
+        findCovs(
+            findVars(pkpars[,c(col.id,names.etas),with=F])
+           ,cols.id=col.id)
+    )
+    names.etas.var <- setdiff(names.etas.var,col.id)
 
     etas <- NULL
     etas.l <- NULL
@@ -84,7 +95,7 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
         etas.l <- melt(etas,id.vars=c(col.id,covs.num,covs.char),measure.vars=names.etas.var,value.name="value",variable.name="param")
         ##
         ## compare.names(etas,pkpars)
-     #   etas.l <- mergeCheck(etas.l,pkpars,by=c(col.id,covs.num,covs.char),allow.cartesian=TRUE)
+        ##   etas.l <- mergeCheck(etas.l,pkpars,by=c(col.id,covs.num,covs.char),allow.cartesian=TRUE)
         
         ## g1 <- ggplot(etas.l,aes(value))+
         ##     geom_histogram()+
@@ -100,12 +111,6 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
         dat <- etas.l.actual
 
         grid <- with(dat, seq(min(value), max(value), length = 100))
-        ## normaldens <- ddply(dat, "param", function(df) {
-        ##     data.frame( 
-        ##         predicted = grid,
-        ##         density = dnorm(grid, mean(df[,"value"]), sd(df[,"value"]))
-        ##     )
-        ## })
 
         DT.dat <- as.data.table(dat)
         normaldens <-
@@ -148,24 +153,16 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
             ## ))
             covs.num <- colnames(findVars(pkpars[,covs.num,with=F]))
             
-            ##        etas.l2.n <- mergeCheck(etas.l,unique(pkpars[c(col.id,covs.num)]),by=col.id)
-            ##        etas.l2.n <- etas.l2.n[,c(col.id,"param","value",covs.num)]
             etas.l2.n <- etas.l[,c(col.id,"param","value",covs.num),with=FALSE]
 
             if(
                 length(setdiff(colnames(etas.l2.n),c("ID","param","value")))>0
             ){
                 etas.covs.n <- melt.data.table(etas.l2.n,variable.name="cov",value.name="val.cov",measure.vars=names(etas.l2.n)[!names(etas.l2.n)%in%c("ID","param","value")])
-### I dont understand why this is needed. This should just be a numeric covariate like any other, I guess?
-                ## if(any(grepl("^ETA",covs.num))){
-                ##     p.iiv.covsn.eta <- ggplot(subset(etas.covs.n,grepl("^ETA",cov)),aes(val.cov,value))+geom_point()+
-                ##         geom_smooth(method="lm")+
-                ##         facet_grid(param~cov,scales="free")
-                ##     gsave(p.iiv.covsn.eta,file=file.runplot(name.run,"iiv_covs_etas.png"),save=write.output,stamp=stamp)
-                ## }
+
                 p.iiv.covsn <- ggplot(subset(etas.covs.n,!grepl(regex.eta,cov)),aes(val.cov,value))+
                     geom_point()+
-                    geom_smooth(method="lm")+
+                    geom_smooth(method="lm", formula=y~x)+
                     facet_grid(param~cov,scales="free")
                 ggwrite(p.iiv.covsn,file=fun.file("iiv_covs_n.png"),save=save,stamp=stamp)
                 all.output[["iiv.covsn"]] <- p.iiv.covsn
@@ -173,31 +170,32 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
         }
         if(!is.null(covs.char)){
             
-            
-            ## etas.l2.c <- mergeCheck(etas.l,unique(pkpars[,c(col.id,covs.char),drop=F]),by=col.id)
-            ## etas.l2.c <- etas.l2.c[,c(col.id,"param","value",covs.char)]
-            etas.l2.c <- etas.l[,c(col.id,variable,"param","value",covs.char),with=F]
+            etas.l2.c <- etas.l[,c(col.id,"param","value",covs.char),with=F]
 
-#### gather_ does not respect factor levels. Using data.table for this melt/gather.
-            ## etas.covs.c <- gather_(etas.l2.c,"cov","val.cov",names(etas.l2.c)[!names(etas.l2.c)%in%c("ID","param","value")])
-            
-            ## p.iiv.covsc <- ggplot(etas.covs.c,aes(colour=val.cov,value))+geom_density()+facet_grid(param~cov,scales="free")
-            ## p.iiv.covsc <- by(etas.covs.c,etas.covs.c$cov,function(data)ggplot(data,aes(colour=val.cov,value))+geom_density()+facet_grid(param~cov,scales="free"))
-            ##            p.iiv.covsc <- ggplot(etas.covs.c,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)
-            ## all.output[["iiv.covsc"]] <- p.iiv.covsc
-            
             DT <- data.table(etas.l2.c)
 
-            warning("Please double-check the plotting aginst charcter covariates. dose is hard-coded which looks like a bug.")
-            DT2 <- melt(DT,measure.vars="dose",id.vars=c("ID","param","value"),value.name="val.cov",value.factor=T)
-            p.iiv.covsc.dt <- ggplot(DT2,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)
-            ggwrite(p.iiv.covsc.dt,file=fun.file("iiv_covs_c.png"),save=save,stamp=stamp)
-            all.output[["iiv.covsc"]] <- p.iiv.covsc.dt
+            DT2 <- melt(DT,measure.vars=covs.char,id.vars=c("ID","param","value"),value.name="val.cov",value.factor=T)
+            
+            ## p.iiv.covsc.dt <- ggplot(DT2,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)
+            sets <- split(DT2,by="variable")
+            p.iiv.covsc.dt <- lapply(sets,function(dat){
+                ggplot(dat,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)+
+                    ### this would bring in ggpubr as dependency. Maybe just call in scripts where needed?
+                    ## rotate_x_text(45)+
+                    labs(x="",y="")
+            })
+            ggwrite(p.iiv.covsc.dt,file=fun.file("iiv_covs_c.png"),useNames=TRUE,save=save,stamp=stamp)
+            all.output[["iiv.covc"]] <- p.iiv.covsc.dt
         }
     } else {
         message("No IIV random effects found in parameter table.")
     }
-    all.output[["etas"]] <- etas
-    all.output[["etas.l"]] <- etas.l
+    ## if there are no plots to return, we return NULL (instead of a list of length 0).
+    if(length(all.output)==0&&!return.data){return(NULL)}
+    if(return.data){
+        all.output[["etas"]] <- etas
+        all.output[["etas.l"]] <- etas.l
+    }
+
     all.output
 }

@@ -4,7 +4,7 @@
 \alias{ggWater}
 \title{Add watermarks to ggplots}
 \usage{
-ggWater(text = "Not validated", scale = 1, rot = 0)
+ggWater(text = "Not validated", scale = 1, rot = 30, col = "grey", alpha = 0.5)
 }
 \arguments{
 \item{text}{What should be written on the plot}
@@ -12,12 +12,20 @@ ggWater(text = "Not validated", scale = 1, rot = 0)
 \item{scale}{the size}
 
 \item{rot}{rotation of the mark. Don't remember the unit.}
+
+\item{col}{the colour (a value, not an expression) of the
+watermark. Default is grey.}
+
+\item{alpha}{alpha value for the watermark. Default is 0.5.}
 }
 \description{
 Add watermarks to ggplots
 }
 \details{
-taken from https://www.r-bloggers.com/adding-watermarks-to-plots/
+This used to be based on
+    https://www.r-bloggers.com/adding-watermarks-to-plots/ That
+    solution stopped working, and this new solution is simpler and
+    based on ggplot2 alone.
 }
 \examples{
 library(ggplot2)
@@ -25,7 +33,6 @@ ff <- qplot(1:10, 11:20) + pmxtricks:::ggWater()
 }
 \seealso{
 Other Plotting: 
-\code{\link{NMplotBOV}()},
 \code{\link{NMplotBSV}()},
 \code{\link{NMplotGOF}()},
 \code{\link{canvasSize}()},

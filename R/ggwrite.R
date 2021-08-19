@@ -28,6 +28,7 @@
 ##' @param useNames If length(plot)>1 use names(plot) in the file
 ##'     names? Default is to use 1:length(plot). Only used if save is
 ##'     TRUE, and length(plot)>1.
+##' @param quiet Default is false but use TRUE to suppress messages about what was saved.
 ##' @param debug If TRUE, browser is called to begin with.
 ##' @export
 ##' @return Nothing.
@@ -48,21 +49,23 @@
 ##' @import grDevices
 ##' @import grid
 
-ggwrite <- function(plot, file, stamp, canvas="standard",
+ggwrite <- function(plot, file, script, canvas="standard",
                     onefile=FALSE, res=200, paper="special",
-                    save=TRUE, show=!save, useNames=FALSE, debug=F){
+                    save=TRUE, show=!save, useNames=FALSE, quiet=FALSE, stamp,debug=F){
     
     if(debug) browser()
 
     if(useNames && length(plot)==1) warning("useNames is ignored because plot is of length 1.")
 
+    
 ###### functions to be used internally
 ### print1 does the actual printing to the device. Because if the plot is a
 ### table it must be written with draw.grid, and if not by print.
     print1 <- function(plot){
         if("gtable"%in%class(plot)) {
-            message("plot is of class gtable. Using grid::grid.draw.")
-            grid::grid.draw(plot)
+            ## message("plot is of class gtable. Using grid::grid.draw.")
+            ## grid::grid.draw
+            grid.draw(plot)
         } else {
             if(!is.null(plot)){
                 print(plot)
@@ -74,8 +77,9 @@ ggwrite <- function(plot, file, stamp, canvas="standard",
     ## it over the elements of plot in case plot is a list.
     write1 <- function(plot,fn=NULL,type,onefile=F,size){  
         
-        if(!is.null(stamp)){
-            plot <- ggstamp(plot,stamp)
+        if(is.null(fn)) fn <- file
+        if(!is.null(script)){
+            plot <- ggstamp(plot,script,file=fn)
         }
         
         if(!is.null(fn)){
@@ -110,6 +114,16 @@ ggwrite <- function(plot, file, stamp, canvas="standard",
         file <- NULL
         if(onefile) onefile <- TRUE
     }
+    if(is.null(file)) save <- FALSE
+
+    if(missing(script)) script <- NULL
+    if(!is.null(script) && !missing(stamp)) stop("stamp is deprecated and makes no sense when supplying script. Please use script and not stamp.")
+    if(!missing(stamp)) {
+        message("stamp argument is depricated. Use script instead.")
+        script <- stamp
+    }
+    
+
     if(missing(stamp)) stamp <- NULL
     ## If file is an empty string or null is the same.
     if(!missing(file)&&!is.null(file)){
@@ -149,6 +163,7 @@ ggwrite <- function(plot, file, stamp, canvas="standard",
                     warning("onefile can only be used with pdf device. Will not be used.")
                     onefile <- FALSE
                 }
+                
                 write1(plot,fn=file,type=type,onefile=onefile,size=size)
             } else {
                 
@@ -161,7 +176,7 @@ ggwrite <- function(plot, file, stamp, canvas="standard",
                 if (type=="x11"){
                     write1(plot[[1]],type="x11")
                     if(Nplots>2){
-                        lapply(2:Nplots,function(I){
+                        silent <- lapply(2:Nplots,function(I){
                             ## debug
                             ## cat("opening x11 device")
                             ## x11()
@@ -184,6 +199,7 @@ ggwrite <- function(plot, file, stamp, canvas="standard",
     
     if(save){
         writeObj(plot,file=file,size=size)
+        if(!quiet&&!is.null(file)) message("Written to ",file)
     }
     if(show){
         writeObj(plot,file=NULL,size=size)

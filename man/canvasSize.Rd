@@ -21,7 +21,6 @@ Get predefined canvas sizes
 }
 \seealso{
 Other Plotting: 
-\code{\link{NMplotBOV}()},
 \code{\link{NMplotBSV}()},
 \code{\link{NMplotGOF}()},
 \code{\link{extractLegend}()},

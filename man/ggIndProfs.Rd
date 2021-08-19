@@ -27,7 +27,8 @@ ggIndProfs(
   x.inc,
   grp.label = grp,
   labels = TRUE,
-  debug = F,
+  nullIfEmpty = FALSE,
+  debug = FALSE,
   debug.sheet
 )
 }
@@ -98,6 +99,14 @@ above the plots (using facet_wrap()). Set this to FALSE to
 remove these labels in order to have more space for the plots
 themselves.}
 
+\item{nullIfEmpty}{By default, submitting an empty data set in the
+data argument will give an error. However, sometimes this may
+be annoying. An example is a wrapper that runs over multiple
+models splitting into subsets of data. Some models may not
+contain all data, and then ggIndProfs would fail. If you want
+it to return NULL and not an error in this case, use
+nullIfEmpty=TRUE.}
+
 \item{debug}{Start by calling debug()?}
 
 \item{debug.sheet}{If something goes wrong when plotting, this may
@@ -117,7 +126,6 @@ The resulting object can be saved with ggwrite.
 }
 \seealso{
 Other Plotting: 
-\code{\link{NMplotBOV}()},
 \code{\link{NMplotBSV}()},
 \code{\link{NMplotGOF}()},
 \code{\link{canvasSize}()},

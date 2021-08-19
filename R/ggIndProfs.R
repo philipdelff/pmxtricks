@@ -22,6 +22,7 @@
 ##'     contains a column called EVID, and this column has at least
 ##'     one value equalling 2.
 ##' @param facet splits plots in pages
+##' @param ncol.facet The number of columns used in facet_wrap.
 ##' @param par.prof Distinguish multiple profiles in dataset.
 ##' @param xlab label for x-axis.
 ##' @param ylab label for y-axis.
@@ -34,16 +35,26 @@
 ##'     horizontal line in plots).
 ##' @param x.inc Values that must be included in the span of the
 ##'     x-axis. This can be multiple values, like c(5,1000).
-##' @param grp.label Column to use for labeling the sheets (while
+##' @param grp.label Column to use for labeling the _sheets_ (when
 ##'     sorting by grp). A typical example is that grp is numeric (say
 ##'     dose including 80 and 280) while grp.label is a character
 ##'     (including 80 mg and 280 mg). In order to sort correctly, you
 ##'     must use the numeric variable for grp. But in order to get
 ##'     nice labels, use the character variable for labels.
-##' @param labels The default is to include the subject id's in labels
-##'     above the plots (using facet_wrap()). Set this to FALSE to
-##'     remove these labels in order to have more space for the plots
-##'     themselves.
+##' @param labels The default is to include the "strip" when faceting
+##'     - i.e. the boxed text above each plot in a facet. These text
+##'     boxes can take a lot of space if you want to plot many
+##'     subjects together. Set to "facet" (default) to let this be
+##'     controlled by the faceting, use labels="none" to remove, or
+##'     use labels="top-right" to not use the strip, but include the same text
+##'     in the top-right corner inside the plotting area.
+##' @param nullIfEmpty By default, submitting an empty data set in the
+##'     data argument will give an error. However, sometimes this may
+##'     be annoying. An example is a wrapper that runs over multiple
+##'     models splitting into subsets of data. Some models may not
+##'     contain all data, and then ggIndProfs would fail. If you want
+##'     it to return NULL and not an error in this case, use
+##'     nullIfEmpty=TRUE.
 ##' @param debug Start by calling debug()?
 ##' @param debug.sheet If something goes wrong when plotting, this may
 ##'     be the debug method to use. Pass an integer to call browser()
@@ -104,9 +115,8 @@
 
 
 
-ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp, amt , id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, par.prof=NULL, x.inc,grp.label = grp, labels=TRUE, debug = F, debug.sheet){
+ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED","IPRE"), grp, amt , id = "ID", xlab = NULL, ylab = NULL, ylab2 = NULL, scales = "fixed", logy = F, NPerSheet=12,LLOQ=NULL, use.evid2, facet=id, ncol.facet=3, par.prof=NULL, x.inc, grp.label = grp, labels="facet", nullIfEmpty=FALSE, debug = FALSE, debug.sheet){
     if(debug) browser()
-
 
 #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
 
@@ -132,6 +142,16 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
 ### Section end: Dummy variables, only not to get NOTE's in pacakge checks
 
     data <- copy(as.data.table(data))
+
+    if(nrow(data)==0) {
+
+        if(nullIfEmpty) {
+            message("Data is empty. Returning NULL")
+            return (NULL)
+        } else {
+            stop("Data is empty.")
+        }
+    }
     
 ##### check arguments
     if(!is.data.frame(data)) stop("data has to be a data.frame.")
@@ -144,6 +164,12 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
         evid.missing <- TRUE
     }
 
+    
+    if(!labels%in%c("facet","none","bottom-left","top-left","top-right","bottom-right")) {
+        stop("labels must be one of \"facet\",\"none\",\"bottom-left\",\"top-left\",\"top-right\",\"bottom-right\".")
+    }
+
+    
     if(!is.null(dv)) {
         if(!dv%in%colnames(data)) stop("dv not found in data.")
 ### as long as we haven't implemented skipping plotting of dv we need this.
@@ -319,13 +345,25 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
     
     ##    xrange <- rangetmp[tmp$EVID==0,x],na.rm=T)
     
-    data <- as.data.frame(DTdata)
-
 ### need to order at this point - to get plots in correct order
-    data$..ROW <- 1:nrow(data)
-    data <- data[with(data,order(sheet,..ROW)),]
+    DTdata[,..ROW := 1:.N]
+    setorder(DTdata,sheet,..ROW)
 
+
+    DTdata[,ptitle:=""]
+    if(run != "") DTdata[,ptitle:=paste0(run,". ")]
+
+    ## if(length(grp)>1 || grp!="..grp"){
+    ##     ltmp <- lapply(unique(tmp[,grp.label,drop=F]),as.character)
+    ##     tmpnames = data.frame(var=names(ltmp),val=c(sapply(ltmp,identity)))
+    ##     ptitle <- paste0(ptitle,paste(within(tmpnames,{yo=paste(var,val,sep="=")})$yo,collapse=", "),".")
+    ## }
     
+    ## if(unique(tmp$Nsheetsgrp)>1) {
+    ##     ptitle <- paste0(ptitle, " ",unique(tmp$sheetgrp), "/", unique(tmp$Nsheetsgrp),".")
+    ## }
+    
+    data <- as.data.frame(DTdata)    
     
 ########### end plot settings ##############
 
@@ -341,60 +379,14 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
     ## lapply(1:length(lvls),function(G){
     
     ##    n.plots <- 0
+    
     if(missing(debug.sheet)) debug.sheet <- NULL
-    outlist <- by(data,data$sheet,ds=debug.sheet,FUN=function(tmp,ds){##        tmp <- data[data[,grp]==lvls[G],]
-        if(!is.null(ds) && debug.sheet==unique(tmp$sheet)) browser()
-        ##        tmp$IDnew <- as.numeric(as.factor(tmp[,id]))
-        ##        tmp$IDcut <- ((tmp$IDnew)-1) %/% NPerSheet + 1 
-        
-        
-#### Set ranges.
-### xrange should only depend on obs - not model
-        ## xrange <- range(tmp[tmp$EVID==0,x],na.rm=T)
-        ## if(!all(is.finite(xrange))) {
-        ##     warning(paste("Skipping one level:",lvls[G]))
-        ##     next
-        ##     ## {stop("range of independent variable cannot be determined for EVID==0")}
-        ## }
-        ## if(length(xlim) > 1) xrange <- xlim
-        
-### not used, and doesnt work. $ipred???
-### ylim[1] should only depend on observations - not model
-        ## yrange <- range(c(data$dv, data$ipred, data$pred), na.rm = T)
-        ## we could get into trouble here if x is na
-        ## if(any(is.na(tmp[tmp$EVID==2,x]))) stop("NA in simulated times. Very strange.")
-        ## yrange <- range(subset(tmp,EVID==0|(EVID==2&x>=xrange[1]&x<=xrange[2]))$dv,na.rm=T)
-        ## dat.yrange <- tmp[tmp$EVID==0|tmp$EVID==2&tmp[,x]>=xrange[1]&tmp[,x]<=xrange[2],]
 
-#### LLOQ should be taken into account if provided
-        ## yrange <- range(dat.yrange[,dv],na.rm=T)
-        ## if(logy == T)  yrange <- range(dat.yrange[dat.yrange[,dv]>0,dv],na.rm=T)
+    data.list <- split(data,data$sheet)
+    data.list <- lapply(data.list,function(tmp){
 
-
-        ## max.dv <- max(tmp[,dv],na.rm = T)
-        ## max.dos <- max(tmp[,amt],na.rm = T)
-        ## s.dv.dos <- max.dv/max.dos
-        ## tmp$amt2 <- tmp[,amt]*tmp[,"s.dv.dos"]
-
-        
-        ## Loop through sheets (NPerSheet in each): Plot and save in list
-        ## outlist.grp <- list()
-        ## for(cut in 1:max(tmp$IDcut)){
-
-        ## tmp2 <- subset(tmp, IDcut == cut)
-        tmp2 <- tmp
-        group <- unique(tmp[,grp])
-        xrange <- c(unique(tmp$xmingrp),unique(tmp$xmaxgrp))
-        yrange <- c(unique(tmp$ymingrp),unique(tmp$ymaxgrp))
-        s.dv.dos <- unique(tmp[,"s.dv.dos"])
-
-        
         ptitle <- ""
         if(run != "") ptitle <- paste0(run,". ")
-        ## ptitle <- paste0(ptitle," ",paste(c(
-        ##                                 unique(tmp[,grp.label])
-        ##                             ),collapse=", "),".")
-        ## df.tmp <- unique(tmp[,grp.label,drop=F])
 
         if(length(grp)>1 || grp!="..grp"){
             ltmp <- lapply(unique(tmp[,grp.label,drop=F]),as.character)
@@ -405,7 +397,42 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
         if(unique(tmp$Nsheetsgrp)>1) {
             ptitle <- paste0(ptitle, " ",unique(tmp$sheetgrp), "/", unique(tmp$Nsheetsgrp),".")
         }
+        tmp$ptitle <- ptitle
+        tmp$ltitle <- gsub('[\\\\/\\:\\*\\?\\"\\<\\>\\|\\=\\.\\,]',"",tmp$ptitle)
+        tmp$ltitle <- gsub('[[:space:]]',"",tmp$ltitle)
+        tmp
+    })
+    
+    names(data.list) <- unlist(lapply(data.list,function(x)unique(x$ltitle)))
 
+    
+    
+    ##     outlist <- by(data,data$sheet,ds=debug.sheet,FUN=function(tmp,ds){
+    outlist <- lapply(data.list,FUN=function(tmp){
+        
+        tmp2 <- tmp
+        group <- unique(tmp[,grp])
+        xrange <- c(unique(tmp$xmingrp),unique(tmp$xmaxgrp))
+        yrange <- c(unique(tmp$ymingrp),unique(tmp$ymaxgrp))
+        s.dv.dos <- unique(tmp[,"s.dv.dos"])
+
+
+#### this part is moved to before by()
+        ## ptitle <- ""
+        ## if(run != "") ptitle <- paste0(run,". ")
+
+        ## if(length(grp)>1 || grp!="..grp"){
+        ##     ltmp <- lapply(unique(tmp[,grp.label,drop=F]),as.character)
+        ##     tmpnames = data.frame(var=names(ltmp),val=c(sapply(ltmp,identity)))
+        ##     ptitle <- paste0(ptitle,paste(within(tmpnames,{yo=paste(var,val,sep="=")})$yo,collapse=", "),".")
+        ## }
+        
+        ## if(unique(tmp$Nsheetsgrp)>1) {
+        ##     ptitle <- paste0(ptitle, " ",unique(tmp$sheetgrp), "/", unique(tmp$Nsheetsgrp),".")
+        ## }
+
+        ptitle <- unique(tmp$ptitle)
+        
         ## if(unique(tmp2$sheet)==30) browser()
         p <- NULL
         ## if(unique(tmp2$sheet)==30) browser()
@@ -419,9 +446,7 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
                 data.amt=subset(tmp2,EVID%in%c(1,4))
             }
             p <- p+geom_segment(mapping = aes_string(x = x, xend = x, y = 0, yend = "amt2",colour=par.prof),data=data.amt)
-            ## } else {
-            ##     p <- p+geom_segment(mapping = aes_string(x = x, xend = x, y = 0, yend = "amt2",colour=as.name(par.prof)),data=subset(tmp2,EVID%in%c(1,4)))
-            ## }
+
         }
 
         
@@ -498,7 +523,7 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
         }
         
         if (!is.null(facet)){
-            p <- p + facet_wrap(reformulate(facet), ncol = 3,scales = scales)
+            p <- p + facet_wrap(reformulate(facet), ncol = ncol.facet,scales = scales)
         }
         ##            p <- p + scale_colour_manual(values = c("red", "black"))
         p <- p + theme(legend.position = "bottom",legend.title=element_blank(),legend.box="horizontal")
@@ -531,15 +556,36 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
         message(paste0(unique(tmp2$sheet),": ", ptitle, " created." ))
         ##            cat("s.dv.dos is",s.dv.dos,"\n")
 
-        if(!labels){
+        if(labels!="facet"){
             p <- p+theme(
                        strip.background = element_blank(),
                        strip.text.x = element_blank())
         }
-        p
+        if(labels%in%c("bottom-left","top-left","top-right","bottom-right")){
+            if(labels=="bottom-left") {
+                lab.x=-Inf
+                lab.y=-Inf
+            }
+            if(labels=="top-left") {
+                lab.x=-Inf
+                lab.y=Inf
+            }
+            if(labels=="top-right") {
+                lab.x=Inf
+                lab.y=Inf
+            }
+            if(labels=="bottom-right") {
+                lab.x=Inf
+                lab.y=-Inf
+            }
+            p <- p+geom_text( x=lab.x, y = lab.y, aes_(label = as.name(facet)), vjust=1, hjust=1,show.legend=FALSE)
+            
+        }
         
+        if(is.null(par.prof)) p <- p+guides(color=FALSE)
+        p
     }
-    
+
     
     ##  outlist <- c(outlist,outlist.grp)
     )

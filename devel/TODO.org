@@ -49,12 +49,14 @@ NMaddColumns
 ***** . not allowed in column names
 **** If col.row included, col.row increasing, unique
 **** Checks/analyses to include
-**** NA TIME
+**** DONE NA TIME
+     CLOSED: [2021-06-07 Mon 22:33]
 **** actual time since first dose vs Nominal time since first dose
 **** actual time since last dose vs Nominal time since nominal dose
 **** all subjects have doses?
 **** All subjects have observations?
 **** Negative actual time (since first or previous dose) when corresponding nominal time is neg
+**** Negative TIME
 **** negative doses
 **** negative dose times
 **** negative concentrations
@@ -63,52 +65,20 @@ NMaddColumns
 **** NA EVID, EVID in 1:4
 **** negative time (for nonmem)
 **** zero doses (will fail in nonmem)
-**** TIME increasing for subjects between EVID 3 or 4
+**** DONE TIME increasing for subjects between EVID 3 or 4
+     CLOSED: [2021-06-07 Mon 22:35]
 **** tests of text file
 ***** A field can't contain more than 24 characters
 *** TODO Meta data functions
 ** Documentation
 *** TODO Tests
 ** Improvements
-*** mergeCheck
-**** DONE Add support for data.frame merge.
-     CLOSED: [2019-12-12 Thu 15:08]
-The would mean that input is converted to df's and then merged. The
-problem is that merge.data.table works slightly differently,
-especially without by. Maybe it would be sufficient to support adding
-of dummy columns to merge by and get a cartesian product.
-
-Here is an alternative way to get the cartesian product
-https://stackoverflow.com/questions/19440769/cartesian-join-in-data-table/20645902
-**** DONE Convert to data.tables first
-     CLOSED: [2019-11-19 Tue 10:41]
-And then - if needed - convert back to data.frames.
-**** DONE base check on actual rows
-     CLOSED: [2019-11-19 Tue 10:41]
-mergeCheck counts number of rows in df1 and df3. This is not entirely safe in
-case all.x=F. It can happen that rows have no match, and others have multiple
-matches, and that the resulting number of rows happen to be the same as for df1.
-
-In stead, add a row counter to df1. Look in df3 whether all values of the row
-counter are there, and that no of rows is retained.
-**** DONE Check uniqueness of column names
-     CLOSED: [2019-11-08 Fri 10:03]
-     Give a warning if merge results in new column names col.x and col.y.
-*** findVars
-**** DONE Add support for missing cols.id
-     CLOSED: [2019-12-15 Sun 18:43]
-This already worked
-*** findCovs
-**** DONE Add support for missing cols.id
-     CLOSED: [2019-12-15 Sun 18:43]
-include a dummy column, use it, remove it
-*** NMreadTab
-**** TODO Option to use colnames for all subtables?
-With the current implementation, this would make processing extremely much slower.
-**** TODO Check if correct seperator chosen
-**** DONE Use fread rather than readLines
-     CLOSED: [2019-12-12 Thu 09:59]
-Enourmous performance gain for large tables. Especially for VPC's this is necessary. 
+*** ggstamp
+**** DONE Add file name
+     CLOSED: [2021-05-05 Wed 14:11]
+**** TODO date format should be changed. Output depends on locale. 
+*** ggIndProfs
+**** TODO Add support for II, ADDL
 *** NMrunLog
 **** TODO Add convergence info
 **** TODO Add Covariance step info
@@ -122,7 +92,7 @@ Enourmous performance gain for large tables. Especially for VPC's this is necess
 **** TODO Shortcut for a runlog presentation tab
 **** TODO Scan for available lst's and mod's. 
 The user doesn't have to supply which ones to include.
-*** gg_theme
+*** theme_pp
 **** DONE Add choice of base theme
      CLOSED: [2019-12-12 Thu 10:01]
 *** NMreadRun
@@ -171,12 +141,14 @@ pop: grp
      CLOSED: [2019-12-12 Thu 15:10]
 If recoverRows, do
 ***** take the not used lines from input data
-***** What to do about id-level and occ-level variables?
+***** [#B] What to do about id-level and occ-level variables?
 They could differ from output, should they be overwritten then? I
 really don't think so. But $id and $row are made before this, right? A
 simple approach would be to do nothing but just rbind. We can then add
 some tests and some warnings.
 *** trapez
+**** TODO Check for equal lengths of x and y
+**** TODO Check if at least 2 observations (before looking for NAs)
 **** DONE strategy for cumulative auc
      CLOSED: [2019-10-24 Thu 14:18]
 One shorter than x and y. 
@@ -197,8 +169,16 @@ intentional.
      CLOSED: [2020-04-13 Mon 16:53]
 scale all dimensions by the parameter value in end of function.
 *** ggwrite
-**** TODO Naming of multiple plots 
+*** TODO [#A] Message written paths to user
+**** DONE Naming of multiple plots 
+     CLOSED: [2021-04-28 Wed 19:04]
 For list objects, optionally name the plots (when onefile=F) by the
 element names of the list. Could also use an additional argument to
 provide the name suffixes, but using element names reduces need for
 checks of length, class etc.
+*** NMplotBSV
+**** TODO Default regex should match all ETA's
+
+     #### Todo
+## 2018-10-11 
+#### End todo

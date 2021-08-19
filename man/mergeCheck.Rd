@@ -42,7 +42,6 @@ Besides merging and checking rows, mergeCheck makes sure the order
 Other DataWrangling: 
 \code{\link{compareNames}()},
 \code{\link{factor2}()},
-\code{\link{findCovs_df}()},
 \code{\link{newNames}()},
 \code{\link{rbindIntersect}()},
 \code{\link{rbindUnion}()},

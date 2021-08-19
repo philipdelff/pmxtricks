@@ -17,15 +17,9 @@
 ##' @family DataWrangling
 ##' @export
 
-### Todo
-
-## sort by how many available, then where they are available
-
-## diffOnly argument. Often you just want to see where the data.frames differ.
-
-### End todo
-
 compareNames <- function(...,keepNames=T,testEqual=F,quietIfEqual=F,debug=F){
+    warning("compareNames is deprecated. Use NMdata::compareCols.")
+
     ## Compares the names of the contents of lists (can be
     ## data.frames). This is useful when combining datasets to get an
     ## overview of compatibility.

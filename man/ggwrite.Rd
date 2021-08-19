@@ -16,6 +16,7 @@ ggwrite(
   save = TRUE,
   show = !save,
   useNames = FALSE,
+  quiet = FALSE,
   debug = F
 )
 }
@@ -57,6 +58,8 @@ powerpoint.}
 names? Default is to use 1:length(plot). Only used if save is
 TRUE, and length(plot)>1.}
 
+\item{quiet}{Default is false but use TRUE to suppress messages about what was saved.}
+
 \item{debug}{If TRUE, browser is called to begin with.}
 }
 \value{
@@ -82,7 +85,6 @@ ggwrite(tg1,stamp=stamp,file="mytab1.png",save=writeOutput)
 }
 \seealso{
 Other Plotting: 
-\code{\link{NMplotBOV}()},
 \code{\link{NMplotBSV}()},
 \code{\link{NMplotGOF}()},
 \code{\link{canvasSize}()},

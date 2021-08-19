@@ -24,10 +24,10 @@
 ##' 
 ##' @examples
 ##' newlines <- "$EST POSTHOC INTERACTION METHOD=1 NOABORT PRINT=5 MAXEVAL=9999 SIG=3"
-##' NMreplacePart(path=pmxtricks_filepath("examples/nonmem/run001.mod"),
+##' pmxtricks:::NMreplacePart(path=pmxtricks_filepath("examples/nonmem/run001.mod"),
 ##' section="EST", newlines=newlines)
-##' @export
 
+### don't export. Use NMdata::NMwriteSection instead.
 
 NMreplacePart <- function(path,section,newlines,newpath,backup=T,blank.append=T,test=F,debug=F){
     if(debug) browser()
@@ -53,10 +53,10 @@ NMreplacePart <- function(path,section,newlines,newpath,backup=T,blank.append=T,
 ######
     
 
-## browser()
-    
     ## see below why we need to read the lines for now
     lines <- readLines(file)
+
+## put this part in a function to be sequentially applied for all elements in list.
     idx.dlines <- NMgetSection(lines=lines,section=section,return="idx",keepEmpty=T,
                                keepName=T,keepComments=T,asOne=T,
                                cleanSpaces=F)
@@ -83,8 +83,10 @@ NMreplacePart <- function(path,section,newlines,newpath,backup=T,blank.append=T,
           lines[(max.dl+1):length(lines)])
     }
 
+    ##  function end
+    
     if(is.null(newpath)) return(newlines)
-
+    
     if(file==newfile && backup ) file.copy (file,
                                             sub("(.+/)([^/].+$)","\\1backup_\\2",x=file)
                                             )

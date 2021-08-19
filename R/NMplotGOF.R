@@ -1,56 +1,95 @@
 ##' A standard panel of residual plots
-##' @param data is all rows from the Nonmem output. Only the EVID==0 subset will
-##'     be used.
-##' @param res The individual residuals (how to derive them from data)
-##' @param ipre expression for individual predictions
+##' 
+##' @param data is all rows from the Nonmem output. Only the EVID==0
+##'     subset will be used.
+##' @param res Name of column with the individual residuals
+##' @param ipre column for individual predictions
 ##' @param time Time variable (normally TIME or NOMTIME or TAPD)
-##' @param arrange If true, the plots will be arranged with arrangeGrob. If not, they will be returned as individual plots in a list.
+##' @param title An optional character title for the plots.
+##' @param arrange If TRUE, the plots will be arranged with
+##'     wrap_plots. If not, they will be returned as individual plots
+##'     in a list.
 ##' @param debug Start by runing bowser?
-##' @details All parameters must be given as expressions (no quotes)
+##' @param ... passed to aes_string. Example colour="dose".
+##' @details This function was rewritten in May 2021. Now all
+##'     arguments are character strings (standard evaluation). The
+##'     legends should be collected if you use either R<4.0 or a fully
+##'     updated version of patchwork. If you get multiple labels
+##'     wasting precious screen space, the reason is likely this:
+##'     https://github.com/thomasp85/patchwork/issues/170 This will
+##'     not be fixed in pmxtricks because it will be sorted out as the
+##'     update of patchwork propagates to the repositories.
 ##' @family Plotting
-##' @importFrom rlang enquo 
-##' @importFrom gridExtra arrangeGrob
+##' @import patchwork
+
 
 ##### Don't export yet. Needs to be elaborated a bit.
 
 
-NMplotGOF <- function(data,res=CWRES,ipre=IPRED,time=TIME,arrange=T,debug=F){
+### support for better labels needed
+
+
+NMplotGOF <- function(data,res="RES",pred="PRED",ipre="IPRED",ires="IRES",iwres="IWRES",time="TIME",tspd="TSPD",cwres="CWRES",arrange=TRUE,title,smooth=TRUE,debug=F,...){
     
     if(debug) browser()
 
-
-#### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
-
-    CWRES <- NULL
-    IPRED <- NULL
-    TIME <- NULL
-    EVID <- NULL
-    PRED <- NULL
-    IWRES <- NULL
-
-###  Section end: Dummy variables, only not to get NOTE's in pacakge checks
-
-    
-    ##    if(is.character(res)){
-    ##        res=sym(res)
-    ##    } else {
-    res=enquo(res)
-    ##    }
-    ipre=enquo(ipre)
-    time=enquo(time)
-    
     data <- subset(data,EVID==0)
-
+    cnames.data <- colnames(data)
     
-    p1 <- ggplot(data,aes(PRED,!!res))+geom_point()+geom_smooth(colour=2)
-    p2 <- ggplot(data,aes(!!ipre,!!res))+geom_point()+geom_smooth(colour=2)
-    p3 <- ggplot(data,aes(!!ipre,IWRES))+geom_point()+geom_smooth(colour=2)
-    p4 <- ggplot(data,aes(!!time,CWRES))+geom_point()+geom_smooth(colour=2)
+    p1 <- ggplot(data)+
+        geom_point(aes_string(...))
+    if(smooth){
+        p1 <- p1 + geom_smooth(aes_string(...),method="loess",formula=y~x,se=FALSE)
+    }
+
+    update.plot <- function(plot,x,y){
+        if( is.null(x) || is.null(y) || any(!c(x,y)%in%cnames.data)){
+            return(NULL)
+        } else {
+            plot + aes_string(x=x,y=y)
+        }
+    }
+    plots <- list()
+    
+### PRED/RES plots
+    plots$res.pred <- update.plot(p1,pred,res)
+    plots$res.time <- update.plot(p1,time,res)
+    plots$res.tspd <- update.plot(p1,tspd,res)
+
+### IPRED/IRES plots
+    plots$ires.ipre <- update.plot(p1,ipre,ires)
+    plots$ires.time <- update.plot(p1,time,ires)
+    plots$ires.tspd <- update.plot(p1,tspd,ires)
+
+### IWRES
+    plots$iwres.ipre <- update.plot(p1,ipre,iwres)
+    plots$iwres.time <- update.plot(p1,time,iwres)
+    plots$iwres.tspd <- update.plot(p1,tspd,iwres)
+
+### CWRES
+    plots$cwres.ipre <- update.plot(p1,ipre,cwres)
+    plots$cwres.time <- update.plot(p1,time,cwres)
+    plots$cwres.tspd <- update.plot(p1,tspd,cwres)
+
     
     if(arrange){
-        all.ps <- arrangeGrob(p1,p2,p3,p4,ncol=2)
+        if(missing(title)) title <- ""
+
+        ## all.ps <- Reduce(`+`,plots)
+        all.ps <- wrap_plots(plots)
+        
+        nrow <- sum(c(pred,time,tspd)%in%cnames.data)
+        
+        all.ps <- all.ps +
+            plot_layout(nrow = nrow,byrow=FALSE,guides = 'collect') +
+            plot_annotation(title = title)
+        
+
     } else {
-        all.ps <- list(p1,p2,p3,p4)
+
+        all.ps <- plots
+        
+        if(!missing(title)) all.ps <- lapply(all.ps,labs(subtitle=title))
     }
     all.ps
 }

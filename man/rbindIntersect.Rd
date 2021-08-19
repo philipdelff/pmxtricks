@@ -25,7 +25,6 @@ rbindIntersect(x,y,z)
 Other DataWrangling: 
 \code{\link{compareNames}()},
 \code{\link{factor2}()},
-\code{\link{findCovs_df}()},
 \code{\link{mergeCheck}()},
 \code{\link{newNames}()},
 \code{\link{rbindUnion}()},
