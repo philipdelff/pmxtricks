@@ -127,6 +127,8 @@ NMplotBSV <- function(data,regex.eta="^ETABSV",col.id="ID",covs.num,covs.char,fu
         plot.qq <- ggplot(dat,aes(sample=value))+
             geom_qq_line(colour=2,size=1.5)+
             geom_qq()+
+            ## the theroretical identity line
+            geom_abline(slope=1,intercept=0,linetype=2)+
             facet_wrap(~param)+
             labs(x="Theoretical",y="Observed")
         ggwrite(plot.qq,file=fun.file("qq_etas.png"),save=save,stamp=stamp)
