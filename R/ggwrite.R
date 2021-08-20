@@ -82,7 +82,7 @@ ggwrite <- function(plot, file, script, canvas="standard",
             plot <- ggstamp(plot,script,file=fn)
         }
         
-        if(!is.null(fn)){
+        if(!is.null(fn)&&type!="x11"){
             switch(type,
                    png={
                        png(filename = fn, width = 0.6 * size$width, 

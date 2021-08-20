@@ -48,7 +48,7 @@ thalf_1a2c <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=F,d
     return(ths2)
 }
 
-
+### if pars is a data.table. Will be calculated for each row.
 thalf_1a2c_dt <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=F,debug=F){
     if(debug) browser()
 
