@@ -23,10 +23,11 @@ ggIndProfs(
   LLOQ = NULL,
   use.evid2,
   facet = id,
+  ncol.facet = 3,
   par.prof = NULL,
   x.inc,
   grp.label = grp,
-  labels = TRUE,
+  labels = "facet",
   nullIfEmpty = FALSE,
   debug = FALSE,
   debug.sheet
@@ -82,22 +83,27 @@ one value equalling 2.}
 
 \item{facet}{splits plots in pages}
 
+\item{ncol.facet}{The number of columns used in facet_wrap.}
+
 \item{par.prof}{Distinguish multiple profiles in dataset.}
 
 \item{x.inc}{Values that must be included in the span of the
 x-axis. This can be multiple values, like c(5,1000).}
 
-\item{grp.label}{Column to use for labeling the sheets (while
+\item{grp.label}{Column to use for labeling the _sheets_ (when
 sorting by grp). A typical example is that grp is numeric (say
 dose including 80 and 280) while grp.label is a character
 (including 80 mg and 280 mg). In order to sort correctly, you
 must use the numeric variable for grp. But in order to get
 nice labels, use the character variable for labels.}
 
-\item{labels}{The default is to include the subject id's in labels
-above the plots (using facet_wrap()). Set this to FALSE to
-remove these labels in order to have more space for the plots
-themselves.}
+\item{labels}{The default is to include the "strip" when faceting
+- i.e. the boxed text above each plot in a facet. These text
+boxes can take a lot of space if you want to plot many
+subjects together. Set to "facet" (default) to let this be
+controlled by the faceting, use labels="none" to remove, or
+use labels="top-right" to not use the strip, but include the same text
+in the top-right corner inside the plotting area.}
 
 \item{nullIfEmpty}{By default, submitting an empty data set in the
 data argument will give an error. However, sometimes this may

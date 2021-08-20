@@ -8,9 +8,16 @@ canvasSize(canvas, scale = 1)
 }
 \arguments{
 \item{canvas}{Can either be a character with one of the values
-"standard", "wide", "A4", "square","wide-screen" or it can be a
-list with elements width and height with single values (unit
-is inches).}
+\itemize{
+\item{"standard"} - A powerpoint standard size, and two can be shown side by side - 12 by 9 inch.
+\item{"wide"} - For a single wide plot on a powerpoint slide - 16 by 9 inch
+\item{"A4"} A full A4 page - 9 by 12 inch
+\item{"square"} As reads - 9 by 9 inch
+\item{"wide-screen"} For full screen display - 31 by 15 inch
+}
+or it can be a
+    list with elements width and height with single values (unit
+    is inches). Example: canvas=list(height=5,width=9).}
 
 \item{scale}{A scale to apply to both directions of the canvas
 size. This can be useful in combination with the pre-defined

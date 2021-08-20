@@ -1,20 +1,22 @@
 
+##' Check data for Nonmem compatibility
+##' @param data The data to check
+##' @import NMdata
+
 ## convert to data.table
 
 ## checks for NM compatibility.
 ### Report which can be used and which cannot.
 ### error if EVID, DV, AMT etc are not numeric to Nonmem
 
-## run flagsAssign to summarize all findings
+## run flagsAssign to summarize all findings? 
 
 
-
-NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL){
-    
+NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=NULL){
     
     
     data <- copy(as.data.table(data))
-    tmprow <- tmpcol(data)
+    tmprow <- tmpcol(data,base="ROW",prefer.plain=TRUE)
     data[,(tmprow):=.I]
 
     NMasNumeric <- function(x) {
@@ -105,6 +107,24 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL){
     data[,checkTimeInc:=c(TRUE,diff(get(col.time))>=0),by=.(newID)]
 
     findings <- listEvents(col="checkTimeInc",name="Time increasing",function(x) !isTRUE(x),colname="TIME",events=findings)
+
+### subjects without doses
+
+### subjects without observations
+    
+
+### add ID to findings. Before or after 
+    
+    if(!is.null(col.id)){
+        findings <- mergeCheck(findings,data[,c(tmprow,col.id),with=F],by.x="row",by.y=tmprow,all.x=T)
+    }
+
+### use the row identifier for reporting
+    if(!is.null(col.row)){
+        setcolnames(findings,"row",tmprow)
+        findings <- mergeCheck(findings,data[,c(tmprow,col.row),with=F],by=tmprow,all.x=T)
+        findings[,(tmprow):=NULL]
+    }
 
     if(nrow(findings)==0) {
         message("No findings. Great!")

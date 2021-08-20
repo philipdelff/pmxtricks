@@ -8,7 +8,7 @@
 ggwrite(
   plot,
   file,
-  stamp,
+  script,
   canvas = "standard",
   onefile = FALSE,
   res = 200,
@@ -17,6 +17,7 @@ ggwrite(
   show = !save,
   useNames = FALSE,
   quiet = FALSE,
+  stamp,
   debug = F
 )
 }
@@ -28,9 +29,6 @@ though. Not sure exactly what classes are supported.}
 
 \item{file}{A file to export to. Must end in .png or .pdf. If plot
 is a list, see onefile. If missing, plot is shown on screen.}
-
-\item{stamp}{This should normally be the path to your
-script. Requires ggplot >=2.2.1.}
 
 \item{canvas}{Either a list of height and width or a shortname of
 predefined canvas size. See ?canvasSize.}
@@ -59,6 +57,9 @@ names? Default is to use 1:length(plot). Only used if save is
 TRUE, and length(plot)>1.}
 
 \item{quiet}{Default is false but use TRUE to suppress messages about what was saved.}
+
+\item{stamp}{This should normally be the path to your
+script. Requires ggplot >=2.2.1.}
 
 \item{debug}{If TRUE, browser is called to begin with.}
 }
