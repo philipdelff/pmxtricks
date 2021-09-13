@@ -1,8 +1,9 @@
-##### this function is experimental
+##' Create character vectors without quotation marks
+##' 
+##' When creating character vectors with several elements, it becomes a lot of quotes to type. cc provides a simple way to skip the quotes.
+##' @param ... The unquoted names that will become character values in the returned vector.
 
-## returns NULL if no args. should return a zero length char vector - should be fixed
-
-## spaces cannot be handled - should be fixed
+##' @export
 
 ##' @examples
 ##' cc(a,b,`a b`)
