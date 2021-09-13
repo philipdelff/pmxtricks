@@ -4,7 +4,13 @@
 \alias{NMcheckData}
 \title{Check data for Nonmem compatibility}
 \usage{
-NMcheckData(data, col.id = "ID", col.time = "TIME", col.flagn = NULL, col.row)
+NMcheckData(
+  data,
+  col.id = "ID",
+  col.time = "TIME",
+  col.flagn = NULL,
+  col.row = NULL
+)
 }
 \arguments{
 \item{data}{The data to check}
