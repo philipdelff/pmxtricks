@@ -12,19 +12,34 @@
 ## run flagsAssign to summarize all findings? 
 
 
-NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=NULL){
-    
+NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=NULL,debug=F){
+
+    if(debug) browser()
     
     data <- copy(as.data.table(data))
+
+### if possible, only look at col.flagn==0
+
+    if(!is.null(col.flagn) && col.flagn%in%colnames(data)){
+        if(is.numeric(data[,get(col.flagn)])){
+            data <- data[get(col.flagn)==0]
+        }
+    }
+
     tmprow <- tmpcol(data,base="ROW",prefer.plain=TRUE)
     data[,(tmprow):=.I]
 
-    NMasNumeric <- function(x) {
-        as.numeric(as.character(x))
+    NMasNumeric <- function(x,warn=F) {
+        if(warn){
+            as.numeric(as.character(x))
+        } else {
+            suppressWarnings(as.numeric(as.character(x)))
+        }
     }
     
     ## if fun does not return TRUE, we have a finding.
-    ## column is to be used for the condition, colname is the column name reported to user.
+    ## col is the actual column to be used for the condition,
+    ## colname is the column name reported to user.
     listEvents <- function(col,name,fun,colname=col,dat=data,events=NULL,invert=FALSE,debug=F){
         if(debug) browser()
 
@@ -70,7 +85,8 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=
     findings <- rbind(findings,
                       newfinds
                      ,fill=TRUE)
-    
+
+
 ##### overwrite cols.num with NMasNumeric of cols.num
     data[,(cols.num):=lapply(.SD,NMasNumeric),.SDcols=cols.num]
 
@@ -87,8 +103,9 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=
 
 ### MDV should perfectly reflect is.na(DV)
     if("MDV"%in%colnames(data)){
+        ## browser()
         data[,MDVDV:=MDV==as.numeric(is.na(DV))]
-        findings <- listEvents("MDV","MDV does not match DV",colname="MDV",fun=function(x)x==TRUE,events=findings)
+        findings <- listEvents("MDVDV","MDV does not match DV",colname="MDV",fun=function(x)x==TRUE,events=findings)
     }
     
 ### EVID must be in c(0,1,2,3,4)
