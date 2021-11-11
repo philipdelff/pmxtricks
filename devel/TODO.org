@@ -53,17 +53,20 @@ NMaddColumns
      CLOSED: [2021-06-07 Mon 22:33]
 **** actual time since first dose vs Nominal time since first dose
 **** actual time since last dose vs Nominal time since nominal dose
-**** all subjects have doses?
-**** All subjects have observations?
+**** DONE all subjects have doses?
+     CLOSED: [2021-11-10 Wed 21:20]
+**** DONE All subjects have observations?
+     CLOSED: [2021-11-10 Wed 21:20]
 **** Negative actual time (since first or previous dose) when corresponding nominal time is neg
-**** Negative TIME
+**** DONE Negative TIME
+     CLOSED: [2021-11-10 Wed 21:20]
 **** negative doses
-**** negative dose times
+**** DONE negative dose times
+     CLOSED: [2021-11-10 Wed 21:21]
 **** negative concentrations
 **** Nomminal dose vs actual dose
 **** positive AMT for !EVID%in%c(1,4)
 **** NA EVID, EVID in 1:4
-**** negative time (for nonmem)
 **** zero doses (will fail in nonmem)
 **** DONE TIME increasing for subjects between EVID 3 or 4
      CLOSED: [2021-06-07 Mon 22:35]
@@ -182,3 +185,5 @@ checks of length, class etc.
      #### Todo
 ## 2018-10-11 
 #### End todo
+*** NMcheckData
+**** TODO check for commas in character columns

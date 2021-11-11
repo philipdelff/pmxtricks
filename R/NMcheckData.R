@@ -35,9 +35,9 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=
         }
 
         if(length(row)==0) {
-            res <- data.table(check=name,column=colname,row=NA)[0]
+            res <- data.table(check=name,column=colname,row=NA,level="row")[0]
         } else {
-            res <- data.table(check=name,column=colname,row=row)
+            res <- data.table(check=name,column=colname,row=row,level="row")
         }
         rbind(events,res,fill=TRUE)
     }
@@ -47,15 +47,13 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=
     cols.num <- c("TIME","EVID","ID","CMT")
 
 ### Others that must be numeric?
-    ## if MDV is found, add it here
-    ## if MDV not found, record that without a row number
     cols.num.if.avail <- c("MDV",col.flagn)
     for(col in cols.num.if.avail){
         if(!is.null(col)&&col%in%colnames(data)){
             cols.num <- c(cols.num,col)
         } else {
             findings <- rbind(findings,
-                              data.table(check="Column not found",column=col),
+                              data.table(check="Column not found",column=col,level="column"),
                               fill=TRUE)
         }
     }
@@ -108,15 +106,25 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=
 
     findings <- listEvents(col="checkTimeInc",name="Time increasing",function(x) !isTRUE(x),colname="TIME",events=findings)
 
+    
 ### subjects without doses
-
+    all.ids <- data[,unique(get(col.id))]
+    tab.evid.id <- data[,.N,by=c(col.id,"EVID")]
+    ids.no.doses <- setdiff(all.ids,tab.evid.id[EVID%in%c(1,4),get(col.id)])
+    
+    if(length(ids.no.doses)){
+        findings <- rbind(findings,data.table(check="Subject has no doses",column="EVID",ID=ids.no.doses,level="ID"))
+    }
 ### subjects without observations
-    
+    ids.no.obs <- setdiff(all.ids,tab.evid.id[EVID%in%c(1,4),get(col.id)])
+    if(length(ids.no.obs)){
+        findings <- rbind(findings,data.table(check="Subject has no obs",column="EVID",ID=ids.no.doses,level="ID"))
+    }
 
-### add ID to findings. Before or after 
-    
     if(!is.null(col.id)){
-        findings <- mergeCheck(findings,data[,c(tmprow,col.id),with=F],by.x="row",by.y=tmprow,all.x=T)
+        findings.row <- mergeCheck(findings[level=="row"],data[,c(tmprow,col.id),with=F],by.x="row",by.y=tmprow,all.x=T)
+        
+        findings <- rbind(findings[level!="row"],findings.row,fill=T)
     }
 
 ### use the row identifier for reporting
@@ -125,13 +133,14 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=
         findings <- mergeCheck(findings,data[,c(tmprow,col.row),with=F],by=tmprow,all.x=T)
         findings[,(tmprow):=NULL]
     }
+    setcolorder(findings,c("row","ID","column","check"))
 
     if(nrow(findings)==0) {
         message("No findings. Great!")
         invisible(findings)
     } else {
         print(findings[,.N,by=.(column,check)],row.names=FALSE)
-        ##        cat("\n")
+        cat("\n")
         return(findings)
     }
     
