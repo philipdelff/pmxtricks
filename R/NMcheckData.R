@@ -11,10 +11,22 @@
 ##' @param col.flagn Optionally, the name of the column holding numeric exclusion flags.
 ##' @param col.row 
 ##' @param debug Start by calling browser()?
-##' @details The following checks are performed:
+##' @details The following checks are performed. The term "numeric" does not refer to a numeric representation in R, but compatibility with Nonmem. The character string "2" is in this sense a valid numeric, "id2" is not.
 ##' \itemize{
-##' \item Existence of 
-##' \item 
+##' \item If an exclusion flag is used (for ACCEPT/IGNORE in Nonmem), elements must be non-missing and integers. If an exclusion flag is found, the rest of the checks are performed on rows where that flag equals 0 (zero) only.
+##' \item col.time (TIME), EVID, ID, CMT, MDV: If present, elements must be non-missing and numeric.
+##' \item col.time (TIME) must be non-negative
+##' \item EVID must be in {0,1,2,3,4}
+##' \item CMT must be positive integers
+##' \item MDV must be the binary (1/0) representation of is.na(DV)
+##' \item AMT must be 0 or NA for EVID 0 and 2
+##' \item AMT must be positive for EVID 1 and 4
+##' \item DV must be numeric
+##' \item DV must be missing for EVID in {1,4}.
+##' \item ID must be positive and values cannot be disjoint (all records for each ID must be following each other. This is technically not a requirement in Nonmem but most often an error. Use a second ID column if you deliberately want to soften this check)
+##' \item TIME cannot be decreasing within ID, unless EVID in {3,4}.
+##' \item all ID's must have doses (EVID in {1,4})
+##' \item all ID's must have observations (EVID==0)
 ##' }
 ##' @import NMdata
 
@@ -212,8 +224,15 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=
 
 #### AMT
     ## positive for EVID 1 and 4
-    ## must be NA for EVID 0 and 2
-
+    findings <- listEvents("AMT","Non-positive dose amounts",
+                           fun=function(x)x>=0,events=findings,
+                           dat=data[EVID%in%c(1,4)])
+    ## must be 0 or NA for EVID 0 and 2
+    findings <- listEvents("AMT","Non-zero dose amounts for obs or sim record",
+                           fun=function(x)is.na(x)||(is.numeric(x)&&x==0),
+                           events=findings,
+                           dat=data[EVID%in%c(0,2)])
+    
     ## ID-level checks
 ### Warning if the same ID is in non-consequtive rows
     data[,ID.jump:=c(0,diff(get(rowint))),by=col.id]
@@ -236,9 +255,6 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=
     ids.no.doses <- setdiff(all.ids,tab.evid.id[EVID%in%c(1,4),get(col.id)])
 
     if(length(ids.no.doses)){
-        ##:ess-bp-start::conditional@:##
-browser(expr={TRUE})##:ess-bp-end:##
-        
         findings <- rbind(findings
                          ,data.table(check="Subject has no doses",column="EVID",ID=ids.no.doses,level="ID")
                          ,fill=TRUE)
