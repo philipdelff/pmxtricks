@@ -50,6 +50,9 @@ NMaddColumns
 **** TODO If col.row included, col.row increasing, unique
 **** TODO For elements that are not numeric, are the characters accepted (like na.char=".")
 **** TODO Duplicated events
+     Remember, this is between EVID 3 or 4's. What is being done for
+     checking for non-decreasing time to keep track of this should be
+     reused.
 **** Inform what columns Nonmem can use
 ***** Which are numeric
 ***** Which are before the first non-numeric

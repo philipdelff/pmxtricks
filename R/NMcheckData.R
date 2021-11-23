@@ -73,9 +73,7 @@
 
 
 NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=NULL,debug=F){
-
     if(debug) browser()
-    
     data <- copy(as.data.table(data))
 
 ### TODO: check flags for NA's before subsetting on FLAG
@@ -91,13 +89,15 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=
         }
     }
 
-    ## listEvents is for row-level findings if fun does not return
-    ## TRUE, we have a finding.  col is the actual column to be used
-    ## for the condition, colname is the column name reported to user.
+    ##' listEvents is for row-level findings
+    ##' @param col is the actual column to be used for the condition
+    ##' @param name 
+    ##' @param fun if fun does not return TRUE, we have a finding.
+    ##' @param colname is the column name reported to user.
 
-    ## @param new.rows.only. For nested criteria. Say that CMT is not
-    ## numeric for row 10. Then don't report that it is not an integer
-    ## too.
+    ##' @param new.rows.only. For nested criteria. Say that CMT is not
+    ##' numeric for row 10. Then don't report that it is not an integer
+    ##' too.
     listEvents <- function(col,name,fun,colname=col,dat=data,events=NULL,invert=FALSE,new.rows.only=T,debug=F){
         if(debug) browser()
 
@@ -105,7 +105,7 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=
             if(events[check=="Column not found"&column==colname&level=="column",.N]==0){
                 events <- rbind(events,
                                 data.table(check="Column not found",column=colname,level="column")
-                                ) }
+                                ,fill=TRUE) }
             return(events)
         }
         
@@ -118,7 +118,8 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=
         if(length(row)==0) {
             res <- data.table(check=name,column=colname,row=NA,level="row")[0]
         } else {
-            if(new.rows.only){
+            
+            if(new.rows.only&&!is.null(events)){
                 row <- setdiff(row,events[column==colname,row])
             }
             res <- data.table(check=name,column=colname,row=row,level="row")
@@ -130,7 +131,7 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=
 
     if(!is.null(col.flagn)){
         findings <- listEvents(col.flagn,"Missing value",
-                               fun=is.na,invert=T,events=findings)
+                               fun=is.na,invert=T,events=findings,debug=FALSE)
         findings <- listEvents(col.flagn,"Not numeric",
                                fun=NMisNumeric,events=findings,
                                new.rows.only=T)
@@ -161,7 +162,9 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=
         }
     }
 ### check for missing in cols.num
-    newfinds <- rbindlist( lapply(cols.num,listEvents,name="is NA",fun=is.na,invert=TRUE,new.rows.only=T,debug=F) )
+    ## listEvents("CMT",listEvents,name="is NA",fun=is.na,invert=TRUE,new.rows.only=T,
+    ##            debug=TRUE)
+    newfinds <- rbindlist( lapply(cols.num,listEvents,name="is NA",fun=is.na,invert=TRUE,new.rows.only=T,debug=FALSE) )
     findings <- rbind(findings,
                       newfinds
                      ,fill=TRUE)
@@ -239,15 +242,21 @@ NMcheckData <- function(data,col.id="ID",col.time="TIME",col.flagn=NULL,col.row=
     findings <- listEvents("ID.jump",colname="ID",name="ID disjoint",fun=function(x) x<=1,events=findings)
 
 ### within ID, time must be increasing. Unless EVID%in% c(3,4) or events are jumped
+    data[,newID:=ID]
     if(col.time%in%colnames(data)){
-        data[,newID:=get(col.id)!=shift(get(col.id),n=1)]
-        data[1,newID:=TRUE]
+        
+        data[,isnewID:=get(col.id)!=shift(get(col.id),n=1)]
+        data[1,isnewID:=TRUE]
         data[,reset:=EVID%in%c(3,4)]
-        data[,newID:=cumsum(as.numeric(newID)+as.numeric(reset))]
+        data[,newID:=cumsum(as.numeric(isnewID)+as.numeric(reset))]
         data[,checkTimeInc:=c(TRUE,diff(get(col.time))>=0),by=.(newID)]
 
-        findings <- listEvents(col="checkTimeInc",name="Time increasing",function(x) !isTRUE(x),colname="TIME",events=findings)
+        findings <- listEvents(col="checkTimeInc",name="Time decreasing",fun=function(x) x==TRUE,
+                               colname="TIME",events=findings)
     }
+    
+    data[,Nrep:=.N,by=c("newID","CMT","EVID",col.time)]
+    findings <- listEvents(col="Nrep",name="Duplicated event",function(x) x<2,colname="ID, CMT, EVID, TIME",events=findings)
 
 ### subjects without doses
     all.ids <- data[,unique(get(col.id))]
