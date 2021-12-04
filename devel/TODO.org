@@ -43,47 +43,6 @@ NMcompAllRes
 NMaddColumns
 *** DONE Individual profile plots
     CLOSED: [2019-12-12 Thu 09:57]
-*** TODO Check nonmem data set
-**** column names
-***** TODO duplicate column names
-***** TODO special characters not allowed in column names
-**** TODO If col.row included, col.row increasing, unique
-**** TODO For elements that are not numeric, are the characters accepted (like na.char=".")
-**** TODO Duplicated events
-     Remember, this is between EVID 3 or 4's. What is being done for
-     checking for non-decreasing time to keep track of this should be
-     reused.
-**** Inform what columns Nonmem can use
-***** Which are numeric
-***** Which are before the first non-numeric
-**** DONE NA TIME
-     CLOSED: [2021-06-07 Mon 22:33]
-**** CANCELED actual time since first dose vs Nominal time since first dose
-     CLOSED: [2021-11-17 Wed 11:34]
-**** CANCELED actual time since last dose vs Nominal time since nominal dose
-     CLOSED: [2021-11-17 Wed 11:34]
-**** DONE all subjects have doses?
-     CLOSED: [2021-11-10 Wed 21:20]
-**** DONE All subjects have observations?
-     CLOSED: [2021-11-10 Wed 21:20]
-**** Negative actual time (since first or previous dose) when corresponding nominal time is neg
-**** DONE Negative TIME
-     CLOSED: [2021-11-10 Wed 21:20]
-**** negative doses
-**** DONE negative dose times
-     CLOSED: [2021-11-10 Wed 21:21]
-**** negative concentrations
-**** CANCELED Nomminal dose vs actual dose
-     CLOSED: [2021-11-17 Wed 11:34]
-**** DONE positive AMT for !EVID%in%c(1,4)
-     CLOSED: [2021-11-17 Wed 10:46]
-**** DONE NA EVID, EVID in 1:4
-     CLOSED: [2021-11-17 Wed 10:38]
-**** zero doses (will fail in nonmem)
-**** DONE TIME increasing for subjects between EVID 3 or 4
-     CLOSED: [2021-06-07 Mon 22:35]
-**** tests of text file
-***** A field can't contain more than 24 characters
 *** TODO Meta data functions
 ** Documentation
 *** TODO Tests
@@ -194,8 +153,4 @@ checks of length, class etc.
 *** NMplotBSV
 **** TODO Default regex should match all ETA's
 
-     #### Todo
-## 2018-10-11 
-#### End todo
-*** NMcheckData
-**** TODO check for commas in character columns
+
