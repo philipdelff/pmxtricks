@@ -36,6 +36,7 @@
 
 ggstamp <- function(plot, stamp = "no stamp", file, time=Sys.time()) {
 ### Captions are only available in ggplot 2.2.1
+    .Deprecated("tracee::ggstamp")
 
 ### A list of plots is supported so we will run everything with lapply
     plot.was.list <- T

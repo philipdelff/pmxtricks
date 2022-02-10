@@ -8,6 +8,8 @@
 ##' @export
 
 theme_pp <- function(theme0 = theme_bw,...){
+    .Deprecated("tracee::theme_pp")
+
     theme1 <- 
         theme0()+
 

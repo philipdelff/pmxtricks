@@ -6,7 +6,7 @@ Author: Philip Delff <philip@delff.dk>
 Maintainer: Philip Delff <philip@delff.dk>
 Description: Tools mainly for pharmacometrics related tasks. 
 License: MIT + file LICENSE
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Depends: R (>= 3.2.2)
 Imports: data.table,
  ggplot2, 

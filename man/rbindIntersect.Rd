@@ -23,15 +23,10 @@ rbindIntersect(x,y,z)
 }
 \seealso{
 Other DataWrangling: 
-\code{\link{compareNames}()},
-\code{\link{factor2}()},
-\code{\link{mergeCheck}()},
 \code{\link{newNames}()},
 \code{\link{rbindUnion}()},
 \code{\link{roundDF}()},
 \code{\link{roundResp0}()},
-\code{\link{selectVars}()},
-\code{\link{signif2}()},
-\code{\link{stampObj}()}
+\code{\link{signif2}()}
 }
 \concept{DataWrangling}

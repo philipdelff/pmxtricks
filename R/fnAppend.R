@@ -16,6 +16,8 @@
 
 
 fnAppend <- function(fn,x,pad0=0,sep="_"){
+
+    .Deprecated("tracee::fnAppend")
     
     if(!is.numeric(x)&&!is.character(x)) stop("x must be numeric or character.")
 
