@@ -8,14 +8,14 @@
 ##' @details Don't use cc with any special characters - only
 ##'     alphanumerics and no spaces supported.
 
-##' @export
-
 ##' @examples
 ##' cc(a,b,`a b`)
 ##' ## be careful with spaces and special characters
 ##' cc( d)
 ##' cc(` d`)
 ##' cc()
+
+### Don't export. This is available in NMdata.
 
 cc <- function(...){
 
