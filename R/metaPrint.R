@@ -37,7 +37,7 @@ metaPrint <- function(data,meta.data,file=NULL,file.data,match.data=T,silent=!is
     MetaFile.header.lines <- c(
         ifelse(missing(file.data),NULL,paste("Meta data for NONMEM data file:",file.data)),
         paste("Data file created by script:",meta.data$meta$DataCreateScript),
-        paste("Data file created for trial:",meta.data$meta$Trial),
+        paste("Description:",meta.data$meta$Analysis),
         paste("This file was created:",Sys.time())
     )
 ### Assumption: There are exactly three required fields (plus
