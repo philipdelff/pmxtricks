@@ -31,7 +31,7 @@
 ##' @param scales passed to facet_wrap.
 ##' @param logy Show y-axis on logarithmic scale?
 ##' @param NPerSheet Number of subjects per sheet
-##' @param LLOQ Lower limiit of quantification (will be shown as a
+##' @param LLOQ Lower limit of quantification (will be shown as a
 ##'     horizontal line in plots).
 ##' @param x.inc Values that must be included in the span of the
 ##'     x-axis. This can be multiple values, like c(5,1000).
@@ -398,6 +398,7 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
             ptitle <- paste0(ptitle, " ",unique(tmp$sheetgrp), "/", unique(tmp$Nsheetsgrp),".")
         }
         tmp$ptitle <- ptitle
+        ## use [:punct:] ?
         tmp$ltitle <- gsub('[\\\\/\\:\\*\\?\\"\\<\\>\\|\\=\\.\\,]',"",tmp$ptitle)
         tmp$ltitle <- gsub('[[:space:]]',"",tmp$ltitle)
         tmp

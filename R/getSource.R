@@ -18,6 +18,7 @@
 ##' @export
 
 getSource <- function(file,dir.central=NULL,dir.local,overwrite=FALSE,source.directly=FALSE,silent=F){
+    
 ### Getting the paths right
     if(is.null(dir.central)){
         dir.central <- dirname(file)
