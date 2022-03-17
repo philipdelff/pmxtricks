@@ -287,7 +287,7 @@ ggIndProfs <- function(data, run, x="TIME", dv="DV", pred="PRED", ipred=c("IPRED
            by = grp]
     DTdata[,grp.char:=get(grp)]
     
-    DTdata$..ROW <- 1:nrow(DTdata)
+    DTdata[,..ROW:=.I]
     ##    DTdata[with(DTdata,order(get(grp),IDcut,..ROW)),]
     setorderv(DTdata,cols = c(grp,"IDcut","..ROW"))
     
