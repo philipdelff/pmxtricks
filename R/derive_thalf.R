@@ -51,37 +51,36 @@ thalf_1a2c <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=F,d
 ### if pars is a data.table. Will be calculated for each row.
 thalf_1a2c_dt <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=F,debug=F){
     if(debug) browser()
-
+    pars <- copy(as.data.table(pars))
     
     varnames <- c(cl,ka,v2,q,v3)
     varsInPars <- varnames%in%names(pars)
-    if(any(!varsInPars)){stop(paste("These variables are not in pars:",paste(varnames[!varsInPars],collaps=", ")))}
+    if(any(!varsInPars)){stop(paste("These variables are not in pars:",paste(varnames[!varsInPars],collapse=", ")))}
 
     setnames(pars,old=varnames,new=c("cl","ka","v2","q","v3"))
     
     rowcol <- tmpcol(pars)
     pars[,(rowcol):=1:.N]
-    pars[,{
+    thalves <- pars[,{
         Asys <- matrix(c(-ka,0,0,
                                 ka,-(cl+q)/v2,q/v3,
                                 0,q/v2,-q/v3),nrow=3,byrow=TRUE)
             
         thalves.u <- log(2)/-sort(eigen(Asys)$values)
-        list(thalf=thalves.u)
+        list(nth=1:length(thalves.u),thalf=thalves.u)
     }
          ,by=rowcol]
     
-
-
-
-    ths2 <- t(thalves)
     
+
+    ths2 <- dcast(thalves,as.formula(paste0(rowcol,"~nth")),value.var="thalf")
+    ths2[,(rowcol):=NULL]    
     if(transform){
         colnames(ths2) <- paste("th",1:ncol(ths2),sep="")
         ths2 <- cbind(pars,ths2)
     }
 
-    return(ths2)
+    return(ths2[])
 }
 
 
