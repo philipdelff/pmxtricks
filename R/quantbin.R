@@ -19,14 +19,14 @@
 ###### inform how many are put in each bin. If data is not continuous,
 ###### this method may not lead to balanced distributions.
 
-quantbin <- function(x,nbins,type=5,label="num",na.rm=FALSE){
+quantbin <- function(x,nbins,label="num",na.rm=FALSE,...){
     switch(label,
            num=findInterval(x,
-                            quantile(x,probs=c(seq(0,1,length.out=nbins+1))[-1],type=type,na.rm=na.rm),
+                            quantile(x,probs=c(seq(0,1,length.out=nbins+1))[-1],na.rm=na.rm,...),
                             rightmost.closed=TRUE)
           ,
            interval=cut(x,
-                        quantile(x,probs=c(seq(0,1,length.out=nbins+1)),type=type,na.rm=na.rm),
+                        quantile(x,probs=c(seq(0,1,length.out=nbins+1)),na.rm=na.rm,...),
                         include.lowest=TRUE,right=FALSE)
           ,
            stop("label must be either \"num\" or \"interval\"")
