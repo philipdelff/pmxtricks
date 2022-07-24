@@ -3,12 +3,12 @@
 ##' @param ... Arguments passed to theme() after default values have
 ##'     been set. This means ... can be used to overwrite the
 ##'     defaults.
+##' @return A ggplot2 theme.
 ##' @import ggplot2
 ##' @family Plotting
 ##' @export
 
 theme_pp <- function(theme0 = theme_bw,...){
-    .Deprecated("tracee::theme_pp")
 
     theme1 <- 
         theme0()+
