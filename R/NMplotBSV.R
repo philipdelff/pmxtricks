@@ -14,7 +14,7 @@
 ##'     translate the file names. The inputs given to the function
 ##'     argument are "iov_pairs.png" and "iov_covs_n.png".
 ##' @param save Save the generated plots?
-##' @param stamp If saving the plots, a stamp to add. See ggstamp.
+##' @param script If saving the plots, a stamp to add. See ggstamp.
 ##' @param return.data If TRUE, the identified ETA's together with
 ##'     subject id and covariates will be returned in both wide and
 ##'     long format. If FALSE, you just get the plots.
@@ -27,7 +27,7 @@
 ##' @family Plotting
 ##' @export
 
-NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.file=identity,save=FALSE,stamp=NULL,return.data=FALSE,debug=F){
+NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.file=identity,save=FALSE,script=NULL,return.data=FALSE,debug=F){
 
     if(debug) {browser()}
     
@@ -65,7 +65,7 @@ NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.f
     names.etas.var <- colnames(
         findCovs(
             findVars(pkpars[,c(col.id,names.etas),with=F])
-           ,cols.id=col.id)
+           ,by=col.id)
     )
     names.etas.var <- setdiff(names.etas.var,col.id)
 
@@ -76,8 +76,8 @@ NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.f
         ##        etas <- pkpars[,c("ID", names.etas.var,covs.num,covs.char)]
         etas <- unique(pkpars[,c("ID", names.etas.var,covs.num,covs.char),with=F])
         
-### etas against each other. Notice, all etas, even those = 0.
-
+### etas against each other. Notice, omitting those = 0.
+        etas[,(names.etas.var):=lapply(.SD,function(x){x[x==0] <- NA;x}),.SDcols=names.etas.var]
         points.and.smooth <- function(data, mapping, method="lm", ...){
             p <- ggplot(data = data, mapping = mapping) + 
                 geom_point() + 
@@ -88,7 +88,7 @@ NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.f
         
         iiv.pairs <- ggpairs(etas,columns=names.etas.var,lower=list(continuous=points.and.smooth))
         
-        ggwrite(iiv.pairs,file=fun.file("iiv_pairs.png"),save=save,stamp=stamp)
+        ggwrite(iiv.pairs,file=fun.file("iiv_pairs.png"),save=save,script=script)
         all.output[["iiv.pairs"]]  <- iiv.pairs
         
         ## etas.l <- gather(etas,param,value,-1)
@@ -126,7 +126,7 @@ NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.f
             facet_wrap(~param,scales="free")
 
         ## gsave(gh2,file=file.runplot(name.run,"hists_etas_actual_wgaussian.png"),save=write.output,stamp=stamp)
-        ggwrite(gh2,file=fun.file("hists_etas_actual_wgaussian.png"),save=save,stamp=stamp)
+        ggwrite(gh2,file=fun.file("hists_etas_actual_wgaussian.png"),save=save,script=script)
         all.output[["hists.etas"]]  <- gh2
 
         plot.qq <- ggplot(dat,aes(sample=value))+
@@ -136,7 +136,7 @@ NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.f
             geom_abline(slope=1,intercept=0,linetype=2)+
             facet_wrap(~param)+
             labs(x="Theoretical",y="Observed")
-        ggwrite(plot.qq,file=fun.file("qq_etas.png"),save=save,stamp=stamp)
+        ggwrite(plot.qq,file=fun.file("qq_etas.png"),save=save,script=script)
         all.output[["qq.bsv"]]  <- plot.qq
         
         ## IIV random effects vs covariates
@@ -164,7 +164,7 @@ NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.f
                     geom_point()+
                     geom_smooth(method="lm", formula=y~x)+
                     facet_grid(param~cov,scales="free")
-                ggwrite(p.iiv.covsn,file=fun.file("iiv_covs_n.png"),save=save,stamp=stamp)
+                ggwrite(p.iiv.covsn,file=fun.file("iiv_covs_n.png"),save=save,script=script)
                 all.output[["iiv.covsn"]] <- p.iiv.covsn
             }
         }
@@ -179,12 +179,15 @@ NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.f
             ## p.iiv.covsc.dt <- ggplot(DT2,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)
             sets <- split(DT2,by="variable")
             p.iiv.covsc.dt <- lapply(sets,function(dat){
-                ggplot(dat,aes(val.cov,value))+geom_boxplot()+facet_wrap(~param)+
+                ggplot(dat,aes(val.cov,value))+
+                    geom_hline(yintercept=0,linetype=2) +
+                    geom_boxplot()+
+                    facet_wrap(~param)+
                     ### this would bring in ggpubr as dependency. Maybe just call in scripts where needed?
                     ## rotate_x_text(45)+
                     labs(x="",y="")
             })
-            ggwrite(p.iiv.covsc.dt,file=fun.file("iiv_covs_c.png"),useNames=TRUE,save=save,stamp=stamp)
+            ggwrite(p.iiv.covsc.dt,file=fun.file("iiv_covs_c.png"),useNames=TRUE,save=save,script=script)
             all.output[["iiv.covc"]] <- p.iiv.covsc.dt
         }
     } else {
