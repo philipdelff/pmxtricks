@@ -7,14 +7,21 @@
 cc(...)
 }
 \arguments{
-\item{...}{The unquoted names that will become character values in the returned vector.}
+\item{...}{The unquoted names that will become character values in
+the returned vector.}
 }
 \description{
-When creating character vectors with several elements, it becomes a lot of quotes to type. cc provides a simple way to skip the quotes.
+When creating character vectors with several elements, it becomes
+a lot of quotes to type. cc provides a simple way to skip the
+quotes - but only for simple strings.
+}
+\details{
+Don't use cc with any special characters - only
+    alphanumerics and no spaces supported.
 }
 \examples{
 cc(a,b,`a b`)
-## be careful with spaces
+## be careful with spaces and special characters
 cc( d)
 cc(` d`)
 cc()

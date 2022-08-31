@@ -73,7 +73,7 @@ amounts.}
 
 \item{NPerSheet}{Number of subjects per sheet}
 
-\item{LLOQ}{Lower limiit of quantification (will be shown as a
+\item{LLOQ}{Lower limit of quantification (will be shown as a
 horizontal line in plots).}
 
 \item{use.evid2}{Should EVID 2 records be used for pred and ipred

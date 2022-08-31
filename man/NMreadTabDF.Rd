@@ -29,7 +29,6 @@ Read a table file from NONMEM
 Other Nonmem: 
 \code{\link{NMextractText}()},
 \code{\link{NMgetSection}()},
-\code{\link{NMreplacePart}()},
 \code{\link{NMundoReplace}()}
 }
 \concept{Nonmem}

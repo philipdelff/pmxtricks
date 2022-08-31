@@ -21,9 +21,7 @@
 ##'     update of patchwork propagates to the repositories.
 ##' @family Plotting
 ##' @import patchwork
-
-
-##### Don't export yet. Needs to be elaborated a bit.
+##' @export
 
 
 ### support for better labels needed
@@ -83,13 +81,12 @@ NMplotGOF <- function(data,res="RES",pred="PRED",ipre="IPRED",ires="IRES",iwres=
         all.ps <- all.ps +
             plot_layout(nrow = nrow,byrow=FALSE,guides = 'collect') +
             plot_annotation(title = title)
-        
 
     } else {
 
         all.ps <- plots
         
-        if(!missing(title)) all.ps <- lapply(all.ps,labs(subtitle=title))
+        if(!missing(title)) all.ps <- lapply(all.ps,function(x)x+labs(subtitle=title))
     }
     all.ps
 }

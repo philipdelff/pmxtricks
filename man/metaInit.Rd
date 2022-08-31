@@ -22,7 +22,7 @@ metaInit(
 
 \item{stamp}{The path to the script that is creating the data.}
 
-\item{analysis}{The name of the analysi (character). This could be a
+\item{analysis}{The name of the analysis (character). This could be a
 trial name or any another character string.}
 
 \item{header}{Append lines to the header of the meta data.}

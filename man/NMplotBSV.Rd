@@ -8,13 +8,16 @@ from Nonmem}
 NMplotBSV(
   data,
   regex.eta = "^ETA",
+  names.eta = NULL,
   col.id = "ID",
   covs.num,
   covs.char,
   fun.file = identity,
   save = FALSE,
-  stamp = NULL,
+  show = TRUE,
+  script = NULL,
   return.data = FALSE,
+  title = NULL,
   debug = F
 )
 }
@@ -40,7 +43,7 @@ argument are "iov_pairs.png" and "iov_covs_n.png".}
 
 \item{save}{Save the generated plots?}
 
-\item{stamp}{If saving the plots, a stamp to add. See ggstamp.}
+\item{script}{If saving the plots, a stamp to add. See ggstamp.}
 
 \item{return.data}{If TRUE, the identified ETA's together with
 subject id and covariates will be returned in both wide and

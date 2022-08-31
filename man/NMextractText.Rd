@@ -97,7 +97,6 @@ pmxtricks:::NMgetSection(pmxtricks_filepath("examples/nonmem/run001.lst"),sectio
 Other Nonmem: 
 \code{\link{NMgetSection}()},
 \code{\link{NMreadTabDF}()},
-\code{\link{NMreplacePart}()},
 \code{\link{NMundoReplace}()}
 }
 \concept{Nonmem}

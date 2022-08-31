@@ -6,7 +6,7 @@
 ##' cut.
 ##'
 ##' @param x The observations
-##' @param nbins
+##' @param nbins Number of bins to use
 ##' @param type passed to quantile
 ##' @param label label="num" gives a numeric bin number
 ##'     (findInterval). label="interval" gives a character
@@ -14,7 +14,7 @@
 ##' @param na.rm na.rm=T is needed for quantile to be able to estimate
 ##'     the distribution if x contains NA's. Notice, if na.rm=T, an NA
 ##'     element in x will still result in an NA.
-##' @param
+##' @param ... additional arguments passed to quantile.
 
 ###### inform how many are put in each bin. If data is not continuous,
 ###### this method may not lead to balanced distributions.
