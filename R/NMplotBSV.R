@@ -69,11 +69,17 @@ NMplotBSV <- function(data,regex.eta="^ETA",names.eta=NULL,col.id="ID",covs.num,
     )
     names.etas.var <- setdiff(names.etas.var,col.id)
 
+    
     if(!is.null(names.eta)){
+        ## only using relevant names.eta entries
+        names.eta <- names.eta[intersect(names(names.eta),names.etas.var)]
         to.remove <- intersect(as.character(names.eta),colnames(pkpars))
         if(length(to.remove)) pkpars[,(to.remove):=NULL]
         setnames(pkpars,names(names.eta),as.character(names.eta),skip_absent=TRUE)
-        names.etas.var[match(names(names.eta),names.etas.var)] <- names.eta[match(names.etas.var,names(names.eta))]
+
+        idx <- match(names(names.eta),names.etas.var)
+        names.etas.var[idx] <-
+            as.character(names.eta[match(names.etas.var,names(names.eta))])
     }
     
     etas <- NULL
