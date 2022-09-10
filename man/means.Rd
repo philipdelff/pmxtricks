@@ -41,6 +41,14 @@ means(
 \description{
 calculate arithmetic or geometric mean and confidence intervals
 }
+\examples{
+## means return a data.frame which makes it easy to integrate with
+## data.table. But it's a little complicated if you want more than
+## the means results. This works:
+\dontrun{
+dt[,append(means(DV,ci=T),list(N=.N))]
+}
+}
 \seealso{
 Other Calc: 
 \code{\link{CV}()},

@@ -20,7 +20,6 @@ simply overwrite input.txt with contents of backup_input.txt
 Other Nonmem: 
 \code{\link{NMextractText}()},
 \code{\link{NMgetSection}()},
-\code{\link{NMreadTabDF}()},
-\code{\link{NMreplacePart}()}
+\code{\link{NMreadTabDF}()}
 }
 \concept{Nonmem}

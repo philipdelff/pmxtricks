@@ -27,7 +27,7 @@
 ##' @family Plotting
 ##' @export
 
-NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.file=identity,save=FALSE,script=NULL,return.data=FALSE,debug=F){
+NMplotBSV <- function(data,regex.eta="^ETA",names.eta=NULL,col.id="ID",covs.num,covs.char,fun.file=identity,save=FALSE,show=TRUE,script=NULL,return.data=FALSE,title=NULL,debug=F){
 
     if(debug) {browser()}
     
@@ -69,6 +69,19 @@ NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.f
     )
     names.etas.var <- setdiff(names.etas.var,col.id)
 
+    
+    if(!is.null(names.eta)){
+        ## only using relevant names.eta entries
+        names.eta <- names.eta[intersect(names(names.eta),names.etas.var)]
+        to.remove <- intersect(as.character(names.eta),colnames(pkpars))
+        if(length(to.remove)) pkpars[,(to.remove):=NULL]
+        setnames(pkpars,names(names.eta),as.character(names.eta),skip_absent=TRUE)
+
+        idx <- match(names(names.eta),names.etas.var)
+        names.etas.var[idx] <-
+            as.character(names.eta[match(names.etas.var,names(names.eta))])
+    }
+    
     etas <- NULL
     etas.l <- NULL
     
@@ -86,9 +99,9 @@ NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.f
         }
 
         
-        iiv.pairs <- ggpairs(etas,columns=names.etas.var,lower=list(continuous=points.and.smooth))
+        iiv.pairs <- ggpairs(etas,columns=names.etas.var,lower=list(continuous=points.and.smooth),title=title)
         
-        ggwrite(iiv.pairs,file=fun.file("iiv_pairs.png"),save=save,script=script)
+        ggwrite(iiv.pairs,file=fun.file("iiv_pairs.png"),script=script,save=save,show=show)
         all.output[["iiv.pairs"]]  <- iiv.pairs
         
         ## etas.l <- gather(etas,param,value,-1)
@@ -97,15 +110,8 @@ NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.f
         ## compare.names(etas,pkpars)
         ##   etas.l <- mergeCheck(etas.l,pkpars,by=c(col.id,covs.num,covs.char),allow.cartesian=TRUE)
         
-        ## g1 <- ggplot(etas.l,aes(value))+
-        ##     geom_histogram()+
-        ##     facet_wrap(~param,scales="free")
-        ## save this on
-        ## gsave(g1,file=file.runplot(name.run,"hists_etas.png"),save=write.output,stamp=stamp)
+            etas.l.actual <- subset(etas.l,value!=0)
 
-        etas.l.actual <- subset(etas.l,value!=0)
-        ## g2 <- g1%+%etas.l.actual +  facet_wrap(~param,scales="free")
-        ## gsave(g2,file=file.runplot(name.run,"hists_etas_actual.png"),save=write.output,stamp=stamp)
 
 #### this is the histograms of non-zeros and with gaussian approximations
         dat <- etas.l.actual
@@ -123,10 +129,11 @@ NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.f
         gh2 <- ggplot(data = dat,aes(x = value)) + 
             geom_histogram(aes(y = ..density..)) + 
             geom_line(data = normaldens, aes(x = predicted, y = density), colour = "red",size=1)+
-            facet_wrap(~param,scales="free")
+            facet_wrap(~param,scales="free")+
+            labs(title=title)
 
         ## gsave(gh2,file=file.runplot(name.run,"hists_etas_actual_wgaussian.png"),save=write.output,stamp=stamp)
-        ggwrite(gh2,file=fun.file("hists_etas_actual_wgaussian.png"),save=save,script=script)
+        ggwrite(gh2,file=fun.file("hists_etas_actual_wgaussian.png"),script=script,save=save,show=show)
         all.output[["hists.etas"]]  <- gh2
 
         plot.qq <- ggplot(dat,aes(sample=value))+
@@ -135,8 +142,8 @@ NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.f
             ## the theroretical identity line
             geom_abline(slope=1,intercept=0,linetype=2)+
             facet_wrap(~param)+
-            labs(x="Theoretical",y="Observed")
-        ggwrite(plot.qq,file=fun.file("qq_etas.png"),save=save,script=script)
+            labs(x="Theoretical",y="Observed",title=title)
+        ggwrite(plot.qq,file=fun.file("qq_etas.png"),script=script,save=save,show=show)
         all.output[["qq.bsv"]]  <- plot.qq
         
         ## IIV random effects vs covariates
@@ -159,12 +166,15 @@ NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.f
                 length(setdiff(colnames(etas.l2.n),c("ID","param","value")))>0
             ){
                 etas.covs.n <- melt.data.table(etas.l2.n,variable.name="cov",value.name="val.cov",measure.vars=names(etas.l2.n)[!names(etas.l2.n)%in%c("ID","param","value")])
-
-                p.iiv.covsn <- ggplot(subset(etas.covs.n,!grepl(regex.eta,cov)),aes(val.cov,value))+
-                    geom_point()+
-                    geom_smooth(method="lm", formula=y~x)+
-                    facet_grid(param~cov,scales="free")
-                ggwrite(p.iiv.covsn,file=fun.file("iiv_covs_n.png"),save=save,script=script)
+                data.plot <- etas.covs.n[!grepl(regex.eta,cov)]
+                p.iiv.covsn <- lapply(split(data.plot,by="cov"),
+                                      function(dt){ggplot(dt,aes(val.cov,value))+
+                                                       geom_point()+
+                                                       geom_smooth(method="lm", formula=y~x)+
+                                                       facet_wrap(~param,scales="free")+
+                                                       labs(title=title,x=dt[,unique(cov)],y="Eta")
+                                      })
+                ggwrite(p.iiv.covsn,file=fun.file("iiv_covs_n.png"),script=script,save=save,show=show)
                 all.output[["iiv.covsn"]] <- p.iiv.covsn
             }
         }
@@ -181,17 +191,18 @@ NMplotBSV <- function(data,regex.eta="^ETA",col.id="ID",covs.num,covs.char,fun.f
             p.iiv.covsc.dt <- lapply(sets,function(dat){
                 ggplot(dat,aes(val.cov,value))+
                     geom_hline(yintercept=0,linetype=2) +
-                    geom_boxplot()+
-                    facet_wrap(~param)+
-                    ### this would bring in ggpubr as dependency. Maybe just call in scripts where needed?
+                    geom_boxplot(outlier.shape=NA,colour="blue")+
+                    geom_jitter(height=0,width=.4,alpha=.5)+
+                    facet_wrap(~param,scales="free_y")+
+### this would bring in ggpubr as dependency. Maybe just call in scripts where needed?
                     ## rotate_x_text(45)+
-                    labs(x="",y="")
+                    labs(title=title,x=dat[,unique(variable)],y="Eta")
             })
-            ggwrite(p.iiv.covsc.dt,file=fun.file("iiv_covs_c.png"),useNames=TRUE,save=save,script=script)
+            ggwrite(p.iiv.covsc.dt,file=fun.file("iiv_covs_c.png"),useNames=TRUE,script=script,save=save,show=show)
             all.output[["iiv.covc"]] <- p.iiv.covsc.dt
         }
     } else {
-        message("No IIV random effects found in parameter table.")
+        message("No BSV random effects found in parameter table.")
     }
     ## if there are no plots to return, we return NULL (instead of a list of length 0).
     if(length(all.output)==0&&!return.data){return(NULL)}
