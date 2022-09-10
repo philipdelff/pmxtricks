@@ -51,6 +51,8 @@ NMaddColumns
 **** DONE Add file name
      CLOSED: [2021-05-05 Wed 14:11]
 **** TODO date format should be changed. Output depends on locale. 
+**** TODO possibility to have a separate caption in the bottom-left corner. 
+Often not a stamp but a note to the reader.
 *** ggIndProfs
 **** TODO Add support for II, ADDL
 *** NMrunLog
@@ -143,7 +145,10 @@ intentional.
      CLOSED: [2020-04-13 Mon 16:53]
 scale all dimensions by the parameter value in end of function.
 *** ggwrite
-*** TODO [#A] Message written paths to user
+**** TODO [#A] Message written paths to user for lists
+When lists of plots are written, only one (common but not matching
+any) file name is reported. It seems like the reporting is done at too
+high a level.
 **** DONE Naming of multiple plots 
      CLOSED: [2021-04-28 Wed 19:04]
 For list objects, optionally name the plots (when onefile=F) by the

@@ -7,7 +7,7 @@
 ##'
 ##' @param data The dataset being described (i.e. a data.frame).
 ##' @param stamp The path to the script that is creating the data.
-##' @param analysis The name of the analysi (character). This could be a
+##' @param analysis The name of the analysis (character). This could be a
 ##'     trial name or any another character string.
 ##' @param header Append lines to the header of the meta data.
 ##' @param use.standard.cols The name is slightly misleading. If FALSE,
@@ -142,9 +142,9 @@ VISIT,Visit ID")
     dlvl.unit <- ifelse("dlvl.unit"%in%datacols,unique(data$dlvl.unit),NA)
 
     vars.default <- merge(vars.default,
-                          data.frame(variable=c("DLVL","DV","TIME","NOMTIME","NDOS","AMT","AGE","BW","BLQ","MD"),
-                                     unit=c(dlvl.unit,dv.unit,time.unit,time.unit,ndos.unit,amt.unit,age.unit,bw.unit,NA,NA),
-                                     values=c(NA,NA,NA,NA,NA,NA,NA,NA,"0: Not below LLOQ; 1: Below LLOQ","0: Single dose; 1: Multiple dose"),
+                          data.frame(variable=c("DLVL","DV","TIME","NOMTIME","NDOS","AMT","AGE","BW","BMI","BLQ","MD"),
+                                     unit=c(dlvl.unit,dv.unit,time.unit,time.unit,ndos.unit,amt.unit,age.unit,bw.unit,bmi.unit,NA,NA),
+                                     values=c(NA,NA,NA,NA,NA,NA,NA,NA,NA,"0: Not below LLOQ; 1: Below LLOQ","0: Single dose; 1: Multiple dose"),
                                      stringsAsFactors=F),
                           all.x=T)
     variables <- subset(vars.default,variable%in%datacols)

@@ -21,9 +21,7 @@
 ##'     update of patchwork propagates to the repositories.
 ##' @family Plotting
 ##' @import patchwork
-
-
-##### Don't export yet. Needs to be elaborated a bit.
+##' @export
 
 
 ### support for better labels needed
@@ -56,6 +54,11 @@ NMplotGOF <- function(data,res="RES",pred="PRED",ipre="IPRED",ires="IRES",iwres=
     plots$res.time <- update.plot(p1,time,res)
     plots$res.tspd <- update.plot(p1,tspd,res)
 
+### CWRES
+    plots$cwres.pred <- update.plot(p1,pred,cwres)
+    plots$cwres.time <- update.plot(p1,time,cwres)
+    plots$cwres.tspd <- update.plot(p1,tspd,cwres)
+    
 ### IPRED/IRES plots
     plots$ires.ipre <- update.plot(p1,ipre,ires)
     plots$ires.time <- update.plot(p1,time,ires)
@@ -65,11 +68,6 @@ NMplotGOF <- function(data,res="RES",pred="PRED",ipre="IPRED",ires="IRES",iwres=
     plots$iwres.ipre <- update.plot(p1,ipre,iwres)
     plots$iwres.time <- update.plot(p1,time,iwres)
     plots$iwres.tspd <- update.plot(p1,tspd,iwres)
-
-### CWRES
-    plots$cwres.ipre <- update.plot(p1,ipre,cwres)
-    plots$cwres.time <- update.plot(p1,time,cwres)
-    plots$cwres.tspd <- update.plot(p1,tspd,cwres)
 
     
     if(arrange){
@@ -83,13 +81,12 @@ NMplotGOF <- function(data,res="RES",pred="PRED",ipre="IPRED",ires="IRES",iwres=
         all.ps <- all.ps +
             plot_layout(nrow = nrow,byrow=FALSE,guides = 'collect') +
             plot_annotation(title = title)
-        
 
     } else {
 
         all.ps <- plots
         
-        if(!missing(title)) all.ps <- lapply(all.ps,labs(subtitle=title))
+        if(!missing(title)) all.ps <- lapply(all.ps,function(x)x+labs(subtitle=title))
     }
     all.ps
 }

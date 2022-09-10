@@ -108,9 +108,14 @@ metaAdd <- function(data,meta.data,variable=NULL,text=NULL,header=NULL,var.char=
         temp=unique(data[,c(variable,var.char)])
         temp=temp[order(temp[,variable]),]
         ## need check that NA match NA and nothing else
-        if(any(rowSums(is.na(temp))==1)){
-            stop("variable and character variable combinations pair NA with non-NA. This means that you either have NA in variable while not in var.char or the other way around. That is not allowed.")
-            }
+        ## temp <- as.data.frame(lapply(temp, function(x){
+        ##     x[gsub(" ","",x)==""] <- NA
+        ##     x
+        ## }))
+#### this checks if NA paired with non-NA. The check is relevant but not here. Maybe a warning could be given. 
+        ## if(any(rowSums(is.na(temp))==1)){
+        ##     stop("variable and character variable combinations pair NA with non-NA. This means that you either have NA in variable while not in var.char or the other way around. That is not allowed.")
+        ##     }
         values.out=paste(  paste( temp[,1],temp[,2],sep=": "),collapse="; ")
         
     } else {

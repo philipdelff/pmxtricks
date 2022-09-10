@@ -13,14 +13,14 @@
 ##' @import stats
 ##' @family Calc
 ##' @export
+##' @examples
+##' ## means return a data.frame which makes it easy to integrate with
+##' ## data.table. But it's a little complicated if you want more than
+##' ## the means results. This works:
+##' \dontrun{
+##' dt[,append(means(DV,ci=T),list(N=.N))]
+##' }
 
-### ChangeLog
-## 2019-03-14 philipdelff: Added support for median
-### ChangeLog end
-
-### TODO
-
-### TODO end
 
 means <- function(x,type="arithmetic",na.rm=FALSE,z.rm=FALSE,ci=FALSE,dist.ci="t",p.ci=.95,colnames=c("est","ll","ul"),format = "df",debug=F) {
 
