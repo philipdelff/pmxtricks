@@ -17,7 +17,7 @@
 
 
 ggWater <- function(text="Not validated",scale=1,rot=30,col="grey",alpha=.5){
-    
+    .Deprecated("tracee::ggwater")
     ## watermarkGrob <- function(text = "Not validated",scale=1,rot=0){
     ##     g1 <- grob(lab=text, scale=scale,rot=rot,cl="watermark")
     ##     return(g1)

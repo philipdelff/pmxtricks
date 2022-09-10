@@ -27,6 +27,8 @@ canvasSize <- function(canvas,scale=1){
         square=list(width=9,height=9),
         "wide-screen"=list(width=31,height=15)
     )
+
+    .Deprecated("tracee::canvasSize")
     
     ## size of plot
     ## A "screen" version is needed that will save graphics nice to read on screen. Could be like 1.4*standard.

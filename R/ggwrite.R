@@ -52,7 +52,7 @@
 ggwrite <- function(plot, file, script, canvas="standard",
                     onefile=FALSE, res=200, paper="special",
                     save=TRUE, show=!save, useNames=FALSE, quiet=FALSE, stamp,debug=F){
-    
+    .Deprecated("tracee::ggwrite")    
     if(debug) browser()
 
     if(useNames && length(plot)==1) warning("useNames is ignored because plot is of length 1.")
