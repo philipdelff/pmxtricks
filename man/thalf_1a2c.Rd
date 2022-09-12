@@ -37,10 +37,7 @@ Can take multiple parameter sets and return a data.frame of halftimes.
 }
 \seealso{
 Other Calc: 
-\code{\link{CV}()},
-\code{\link{means}()},
 \code{\link{thalf_1a1c}()},
-\code{\link{thalf_trans_1c}()},
-\code{\link{trapez}()}
+\code{\link{thalf_trans_1c}()}
 }
 \concept{Calc}

@@ -22,10 +22,7 @@ Thalf for 1st order models, single-depot abs through any number of transit compa
 }
 \seealso{
 Other Calc: 
-\code{\link{CV}()},
-\code{\link{means}()},
 \code{\link{thalf_1a1c}()},
-\code{\link{thalf_1a2c}()},
-\code{\link{trapez}()}
+\code{\link{thalf_1a2c}()}
 }
 \concept{Calc}

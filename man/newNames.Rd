@@ -30,7 +30,6 @@ Other DataWrangling:
 \code{\link{rbindIntersect}()},
 \code{\link{rbindUnion}()},
 \code{\link{roundDF}()},
-\code{\link{roundResp0}()},
-\code{\link{signif2}()}
+\code{\link{roundResp0}()}
 }
 \concept{DataWrangling}

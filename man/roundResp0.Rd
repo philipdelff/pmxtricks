@@ -19,7 +19,6 @@ Other DataWrangling:
 \code{\link{newNames}()},
 \code{\link{rbindIntersect}()},
 \code{\link{rbindUnion}()},
-\code{\link{roundDF}()},
-\code{\link{signif2}()}
+\code{\link{roundDF}()}
 }
 \concept{DataWrangling}
