@@ -3,7 +3,7 @@
 ##' Taken from Based on function from package:xpose4 (read.npc.vpc.results)
 ##' This function reads in a results file from running either the PsN command vpc or npc. The function
 ##' then parses the file and passes the result to plotting functions
-##' @param vpc.results The name of the results file from running the PsN command vcp. Often this
+##' @param vpc.results The name of the results file from running the PsN command vpc. Often this
 ##' is named 'vpc\_results.csv'. 
 ##' @param npc.results The name of the results file from running the PsN command npc. Often this is
 ##' named 'npc\_results.csv'. relative or absolute paths to the file are allowed
