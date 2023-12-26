@@ -7,7 +7,7 @@
 readPsnVpc(vpc.results = NULL, npc.results = NULL, verbose = FALSE, ...)
 }
 \arguments{
-\item{vpc.results}{The name of the results file from running the PsN command vcp. Often this
+\item{vpc.results}{The name of the results file from running the PsN command vpc. Often this
 is named 'vpc\_results.csv'.}
 
 \item{npc.results}{The name of the results file from running the PsN command npc. Often this is

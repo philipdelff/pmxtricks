@@ -39,7 +39,6 @@ Get file from remote library and inport it into project if it does not exist. Th
 }
 \seealso{
 Other FileSystem: 
-\code{\link{filePathSimple}()},
 \code{\link{pmxtricks_filepath}()}
 }
 \concept{FileSystem}

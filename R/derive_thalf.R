@@ -49,6 +49,8 @@ thalf_1a2c <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=F,d
 }
 
 ### if pars is a data.table. Will be calculated for each row.
+##' @import data.table
+##' @import NMdata
 thalf_1a2c_dt <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=F,debug=F){
     if(debug) browser()
     pars <- copy(as.data.table(pars))
@@ -59,7 +61,7 @@ thalf_1a2c_dt <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=
 
     setnames(pars,old=varnames,new=c("cl","ka","v2","q","v3"))
     
-    rowcol <- tmpcol(pars)
+    rowcol <- NMdata::tmpcol(pars)
     pars[,(rowcol):=1:.N]
     thalves <- pars[,{
         Asys <- matrix(c(-ka,0,0,

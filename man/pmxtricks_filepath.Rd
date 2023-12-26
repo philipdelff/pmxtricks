@@ -17,7 +17,6 @@ a light wrapper around system.file
 }
 \seealso{
 Other FileSystem: 
-\code{\link{filePathSimple}()},
 \code{\link{getSource}()}
 }
 \concept{FileSystem}
