@@ -26,7 +26,7 @@ metaCheck <- function(data,meta.data,file.data,match.data=TRUE,skip.chars=T,sile
     if(skip.chars){
         data <- data[,
                      unique(c(
-                         which(unlist(lapply(data,is.numeric)))
+                         which(unlist(lapply(data,NMisNumeric)))
                         ,
                          which(colnames(data)%in%meta.data$variables$variable)
                      ))]

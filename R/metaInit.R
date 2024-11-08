@@ -52,10 +52,9 @@
 ###### end bugs
 
 
-metaInit <- function(data,stamp, analysis=NULL,header=NULL,use.standard.cols=T,time.unit="h",dv.unit=NULL,amt.unit=NULL,ndos.unit=NULL,debug=F){
+metaInit <- function(data,stamp, analysis=NULL,header=NULL,use.standard.cols=T,time.unit="h",dv.unit=NULL,amt.unit=NULL,ndos.unit=NULL){
 
-    if(debug){browser()}
-
+    
 #### check arguments
     if(!is.null(analysis)) stopifnot(is.character(analysis))
 

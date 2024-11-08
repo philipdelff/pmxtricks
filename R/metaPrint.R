@@ -21,8 +21,14 @@
 metaPrint <- function(data,meta.data,file=NULL,file.data,match.data=T,silent=!is.null(file),test=F,debug=F){
     if(debug) browser()
 
+    setDT(data)
+    setDT(meta.data$variables)
+    
     datacols <- colnames(data)
     if(match.data){
+        ## include only column names present in data
+        
+        meta.data$variables <- meta.data$variables[variable%in%datacols]
         ## Sort meta
         meta.data$variables <- meta.data$variables[order(match(meta.data$variables$variable,datacols)),]
         rownames(meta.data$variables) <- 1:nrow(meta.data$variables)

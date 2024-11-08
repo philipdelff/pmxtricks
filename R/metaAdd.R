@@ -30,6 +30,7 @@
 ##' @param unit The unit of the variable. Will be printet in parenthesis when listing variables.
 ##' @param debug Start by calling browser().
 ##' @return Updated meta data object
+##' @import NMdata data.table
 ##' @export
 ##' @family DataGen: Meta
 
@@ -48,14 +49,23 @@
 
 
 
-metaAdd <- function(data,meta.data,variable=NULL,text=NULL,header=NULL,var.char=NULL,var.unit=NULL,values=NULL,unit=NA,debug=F){##### metaAdd provides three different methods for adding meta data.
+metaAdd <- function(data,meta.data,variable=NULL,text=NULL,header=NULL,var.char=NULL,add.var.char=TRUE,var.unit=NULL,values=NULL,unit=NA,debug=F){##### metaAdd provides three different methods for adding meta data.
 
     if(debug)browser()
     data <- as.data.frame(data)
     datacols <- colnames(data)
 
+    
+    if( !is.null(var.char) && variable==var.char ){
+        stop("variable and var.char must be different variables.")
+    }
+    
     ## either we are adding a variable or a header line. Not both.
     if((is.null(variable)+is.null(header))!=1) {stop("You must add either a variable or a header line.")}
+
+    if(is.null(var.char)){
+        add.var.char <- FALSE
+    }
     
     if(!is.null(var.char)&&!is.null(values)) {stop("Either var.char or values can be supplied. Not both.")}
     
@@ -81,42 +91,51 @@ metaAdd <- function(data,meta.data,variable=NULL,text=NULL,header=NULL,var.char=
     var.arg <- variable
     meta.data$variables <- subset(meta.data$variables,variable!=var.arg)
     
-        
+    setDT(data)
+    
 ### values supplied in data.frame
     if(!is.null(values)){
         if(!is.data.frame(values)){stop("values must be a data.frame")}
+        setDT(values)
         if(ncol(values)!=2) stop("values must have exactly two columns")
         if(!variable%in%colnames(values))stop("values must contain a column named like the variable you are documenting.")
-        if(!is.numeric(values[,variable])){stop("The values column named as the contents of variable must be numeric")}
-        ##   maybe this should rather be done like
-        ##   sum(unlist(lapply(value,is.numeric)))!=1 ? I mean, could other
-        ##   classes be ok and the values still numeric?
-        classes <- sapply(values,class)
-        col.num <- which(classes%in%c("numeric","integer"))
-        col.char <- which(classes%in%c("character","factor"))
+
+        ## if(!is.numeric(values[,variable])){stop("The values column named as the contents of variable must be numeric")}
+        if(values[,!NMisNumeric(get(variable))]){stop("The values column named as the contents of variable must be numeric")}
+
+        
+        classes <- sapply(values,NMisNumeric)
+        col.num <- which(classes)
+        col.char <- which(!classes)
+        
+        cname.num <- colnames(values)[col.num]
+        cname.char <- colnames(values)[col.num]
+
         if(length(col.num)!=1||length(col.char)!=1){stop("values must contain exactly one numeric column and one column of class character or factor.")}
         
 #### have to check that all values are matched
-        if(any(!unique(data[,variable])%in%values[,variable])){stop(paste("Not all values of column",variable,"is matched by values supplied in values."))}
+        
+        if(any(!unique(data[,get(variable)])%in%values[,get(variable)])){
+            ## stop(paste("Not all values of column",variable,"is matched by values supplied in values."))
+            
+            dt.vars <- data[,.N,by=variable]
+            
+            msg <- paste("Not all values of column",variable,"is matched by values supplied in values.\nNumber of rows by value of",variable,":\n",paste0(capture.output(dt.vars), collapse = "\n"))
+                     
+            stop(msg)
+        }
         
         var.char <- colnames(values)[col.char]
         
-        data <- merge(data,values,all.x=T)
+        data <- mergeCheck(data,values,all.x=T,by=cname.num,fun.na.by=NULL,quiet=TRUE)
     }
 
-    if(!is.null(var.char)){        
-        temp=unique(data[,c(variable,var.char)])
-        temp=temp[order(temp[,variable]),]
-        ## need check that NA match NA and nothing else
-        ## temp <- as.data.frame(lapply(temp, function(x){
-        ##     x[gsub(" ","",x)==""] <- NA
-        ##     x
-        ## }))
-#### this checks if NA paired with non-NA. The check is relevant but not here. Maybe a warning could be given. 
-        ## if(any(rowSums(is.na(temp))==1)){
-        ##     stop("variable and character variable combinations pair NA with non-NA. This means that you either have NA in variable while not in var.char or the other way around. That is not allowed.")
-        ##     }
-        values.out=paste(  paste( temp[,1],temp[,2],sep=": "),collapse="; ")
+    if(!is.null(var.char)){
+        
+        temp=unique(data[,c(variable,var.char),with=FALSE])
+        setorderv(temp,variable)
+
+        values.out=paste(  paste( unlist(temp[,1]),unlist(temp[,2]),sep=": "),collapse="; ")
         
     } else {
         values.out <- NA
@@ -127,7 +146,8 @@ metaAdd <- function(data,meta.data,variable=NULL,text=NULL,header=NULL,var.char=
     if((!is.na(unit)+!is.null(var.unit))==2){stop("You cannot use both unit and var.unit.")}
 ### if var.unit is supplied, we take unit from there. If NA's should be in present, they are removed without warning. This could be the case for say dose.unit if that was assigned to doses dataset which was later rbind'ed with pk data.
     if(!is.null(var.unit)){
-        units.in.data <- unique(data[!is.na(data[,var.unit]),var.unit])
+        ## units.in.data <- unique(data[!is.na(data[,var.unit]),var.unit])
+        units.in.data <- data[!is.na(get(var.unit)),unique(get(var.unit))]
         if(length(units.in.data)>1) {
             stop(paste0("Exiting. More than one unique values is found in unit.var:\n",paste(units.in.data,collapse="\n")))
         }
@@ -141,14 +161,18 @@ metaAdd <- function(data,meta.data,variable=NULL,text=NULL,header=NULL,var.char=
                                             description=paste(text,sep=" - "),
                                             values=values.out)
                                  )
+
     
-### order variable table according to data
-    ##    meta.data1[var]
     
     
     ## Sort meta
     meta.data$variables <- meta.data$variables[order(match(meta.data$variables$variable,datacols)),]
     rownames(meta.data$variables) <- 1:nrow(meta.data$variables)
+
+    if(add.var.char){
+        meta.data <- metaAdd(data=data,meta.data,variable=var.char,text=paste(text," See",variable,"for numeric representation."))
+    }
+    
     
     return(meta.data)
     
