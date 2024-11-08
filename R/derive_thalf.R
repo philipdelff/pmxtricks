@@ -243,3 +243,49 @@ derivePars_1a1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
     res1
 }
 ###}
+
+
+##' Thalf for 1 absorption depot, 2 compartments
+##'
+##' @description Can take multiple parameter sets and return a data.frame of halftimes.
+##' @param pars A parameter table. Thalf will be calculated for all rows.
+##' @param cl The name of the column with clearance values. Can represent CL/F if volume variables do the same.
+##' @param ka The name of the column representing absorption rate.
+##' @param v2 The name of the column with central volume (see cl as well).
+##' @param q The name of the column with intercompartmental clearance.
+##' @param v3 The name of the column with peripharel volume (see cl as well).
+##' @param transform Add results to existing dataset?
+##' 
+##' @param debug Start by calling browser()
+## For thalf, I think this is the one to use. Would be good to generalise this to use for simpler systems.
+##' @family Calc
+
+thalf_1a2c_vec <- function(cl,ka,v2,q,v3,transform=F,debug=F){
+    if(debug)browser()
+
+
+    dt.pars <- data.table(cl=cl,ka=ka,v2,q=q,v3=v3)[
+        ,ROW:=.I]
+    
+    thalves <- dt.pars[,{
+                       Asys <- matrix(unlist(c(-ka,0,0,
+                                ka,-(cl+q)/v2,q/v3,
+                                0,q/v2,-q/v3)),nrow=3,byrow=TRUE)
+
+        thalves.u <- log(2)/-sort(eigen(Asys)$values)
+        thalves.u
+    },by=ROW]
+
+    ## thalves[,par:=rep(paste0("th",1:3),length(cl))]
+    thalves[,par:=paste0("th",1:3),by="ROW"]
+    ths2 <- dcast(thalves,ROW~par,value.var="V1")    
+    ths2[,ROW:=NULL]
+    ## ths2 <- t(thalves)
+    
+    ## if(transform){
+    ##     colnames(ths2) <- paste("th",1:ncol(ths2),sep="")
+    ##     ths2 <- cbind(pars,ths2)
+    ## }
+
+    return(ths2[])
+}

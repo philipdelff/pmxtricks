@@ -47,12 +47,7 @@ NMaddColumns
 ** Documentation
 *** TODO Tests
 ** Improvements
-*** ggstamp
-**** DONE Add file name
-     CLOSED: [2021-05-05 Wed 14:11]
-**** TODO date format should be changed. Output depends on locale. 
-**** TODO possibility to have a separate caption in the bottom-left corner. 
-Often not a stamp but a note to the reader.
+*** metaAdd
 *** ggIndProfs
 **** TODO Add support for II, ADDL
 *** NMrunLog
@@ -88,49 +83,6 @@ This function is dead. If at all relevant, this will be developed in a separate 
      CLOSED: [2019-10-24 Thu 15:39]
 **** CANCELED Individualise doses or introduce a NMdoses
      CLOSED: [2019-10-24 Thu 15:39]
-*** NMscanData
-**** TODO check if .mod file exists
-Right now it is assumed. But check for it. And if a new argument "dir.data" is
-given, it is not needed. This is to be implemented in NMtransInput.
-**** TODO Clean up messages
-Messages seem a bit random.
-**** DONE NMdata class
-     CLOSED: [2019-12-14 Sat 22:29]
-Output should be of class NMdata and contain helpful extra information.
-**** DONE rbind
-     CLOSED: [2019-12-14 Sat 22:28]
-**** TODO merge
-**** TODO summary
-**** TODO Fix the now missing col.grp functionality
-**** DONE rename $run to $pop
-     CLOSED: [2019-12-14 Sat 22:29]
-**** TODO Set correct keys
-id: ID, grp
-row: ROW (if available)
-occ: ID, occ, grp
-pop: grp
-**** DONE as.dt argument
-     CLOSED: [2019-12-12 Thu 15:10]
-**** DONE introduce a quiet option
-     CLOSED: [2019-12-12 Thu 10:03]
-**** DONE recoverRows argument
-     CLOSED: [2019-12-12 Thu 15:10]
-If recoverRows, do
-***** take the not used lines from input data
-***** [#B] What to do about id-level and occ-level variables?
-They could differ from output, should they be overwritten then? I
-really don't think so. But $id and $row are made before this, right? A
-simple approach would be to do nothing but just rbind. We can then add
-some tests and some warnings.
-*** trapez
-**** TODO Check for equal lengths of x and y
-**** TODO Check if at least 2 observations (before looking for NAs)
-**** DONE strategy for cumulative auc
-     CLOSED: [2019-10-24 Thu 14:18]
-One shorter than x and y. 
-**** DONE Why not just pass the na.rm to sum/cumsum?
-     CLOSED: [2019-10-24 Thu 14:19]
-No, cumsum does not support na.rm
 *** NMcompRes
 If an rds exists but was called with other options, it is still
 used. That is risky. Maybe save all options to function call in
@@ -140,21 +92,6 @@ object? Or compare with the meta data object?
 If renaming is being done, provide an overview of what is being
 renamed. From such an overview, it should be very easy to see if it's
 intentional.
-*** canvasSize
-**** DONE scale parameter
-     CLOSED: [2020-04-13 Mon 16:53]
-scale all dimensions by the parameter value in end of function.
-*** ggwrite
-**** TODO [#A] Message written paths to user for lists
-When lists of plots are written, only one (common but not matching
-any) file name is reported. It seems like the reporting is done at too
-high a level.
-**** DONE Naming of multiple plots 
-     CLOSED: [2021-04-28 Wed 19:04]
-For list objects, optionally name the plots (when onefile=F) by the
-element names of the list. Could also use an additional argument to
-provide the name suffixes, but using element names reduces need for
-checks of length, class etc.
 *** NMplotBSV
 **** TODO Default regex should match all ETA's
 

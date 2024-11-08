@@ -14,6 +14,7 @@
 ##'     a warning because it is not recommended in final code.
 ##' @param silent Disables printning. Mainly used in testing.
 ##' @family FileSystem
+##' @import NMdata
 ##' @return None. Sources the specified file into the global environment.
 ##' @export
 
@@ -31,10 +32,11 @@ getSource <- function(file,dir.central=NULL,dir.local,overwrite=FALSE,source.dir
     if(source.directly)
     {
         source(org)
-        warning("Central file was sourced directly. Only allowed for debugging. Switch off and run once with overwrite=TRUE if you want to update. Seriously, use this option for debugging only.")
+        message("Central file was sourced directly. Only allowed for debugging. Switch off and run once with overwrite=TRUE if you want to update. Use this option for debugging only.")
         return(invisible())
     }
 
+    filePathSimple <- NMdata:::filePathSimple
     dir.local <- filePathSimple(dir.local)
     dir.central <- filePathSimple(dir.central)
     
