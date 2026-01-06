@@ -16,7 +16,7 @@
 ## For thalf, I think this is the one to use. Would be good to generalise this to use for simpler systems.
 ##' @family Calc
 
-thalf_1a2c <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=F,debug=F){
+thalf_1a2c <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=FALSE,debug=FALSE){
     if(debug)browser()
 
     
@@ -51,7 +51,7 @@ thalf_1a2c <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=F,d
 ### if pars is a data.table. Will be calculated for each row.
 ##' @import data.table
 ##' @import NMdata
-thalf_1a2c_dt <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=F,debug=F){
+thalf_1a2c_dt <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=FALSE,debug=FALSE){
     if(debug) browser()
     pars <- copy(as.data.table(pars))
     
@@ -89,7 +89,7 @@ thalf_1a2c_dt <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=
 
 
 ### This is only 1st order models, single-depot abs. One row of parameters only. Use thalf.1a.1c instead.
-## thalf.1a.1c.one <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
+## thalf.1a.1c.one <- function(pars,cl="CL",ka="KA1",v2="V2",debug=FALSE){
 ##     if(debug)browser()
 ##     pars.u <- unique(pars[,c(cl,ka,v2)])
 ##     ##    print(pars.u[,cl])
@@ -114,7 +114,7 @@ thalf_1a2c_dt <- function(pars,cl="CL",ka="KA1",v2="V2",q="Q",v3="V3",transform=
 ##' @param v2 The name of the column with central volume (see cl as well).
 ##' @param debug Start by calling browser()?
 ##' @family Calc
-thalf_1a1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
+thalf_1a1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=FALSE){
     if(debug)browser()
     ## the rest for each row
     pars$atempROW <- 1:nrow(pars)
@@ -144,7 +144,7 @@ thalf_1a1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
 ##' @param vc The name of the column with central volume (see cl as well).
 ##' @param debug Start by calling browser()?
 ##' @family Calc
-thalf_trans_1c <- function(pars,cl="CL",ka="KA1",vc="VC",debug=F){
+thalf_trans_1c <- function(pars,cl="CL",ka="KA1",vc="VC",debug=FALSE){
     if(debug)browser()
     ## the rest for each row
     pars$atempROW <- 1:nrow(pars)
@@ -179,7 +179,7 @@ thalf_trans_1c <- function(pars,cl="CL",ka="KA1",vc="VC",debug=F){
 ### several parameter sets and return a data frame with all the thalves for each
 ### line in pars.
 ##' @family Calc
-thalf_2a2c <- function(pars,cl="CL",ka1="KA1",ka2="KA2",v2="V2",q="Q",v3="V3",debug=F){
+thalf_2a2c <- function(pars,cl="CL",ka1="KA1",ka2="KA2",v2="V2",q="Q",v3="V3",debug=FALSE){
     warning("This function is experimental. Please check the code.")
     if(debug)browser()
     
@@ -205,7 +205,7 @@ thalf_2a2c <- function(pars,cl="CL",ka1="KA1",ka2="KA2",v2="V2",q="Q",v3="V3",de
 ############ more derived parameters at once. 
 ###{
 ##' @family Calc
-derivePars_1a1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
+derivePars_1a1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=FALSE){
     if(debug)browser()
 
 #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
@@ -260,7 +260,7 @@ derivePars_1a1c <- function(pars,cl="CL",ka="KA1",v2="V2",debug=F){
 ## For thalf, I think this is the one to use. Would be good to generalise this to use for simpler systems.
 ##' @family Calc
 
-thalf_1a2c_vec <- function(cl,ka,v2,q,v3,transform=F,debug=F){
+thalf_1a2c_vec <- function(cl,ka,v2,q,v3,transform=FALSE,debug=FALSE){
     if(debug)browser()
 
 
