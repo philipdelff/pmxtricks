@@ -9,6 +9,7 @@
 ##' y <- data.frame(b=1:3,c="h")
 ##' z <- data.frame(a=4:5,b=letters[4:5],d=c(NA,5))
 ##' rbindIntersect(x,y,z)
+##' @import data.table
 
 rbindIntersect <- function(...){
 
@@ -26,7 +27,7 @@ rbindIntersect <- function(...){
     names.dots <- lapply(dots,names)
     names.all <- Reduce(intersect,names.dots)
     reduce.df <- function(x){
-        x[,names.all]
+      as.data.table(x)[,names.all,with=FALSE]
     }
      
     alldat <- do.call(rbind,lapply(dots,reduce.df))
